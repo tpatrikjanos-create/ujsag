@@ -725,7 +725,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='1.3';
+  var APP_VERSION='1.4';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság · varázsló</div>
@@ -3721,9 +3721,30 @@ function applyProjectState(data){
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<!-- EmailJS: rendelés esetén azonnali e-mail-értesítés a tulajdonosnak (kliens-oldali, backend nélkül) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 (function(){
   var ADMIN_EMAIL='tpatrikjanos@gmail.com';
+  var EMAILJS_SERVICE_ID='service_5qrjnkd';
+  var EMAILJS_TEMPLATE_ID='template_fpp6yro';
+  var EMAILJS_PUBLIC_KEY='mWGbriG0qlk56mTNv';
+  try{ if(window.emailjs)emailjs.init({publicKey:EMAILJS_PUBLIC_KEY}); }catch(e){ console.warn('EmailJS init hiba:',e); }
+  function notifyOwnerOfOrder(o){
+    /* a rendelés-értesítés hibája NE akassza meg magát a rendelés-mentést — ezért ez
+       mindig egy önálló, el nem kapott (nem várt) mellékhatás, sose blokkolja a
+       saveOrder Promise-ját. */
+    if(!window.emailjs)return;
+    try{
+      emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+        customer_email:o.email,
+        order_digital:o.digital?'igen':'nem',
+        order_print_qty:o.printQty||0,
+        order_total:o.total||0,
+        order_time:new Date().toLocaleString('hu-HU')
+      }).catch(function(err){ console.warn('Rendelés-értesítő email nem sikerült:',err); });
+    }catch(err){ console.warn('Rendelés-értesítő email nem sikerült:',err); }
+  }
   var firebaseConfig={
     apiKey:"AIzaSyBVMXSqAXg67E3aPm87eRC5EfwegCIhj10",
     authDomain:"ujsag-2a17e.firebaseapp.com",
@@ -3879,6 +3900,7 @@ function applyProjectState(data){
           db.ref('submissions_meta/'+uid).update(payload)
         ]).then(function(){
           if(settled)return; settled=true; resolve(true);
+          notifyOwnerOfOrder(o);
         }).catch(function(err){
           if(settled)return; settled=true;
           console.warn('Rendelés mentése sikertelen:',err);
