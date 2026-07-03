@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Készíts saját esküvői újságot percek alatt — kitöltöd az adatokat, feltöltöd a fotókat, és nyomtatható híradót kapsz a nagy napra.">
+<meta name="description" content="Készíts saját esküvői újságot percek alatt — kitöltöd az adatokat, feltöltöd a fotókat, és nyomtatható újságot kapsz a nagy napra.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💍%3C/text%3E%3C/svg%3E">
-<title>Esküvői Híradó — Varázsló</title>
+<title>Esküvői Újság — Varázsló</title>
 <style id="pgcss">@page{size:A4 landscape;margin:0;}</style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;600;700&display=swap');
@@ -283,11 +283,27 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .gyik-q{font-size:13px;}
 .size-a4 .gyik-a{font-size:11.5px;}
 .horo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;}
+.horo-grid-2{grid-template-columns:repeat(2,1fr);}
 .horo-card{border:.8px solid var(--ink);border-radius:5px;padding:4px 6px;text-align:center;}
-.horo-sign{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--claret);margin-bottom:3px;}
-.horo-txt{font-size:7.6px;line-height:1.35;}
+.horo-sign{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:8.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--claret);margin-bottom:1px;display:flex;align-items:center;justify-content:center;gap:3px;}
+.horo-ico{font-size:1.3em;line-height:1;flex-shrink:0;}
+.horo-dates{font-family:'Libre Franklin',sans-serif;font-size:6.4px;color:var(--soft);margin-bottom:3px;}
+.horo-txt{font-size:7.6px;line-height:1.35;text-align:left;}
+.horo-txt p{margin:0 0 3px;}
+.horo-txt p:last-child{margin-bottom:0;}
 .size-a4 .horo-sign{font-size:11px;}
+.size-a4 .horo-dates{font-size:8.2px;}
 .size-a4 .horo-txt{font-size:9.8px;}
+.guide-sub{text-align:center;font-size:9px;font-style:italic;color:var(--claret);font-weight:700;margin:0 0 6px;}
+.size-a4 .guide-sub{font-size:11.5px;}
+.guide-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3mm;margin:4px 0;}
+.guide-item{border:.8px solid var(--ink);border-radius:5px;padding:5px 7px;}
+.guide-h{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:8px;color:var(--claret);margin-bottom:3px;line-height:1.25;}
+.size-a4 .guide-h{font-size:10px;}
+.guide-txt{font-size:7.4px;line-height:1.4;}
+.guide-txt p{margin:0 0 4px;}
+.guide-txt p:last-child{margin-bottom:0;}
+.size-a4 .guide-txt{font-size:9.6px;}
 .bucket-list{margin:0 auto;padding:0;max-width:110mm;list-style:none;}
 .bucket-list li{font-size:9.4px;line-height:1.7;padding-left:20px;position:relative;}
 .size-a4 .bucket-list li{font-size:12px;}
@@ -338,7 +354,7 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .szinezo-sign{font-family:'Libre Franklin',sans-serif;font-size:9px;color:var(--soft);display:flex;align-items:center;justify-content:center;gap:4px;}
 .size-a4 .szinezo-sign{font-size:11px;}
 .szinezo-line{display:inline-block;width:60mm;border-bottom:1px solid var(--ink);height:1px;}
-.ico{display:inline-block;width:14px;height:14px;vertical-align:-2px;color:var(--ink);}
+.ico{display:inline-block;width:1.2em;height:1.2em;vertical-align:-0.2em;color:var(--ink);}
 .ico svg,svg.ico{width:100%;height:100%;display:block;}
 .sprite{position:absolute;width:0;height:0;overflow:hidden;}
 .sprite symbol path,.sprite symbol circle,.sprite symbol rect{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
@@ -470,6 +486,8 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .act-cols > div{flex:1;}
 .rovat p{font-size:8.4px;text-align:left;line-height:1.4;margin:0;}
 .size-a4 .rovat p{font-size:11px;}
+.hunt-lead{font-family:'Old Standard TT',serif;font-weight:700;font-size:9.5px;margin:0 0 3px;text-align:left;}
+.size-a4 .hunt-lead{font-size:12px;}
 .hunt-intro{font-size:8.4px;font-style:italic;margin:0 0 4px;text-align:left;}
 .hunt-list{list-style:none;padding:0;margin:0;}
 .hunt-list li{display:flex;align-items:center;gap:5px;font-family:'PT Serif',serif;font-size:8.4px;line-height:1.2;padding:1.6px 0;}
@@ -535,7 +553,12 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .tm-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:4mm;}
 .tm-grid>.tm-card{flex:0 0 calc(25% - 3mm);max-width:calc(25% - 3mm);}
 .tm-grid-2{display:grid;grid-template-columns:repeat(2,1fr);min-width:0;}
-.tm-grid-2>.tm-card{flex:none;max-width:none;min-width:0;}
+/* min-width:0 NEM kerül a kártyára: a rács "1fr" oszlopai enélkül a fix méretű
+   imgbox alá zsugorodnának, és a margin:auto-s kép a zsugorított (túl keskeny)
+   kártyához, a szöveg pedig szintén ahhoz igazodna középre — vizuálisan
+   szétcsúszva egymástól. A kártya minimumát a kép (a legszélesebb tartalom)
+   határozza meg, így a kép ÉS a név ugyanahhoz a dobozhoz igazodik középre. */
+.tm-grid-2>.tm-card{flex:none;max-width:none;}
 .tm-card{text-align:center;}
 /* FONTOS: a kép mérete itt SZÁNDÉKOSAN fix mm-érték (nem width:100%+aspect-ratio) — a blk saját
    automatikus zoom-illesztése (fitBlockToBox) a "half oldal" cél-magassághoz csak akkor tud
@@ -725,11 +748,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='1.4';
+  var APP_VERSION='1.5';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság · varázsló</div>
-  <h1 class="wiz-h">Esküvői Híradó</h1>
+  <h1 class="wiz-h">Esküvői Újság</h1>
   <p class="wiz-note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> a bekapcsolt rovatokat a választott oldalakra rendezi, és igyekszik kitölteni a helyet. <b>Az adatok megadása után nyílik meg a szerkesztői nézet a kész lapokkal — ott tudod feltölteni a fényképeket</b>, mozgatni és méretezni a rovatokat. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.</p>
 
   <div class="errbox" id="errbox"></div>
@@ -748,7 +771,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     <h3><span class="num">2</span>Kötelező adatok</h3>
     <div class="grid2">
       <div class="fld"><label>A pár neve <span class="req">*</span></label><input id="f_names" data-req value=""></div>
-      <div class="fld"><label>A lap címe <span class="req">*</span></label><div class="fld-row"><input id="f_masthead" data-req value="" placeholder="pl. Esküvői Híradó"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')">💡 Tipp</button></div></div>
+      <div class="fld"><label>A lap címe <span class="req">*</span></label><div class="fld-row"><input id="f_masthead" data-req value="" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')">💡 Tipp</button></div></div>
     </div>
     <div class="fld"><label>Alcím</label><div class="fld-row"><input id="f_subname" value="" placeholder="pl. Dorina & Patrik ünnepi lapja"><button type="button" class="tipbtn" onclick="fillTip('f_subname')">💡 Tipp</button></div></div>
     <div class="grid2">
@@ -846,29 +869,29 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span>Időpontokat is mutassunk a menetrendben</label>
     <div class="fld"><label>Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
       <div class="rep" id="rep_prog" data-tpl='<input class="r-in r-time" data-k="time" placeholder="időpont"><input class="r-in r-wide" data-k="event" placeholder="esemény">'>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="15:00" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Érkezés, köszöntő ital" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="16:00" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Szertartás" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="16:45" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Gratuláció, koccintás" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="17:30" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Csoportképek" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="19:00" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Vacsora" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" value="21:00" placeholder="időpont"><input class="r-in r-wide" data-k="event" value="Nyitótánc, tortavágás" placeholder="esemény"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="15:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Érkezés, köszöntő ital"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Szertartás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:45"><input class="r-in r-wide" data-k="event" placeholder="pl. Gratuláció, koccintás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="17:30"><input class="r-in r-wide" data-k="event" placeholder="pl. Csoportképek"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="19:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="21:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Nyitótánc, tortavágás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
       </div>
       <button type="button" class="addrow" onclick="addRow('rep_prog')">+ Új sor</button>
     </div>
     <div class="tinyhint">Az étlap fogásai — soronként egy étel, üres rész kimarad:</div>
     <div class="grid2">
-      <div class="fld"><label>Vendégvárás / előétel</label><textarea id="f_m_app" style="min-height:54px;">Libamáj brióssal</textarea></div>
-      <div class="fld"><label>Leves</label><textarea id="f_m_soup" style="min-height:54px;">Húsleves cérnametélttel</textarea></div>
-      <div class="fld"><label>Főétel</label><textarea id="f_m_main" style="min-height:54px;">Vörösboros marhapofa
-Burgonyapüré, párolt zöldség</textarea></div>
-      <div class="fld"><label>Éjféli fogás</label><textarea id="f_m_night" style="min-height:54px;">Sült kolbász, savanyúság</textarea></div>
+      <div class="fld"><label>Vendégvárás / előétel</label><textarea id="f_m_app" style="min-height:54px;" placeholder="pl. Libamáj brióssal"></textarea></div>
+      <div class="fld"><label>Leves</label><textarea id="f_m_soup" style="min-height:54px;" placeholder="pl. Húsleves cérnametélttel"></textarea></div>
+      <div class="fld"><label>Főétel</label><textarea id="f_m_main" style="min-height:54px;" placeholder="pl. Vörösboros marhapofa
+Burgonyapüré, párolt zöldség"></textarea></div>
+      <div class="fld"><label>Éjféli fogás</label><textarea id="f_m_night" style="min-height:54px;" placeholder="pl. Sült kolbász, savanyúság"></textarea></div>
     </div>
-    <div class="fld"><label>Desszert</label><textarea id="f_m_dessert" style="min-height:54px;">Menyasszonytorta</textarea></div>
-    <div class="fld"><label>Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;">Pezsgő: Törley Gála
+    <div class="fld"><label>Desszert</label><textarea id="f_m_dessert" style="min-height:54px;" placeholder="pl. Menyasszonytorta"></textarea></div>
+    <div class="fld"><label>Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;" placeholder="pl. Pezsgő: Törley Gála
 Vörösbor: Egri Bikavér
 Fehérbor: Olaszrizling
 Sör: csapolt
-Alkoholmentes: limonádé, üdítők</textarea></div>
+Alkoholmentes: limonádé, üdítők"></textarea></div>
     <div class="opt" style="border-top:1px dashed #e4ddcf;padding-top:10px;margin-top:4px;">
       <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_drinks" onchange="optToggle(this)"><span class="sw"></span>Férj/feleség itala</label>
       <div class="opt-body off" data-for="chk_drinks">
@@ -885,11 +908,11 @@ Alkoholmentes: limonádé, üdítők</textarea></div>
     <h3>QR-kód <label class="tgl"><input type="checkbox" id="chk_qr" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_qr">
       <div class="fld"><label>QR-sáv címe</label><input id="f_qrHead" value=""></div>
-      <div class="fld"><label>Google Drive QR szövege</label><textarea id="f_driveCap"></textarea></div>
-      <div class="fld" style="margin-top:6px;"><label><input type="checkbox" id="chk_qr2" onchange="optToggle(this)" style="vertical-align:middle;margin-right:6px;">Még egy QR-kód (pl. DJ zenekérés)</label></div>
+      <div class="fld"><label>QR-kód szövege</label><textarea id="f_driveCap"></textarea></div>
+      <div class="fld" style="margin-top:6px;"><label><input type="checkbox" id="chk_qr2" onchange="optToggle(this)" style="vertical-align:middle;margin-right:6px;">Még egy QR-kód</label></div>
       <div class="opt-body off" data-for="chk_qr2">
         <div class="fld"><label>QR-sáv középső segítség-felirat</label><input id="f_qrMid" value=""></div>
-        <div class="fld"><label>DJ QR szövege</label><textarea id="f_djCap"></textarea></div>
+        <div class="fld"><label>Második QR-kód szövege</label><textarea id="f_djCap"></textarea></div>
       </div>
     </div>
   </div>
@@ -1087,7 +1110,6 @@ A kedvenc díszítésed
         <div class="rep-row"><input class="r-in r-wide" data-k="stmt" value="Egyikünk soha nem tanult meg főzni."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
       </div>
       <button type="button" class="addrow" onclick="addRow('rep_igazhamis')">+ Új állítás</button>
-      <div class="fld"><label>Melyik(ek) a hazugság? (sorszám, pl. 2 vagy 2,5)</label><input id="f_igazhamisLies" placeholder="pl. 3"></div>
     </div>
   </div>
 
@@ -1101,27 +1123,14 @@ A kedvenc díszítésed
   <div class="card opt">
     <h3>A lagzi szabályzata (vicces) <label class="tgl"><input type="checkbox" id="chk_lagziszab" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_lagziszab">
-      <div class="tinyhint">Vicces "hivatalos" szabályok — szabadon szerkeszthető, törölhető, bővíthető.</div>
-      <div class="rep" id="rep_lagziszab" data-tpl='<input class="r-in r-wide" data-k="rule" placeholder="szabály">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="rule" value="Aki nem táncol legalább egyszer, mosogatást vállal."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="rule" value="Telefonos fényképezés csak akkor, ha a végén ránk is küldöd a képet."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="rule" value="A pezsgőt fenékig kell inni a pohárköszöntő után."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="rule" value="Aki a menyasszonyi csokrot elkapja, egy évig nem panaszkodhat a szerelmi életére."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_lagziszab')">+ Új szabály</button>
+      <div class="tinyhint">Egy kész, fix — vicces "hivatalos" lakodalmi szabályzat — kerül az újságba; a szövege nem szerkeszthető, csak a rovat mérete és pozíciója állítható.</div>
     </div>
   </div>
 
   <div class="card opt">
     <h3>Útmutató másnaposság ellen (vicces) <label class="tgl"><input type="checkbox" id="chk_masnapos" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_masnapos">
-      <div class="tinyhint">Vicces túlélő-tippek a másnapra — szabadon szerkeszthető.</div>
-      <div class="rep" id="rep_masnapos" data-tpl='<input class="r-in r-wide" data-k="tip" placeholder="tipp">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="tip" value="Víz, víz, víz — és ha lehet, ne kávéval kezdd."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="tip" value="A maradék torta reggelire is torta."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="tip" value="Ha valaki tegnap este megígért egy beszédet, ma már nem kötelező betartani."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_masnapos')">+ Új tipp</button>
+      <div class="tinyhint">Egy kész, fix — vicces túlélő-kisokos a másnapra — kerül az újságba; a szövege nem szerkeszthető, csak a rovat mérete és pozíciója állítható.</div>
     </div>
   </div>
 
@@ -1135,13 +1144,7 @@ A kedvenc díszítésed
   <div class="card opt">
     <h3>Gyakran Ismételt Kérdések (GYIK) <label class="tgl"><input type="checkbox" id="chk_gyik" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_gyik">
-      <div class="tinyhint">Frappáns kérdés-válasz páros — szabadon szerkeszthető.</div>
-      <div class="rep" id="rep_gyik" data-tpl='<input class="r-in r-wide" data-k="q" placeholder="kérdés"><input class="r-in r-wide" data-k="a" placeholder="válasz">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="q" value="Mikor lesz a baba?"><input class="r-in r-wide" data-k="a" value="Amikor lesz — de addig is szívesen elfogadjuk a gyakorlást megkönnyítő ajándékokat."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="q" value="Ki hordja a nadrágot?"><input class="r-in r-wide" data-k="a" value="Mindketten — csak külön napokon."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="q" value="Mennyi ideig voltatok együtt az esküvő előtt?"><input class="r-in r-wide" data-k="a" value="Elég ideig, hogy biztosan tudjuk — és elég rövid ideig, hogy még mindig izguljunk."><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_gyik')">+ Új kérdés</button>
+      <div class="tinyhint">Egy kész, fix — vicces kérdés-válasz csomag — kerül az újságba; a szövege nem szerkeszthető, csak a rovat mérete és pozíciója állítható.</div>
     </div>
   </div>
 
@@ -1177,7 +1180,7 @@ A kedvenc díszítésed
   </div>
 
   <div class="fitbar ok" id="fitStatus">A tartalom elfér a kiválasztott formátumban.</div>
-  <button class="gen-btn" onclick="generate()">✦ Tovább a szerkesztőbe — Híradó generálása ✦</button>
+  <button class="gen-btn" onclick="generate()">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
 </div>
 
 <!-- ===== PAPER ===== -->
@@ -1320,7 +1323,7 @@ function setWatermark(names){
 
 /* ===== block builders (return HTML string) ===== */
 function imgbox(label,cls,style){return '<div class="photo imgbox '+(cls||'')+'" data-label="'+escAttr(label||'')+'"'+(style?' style="'+style+'"':'')+'></div>';}
-function ico(id,sz){return '';}
+function ico(id,sz){return '<span class="ico"'+(sz?' style="width:'+sz+';height:'+sz+'"':'')+'><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#'+id+'"></use></svg></span>';}
 
 function B_cover(d){
   var ears=(d.slogan?'<div class="ears" style="justify-content:center;"><div class="slogan">'+esc(d.slogan)+'</div></div>':'');
@@ -1350,7 +1353,7 @@ function B_szuloknek(d){
     +'<p class="bp editable" contenteditable="true">'+esc(aMsg)+'</p></div>';
   if(bMsg)parts+='<div class="thanks-col"><h3 class="thanks-name editable" contenteditable="true">'+esc(bName||'Vőlegény szülei')+'</h3>'
     +'<p class="bp editable" contenteditable="true">'+esc(bMsg)+'</p></div>';
-  return '<div class="blk"><div class="kicker">Köszönet a szülőknek</div><hr class="rule-hair">'
+  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' Köszönet a szülőknek</div><hr class="rule-hair">'
     +'<div class="thanks-wrap">'+parts+'</div></div>';
 }
 function B_memorial(d){
@@ -1371,7 +1374,7 @@ function B_stats(d){
   var h='';s.forEach(function(x){h+='<div class="stat"><div class="num">'+esc(x[0])+'</div><div class="lbl">'+x[1]+'</div></div>';});
   /* a rovat fejléce egyezzen a varázslóban látott nevével ("Számokban a szerelmünk"), hogy a
      kitöltő ráismerjen arra, amit bekapcsolt */
-  return '<div class="blk"><div class="kicker">Számokban a szerelmünk</div><div class="stats">'+h+'</div></div>';
+  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' Számokban a szerelmünk</div><div class="stats">'+h+'</div></div>';
 }
 function B_childhood(d){
   return '<div class="blk"><div class="duo">'+imgbox('Egyikőtök gyerekként')+imgbox('Másikótok gyerekként')+'</div>'
@@ -1389,19 +1392,19 @@ function B_years(d){
     : '';
   var big='<div class="year-feature"><div class="year-big">'+imgbox('Az esküvőnk éve')
     +'<div class="yr year-big-lbl">'+esc(String(years[hi]))+'</div></div></div>';
-  return '<div class="blk years-half"><div class="kicker" style="border:none;margin-bottom:1px;">Minden évből egy kép</div>'+grid+big+'</div>';
+  return '<div class="blk years-half"><div class="kicker" style="border:none;margin-bottom:1px;">'+ico('i-camera')+' Minden évből egy kép</div>'+grid+big+'</div>';
 }
 function B_menetrend(d){
   var withTimes=on('chk_times');
   var steps='';readRows('rep_prog').forEach(function(r){var ev=(r.event||'').trim();if(!ev)return;var first=ev.split(/[,–-]/)[0].trim();var rest=ev.slice(first.length);var tp=(withTimes&&r.time)?'<b class="t-time">'+esc(r.time)+'</b> ':'';steps+='<div class="step"><span>'+tp+'<b>'+esc(first)+'</b>'+esc(rest)+'</span></div>';});
   if(!steps)return '';
-  return '<div class="blk"><div class="col-head">Menetrend</div><div class="flow">'+steps+'</div></div>';
+  return '<div class="blk"><div class="col-head">'+ico('i-clock')+' Menetrend</div><div class="flow">'+steps+'</div></div>';
 }
 function B_etlap(d){
   var courses=[['Vendégvárás / előétel',val('f_m_app')],['Leves',val('f_m_soup')],['Főétel',val('f_m_main')],['Éjféli fogás',val('f_m_night')],['Desszert',val('f_m_dessert')]];
   var menu='';courses.forEach(function(c){if(!c[1])return;var lines=c[1].split('\n').filter(function(x){return x.trim();});lines.forEach(function(ln,ix){menu+='<div class="row"><span class="course">'+(ix===0?esc(c[0]):'')+'</span><span class="dish">'+esc(ln.trim())+'</span></div>';});});
   if(!menu)return '';
-  return '<div class="blk"><div class="col-head">Mai nap étlapja</div><div class="menu">'+menu+'</div></div>';
+  return '<div class="blk"><div class="col-head">'+ico('i-cutlery')+' Mai nap étlapja</div><div class="menu">'+menu+'</div></div>';
 }
 function B_italok(d){
   if(!d.drinks)return '';
@@ -1410,31 +1413,31 @@ function B_italok(d){
   var h='<div class="hers-his"><div class="hh"><div class="t">A férj itala</div><div class="n">'+esc(hw)+'</div></div>'
     +'<div class="hh"><div class="t">A feleség itala</div><div class="n">'+esc(ww)+'</div></div></div>'
     +(val('f_barNote')?'<p class="bar-note editable" contenteditable="true">'+esc(val('f_barNote'))+'</p>':'');
-  return '<div class="blk"><div class="col-head">A pár kedvenc itala</div>'+h+'</div>';
+  return '<div class="blk"><div class="col-head">'+ico('i-glass')+' A pár kedvenc itala</div>'+h+'</div>';
 }
 function B_robbantsd(d){
   if(!d.robbantsd)return '';
-  return '<div class="blk"><div class="rovat"><div class="rovat-h">Robbantsd fel a telefonunkat!</div><p class="editable" contenteditable="true">'+esc(val('f_robText'))+'</p></div></div>';
+  return '<div class="blk"><div class="rovat"><div class="rovat-h">'+ico('i-chat')+' Robbantsd fel a telefonunkat!</div><p class="editable" contenteditable="true">'+esc(val('f_robText'))+'</p></div></div>';
 }
 function B_vendegkonyv(d){
   if(!d.message)return '';
-  return '<div class="blk"><div class="rovat"><div class="rovat-h">Hagyj nekünk üzenetet a vendégkönyvben!</div><p class="editable" contenteditable="true">'+esc(val('f_guestText'))+'</p></div></div>';
+  return '<div class="blk"><div class="rovat"><div class="rovat-h">'+ico('i-pen')+' Hagyj nekünk üzenetet a vendégkönyvben!</div><p class="editable" contenteditable="true">'+esc(val('f_guestText'))+'</p></div></div>';
 }
 function B_fotovadasz(d){
   if(!d.foto)return '';
   var items='';val('f_hunt').split('\n').forEach(function(l){l=l.trim();if(!l)return;items+='<li><span class="cbx"></span>'+esc(l)+'</li>';});
   if(!items)return '';
-  return '<div class="blk"><div class="rovat-h">Fotóvadász játék</div><p class="hunt-intro">Készíts képet/videót ezekről:</p><ul class="hunt-list">'+items+'</ul></div>';
+  return '<div class="blk"><div class="rovat-h">'+ico('i-camera')+' Fotóvadász játék</div><p class="hunt-lead">Kapd el a pillanatot, és küldd el a képeket az ifjú párnak!</p><p class="hunt-intro">Készíts képet/videót ezekről:</p><ul class="hunt-list">'+items+'</ul></div>';
 }
 function B_qr(d){
   if(!on('chk_qr2')){
     return '<div class="blk"><div class="qr-band"><div class="qr-band-h">'+ico('i-camera')+'<span>'+esc(val('f_qrHead'))+'</span></div>'
-      +'<div class="qr-row qr-row-1"><div class="qr-cell">'+imgbox('Google Drive QR','qrbox')+'<div class="qr-cap">'+ico('i-drive','12px')+' '+esc(val('f_driveCap'))+'</div></div></div></div></div>';
+      +'<div class="qr-row qr-row-1"><div class="qr-cell">'+imgbox('QR-kód','qrbox')+'<div class="qr-cap">'+esc(val('f_driveCap'))+'</div></div></div></div></div>';
   }
   return '<div class="blk"><div class="qr-band"><div class="qr-band-h">'+ico('i-camera')+'<span>'+esc(val('f_qrHead'))+'</span></div>'
-    +'<div class="qr-row"><div class="qr-cell">'+imgbox('Google Drive QR','qrbox')+'<div class="qr-cap">'+ico('i-drive','12px')+' '+esc(val('f_driveCap'))+'</div></div>'
+    +'<div class="qr-row"><div class="qr-cell">'+imgbox('QR-kód','qrbox')+'<div class="qr-cap">'+esc(val('f_driveCap'))+'</div></div>'
     +'<div class="qr-mid">'+esc(val('f_qrMid'))+'</div>'
-    +'<div class="qr-cell">'+imgbox('DJ QR-kód','qrbox')+'<div class="qr-cap">'+ico('i-music','12px')+' '+esc(val('f_djCap'))+'</div></div></div></div></div>';
+    +'<div class="qr-cell">'+imgbox('QR-kód','qrbox')+'<div class="qr-cap">'+esc(val('f_djCap'))+'</div></div></div></div></div>';
 }
 function B_closer(d){
   if(!d.closer)return '';
@@ -1462,7 +1465,7 @@ function newQuote(btn){pushUndo();var blk=btn.closest('.filler-blk');if(!blk)ret
 function B_itallap(d){
   var items='';val('f_itallap').split('\n').forEach(function(l){l=l.trim();if(!l)return;var idx=l.indexOf(':');var c=idx>=0?l.slice(0,idx).trim():'';var dd=idx>=0?l.slice(idx+1).trim():l;items+='<div class="row"><span class="course">'+esc(c)+'</span><span class="dish">'+esc(dd)+'</span></div>';});
   if(!items)return '';
-  return '<div class="blk"><div class="col-head">Itallap</div><div class="menu">'+items+'</div></div>';
+  return '<div class="blk"><div class="col-head">'+ico('i-glass')+' Itallap</div><div class="menu">'+items+'</div></div>';
 }
 function B_csapat(d){
   function card(role,name,role2,desc){ if(!name)return ''; return '<div class="tm-card">'+imgbox(role||name)+'<div class="tm-role">'+esc(role)+'</div><div class="tm-name">'+esc(name)+'</div>'+(role2?'<div class="tm-help">'+esc(role2)+'</div>':'')+(desc?'<div class="tm-desc">'+esc(desc)+'</div>':'')+'</div>'; }
@@ -1475,14 +1478,14 @@ function B_csapat(d){
   var left=side('Feleség oldala','f_w_oromapa','f_w_oromanya','f_w_tanu','Feleség tanúja',readRows('rep_kl'),'Koszorúslány');
   var right=side('Férj oldala','f_h_oromapa','f_h_oromanya','f_h_tanu','Férj tanúja',readRows('rep_kf'),'Koszorúsfiú');
   var gyuru=val('f_gyuru')?'<div class="gyuru-wrap"><div class="tm-card" style="width:34mm;margin:4mm auto 0;">'+imgbox('Gyűrűhordó')+'<div class="tm-role">Gyűrűhordó</div><div class="tm-name">'+esc(val('f_gyuru'))+'</div></div></div>':'';
-  return '<div class="blk team-page"><div class="kicker">A csapatunk</div>'
+  return '<div class="blk team-page"><div class="kicker">'+ico('i-person')+' A csapatunk</div>'
     +'<div class="team-split"><div class="team-col">'+left+'</div><div class="team-col">'+right+'</div></div>'
     +gyuru+'</div>';
 }
 function B_szinglik(d){
   var cards='';readRows('rep_singles').forEach(function(r){if(!r.name)return;var tbl=r.table?('<div class="tm-role">'+esc(r.table)+(/asztal/i.test(r.table)?'':'. asztal')+'</div>'):'';cards+='<div class="tm-card">'+imgbox(r.name)+'<div class="tm-name">'+esc(r.name)+'</div>'+tbl+'</div>';});
   if(!cards)return '';
-  return '<div class="blk"><div class="kicker">A szinglik</div>'
+  return '<div class="blk"><div class="kicker">'+ico('i-person')+' A szinglik</div>'
     +(val('f_singlesIntro')?'<p class="bp" style="text-align:center;font-style:italic;margin:0 0 4px;">'+esc(val('f_singlesIntro'))+'</p>':'')
     +'<div class="tm-grid">'+cards+'</div></div>';
 }
@@ -1534,61 +1537,129 @@ function B_igazhamis(d){
   var stmts=[];
   readRows('rep_igazhamis').forEach(function(r){ if(r.stmt)stmts.push(r.stmt); });
   if(stmts.length<2)return '';
-  var lieNums=(val('f_igazhamisLies')||'').split(',').map(function(s){return parseInt(s.trim(),10);}).filter(function(n){return !isNaN(n);});
   var items=stmts.map(function(s){return '<li class="editable" contenteditable="true">'+esc(s)+'</li>';}).join('');
-  var answer=lieNums.length?lieNums.join(', ')+'. állítás':'?';
   return '<div class="blk"><div class="kicker">Igaz vagy hamis? 🕵️</div>'
-    +'<p class="bp" style="text-align:center;font-style:italic;margin:0 0 5px;">Az alábbiak közül 1–2 állítás nem igaz — melyik?</p>'
-    +'<ol class="truefalse-list">'+items+'</ol>'
-    +'<div class="jatekok-answers">Hazugság — '+esc(answer)+'</div></div>';
+    +'<p class="bp" style="text-align:center;font-style:italic;margin:0 0 5px;">Az alábbiak közül 1–2 állítás nem igaz — melyik? Kérdezd meg élőben a párt!</p>'
+    +'<ol class="truefalse-list">'+items+'</ol></div>';
 }
 function B_lagziszabalyzat(d){
-  var items='';
-  readRows('rep_lagziszab').forEach(function(r){ if(!r.rule)return; items+='<li class="editable" contenteditable="true">'+esc(r.rule)+'</li>'; });
-  if(!items)return '';
-  return '<div class="blk"><div class="kicker">A lagzi szabályzata 📜</div><ol class="rules-list">'+items+'</ol></div>';
+  /* fix, statikus tartalom — nem szerkeszthető szöveg, csak a rovat mérete/pozíciója
+     állítható (akárcsak a horoszkópnál/játékoknál) */
+  var arts=[
+    ['I.','A Táncparkett Törvénye',null,[
+      '1. §: A táncolás nem tehetség, hanem elszántság kérdése. Minden ritmustalan rángatózás, „vonatozás” és indokolatlan breaktánc-kísérlet hivatalos művészeti önkifejezésnek minősül.',
+      '2. §: Szigorúan tilos a menyasszony uszályára lépni, azon csúszkálni, vagy azt takarónak használni a hajnali órákban.',
+      '3. §: Ha felcsendül az „Az a szép, az a szép...” vagy az „Érik a szőlő”, a parkettre lépés minden 18 és 99 év közötti vendég számára állampolgári kötelesség.'
+    ]],
+    ['II.','A Gasztro- és Alkoholgazdálkodási Kódex',null,[
+      '1. §: Az asztalon található sütemények „csak még egy darabot eszem” elven működnek. Kalóriaszámlálás a terem területén bűncselekménynek minősül.',
+      '2. §: A menyasszonyi torta felvágásakor kötelező a „Mmm, de finom!” és az „Ó, de szép!” felkiáltások kórusban való skandálása.',
+      '3. §: Aki éjfélkor nem eszik legalább egy tányér töltött káposztát, azt a hatóságok gyanúsnak nyilvánítják, és visszatapsolják a bárpultthoz.'
+    ]],
+    ['III.','Fotó- és Videóügyi Rendelet','Különös figyelmeztetés: A lagzin hivatásos fotós és videós dolgozik. Minden, amit teszel, rögzítésre kerül, és felhasználható lesz ellened a következő családi karácsonykor!',[
+      '1. §: Ha meglátod a kamerát, azonnal hagyd abba a rágást, húzd be a hasad, és vágj olyan arcot, mint aki épp élete legintelligensebb beszélgetését folytatja.',
+      '2. §: A csúnya/vicces arcok vágása a fotóboxban (photobooth) nemcsak megengedett, de elvárt. A gátlások a ruhatárban maradtak.'
+    ]],
+    ['IV.','Záró Rendelkezések',null,[
+      'A legfontosabb szabály: Sírni csak a meghatódottságtól ér, nevetni mindenen kötelező, hazamenni pedig csak akkor szabad, ha a cipőd már kényelmetlen, a hangod elment, és az ifjú pár boldogságára ivott poharak száma elérte a kritikus tömeget.'
+    ]]
+  ];
+  var cards=arts.map(function(a){
+    var paras=(a[2]?'<p><i>'+esc(a[2])+'</i></p>':'')+a[3].map(function(p){return '<p>'+esc(p)+'</p>';}).join('');
+    return '<div class="guide-item"><div class="guide-h">'+a[0]+' Cikkely: '+esc(a[1])+'</div><div class="guide-txt">'+paras+'</div></div>';
+  }).join('');
+  return '<div class="blk"><div class="kicker">A lagzi szabályzata 📜</div>'
+    +'<div class="guide-sub">Hivatalos és Szigorúan Titkos Lakodalmi Szabályzat</div>'
+    +'<p class="bp">Üdvözlünk az év legnagyobb buliján! Annak érdekében, hogy az este folyamán a jókedv maximális, a botrányok száma pedig minimális legyen, az Ifjú Pár és a Vőfély/Ceremóniamester Tanács jóváhagyásával az alábbi törvénykönyv lép életbe. A szabályok be nem tartása azonnali kötelező pálinkázást von maga után!</p>'
+    +'<div class="guide-grid">'+cards+'</div>'
+    +'<p class="bp">Jó szórakozást és sok boldogságot az Ifjú Párnak! A szabályzat visszavonásig (vagy a menyasszonytáncig) érvényes!</p>'
+    +'</div>';
 }
 function B_masnaposvedelem(d){
-  var items='';
-  readRows('rep_masnapos').forEach(function(r){ if(!r.tip)return; items+='<li class="editable" contenteditable="true">'+esc(r.tip)+'</li>'; });
-  if(!items)return '';
-  return '<div class="blk"><div class="kicker">Útmutató másnaposság ellen 🤕</div><ol class="rules-list">'+items+'</ol></div>';
+  /* fix, statikus tartalom — nem szerkeszthető szöveg, csak a rovat mérete/pozíciója
+     állítható (akárcsak a horoszkópnál/játékoknál) */
+  var tips=[
+    ['🥃💧','A „Pálinka-Víz Szendvics” taktika',[
+      'Nem kell lemondani a koccintásról, de játssz okosan! Minden egyes feles, fröccs vagy koktél után küldj le egy teljes pohár vizet.',
+      'A szabály egyszerű: 1 feles = 1 pohár víz. Ha ezt betartod, holnap reggel nem egy zombira fog hasonlítani a tükörképed, hanem egy hősre, aki meghódította a lakodalmat.'
+    ]],
+    ['🥘','A Töltött Káposzta: A te védőpajzsod',[
+      'Amikor éjfélkor begördül a töltött káposzta (vagy a vőfély bejelenti az éjféli menüt), az nem egy opció. Az egy parancs.',
+      'A nehéz, szaftos ételek tökéletesen felszívják a tegn... izé, a ma esti alkoholt.',
+      'Ne hagyd ki a savanyúságot sem! A sós-savanyú ízek csodákra képesek, és azonnal kitolják az energiaszintedet a hajnali négyes „vonatozásig”.'
+    ]],
+    ['🕶️','A „Biztonsági Napszemüveg” protokoll',[
+      'Láttál már valakit a táncparketten éjfél után napszemüvegben? Nem, nem azért hordja, mert hirtelen kisütött a nap a teremben. Ez a profik fegyvere!',
+      'Eltakarja a fáradtságot: Senki nem látja, ha két szám között két másodpercre elalszol állva.',
+      'Véd a vakuktól: A fotós és a videós elől nincs menekvés, de a sötét lencsék mögött mindig úgy tűnsz majd, mintha a helyzet magaslatán lennél.'
+    ]],
+    ['🚨','Ismerd fel a vészjelzéseket!',[
+      'Ha a következő tüneteket észleled magadon, azonnal kérj egy kávét vagy menj ki a friss levegőre:',
+      '• Azt hiszed, hogy te vagy a Dirty Dancing főszereplője (és meg akarod csinálni az emelést).',
+      '• Hirtelen úgy érzed, folyékonyan beszélsz azon a nyelven, amin a külföldi vendégek.',
+      '• A menyasszonyi ruha uszályát szőnyegnek nézed, és ráfekszel.'
+    ]]
+  ];
+  var cards=tips.map(function(t,i){
+    var paras=t[2].map(function(p){return '<p>'+esc(p)+'</p>';}).join('');
+    return '<div class="guide-item"><div class="guide-h">'+(i+1)+'. '+t[0]+' '+esc(t[1])+'</div><div class="guide-txt">'+paras+'</div></div>';
+  }).join('');
+  return '<div class="blk"><div class="kicker">Túlélési kisokos 🤕</div>'
+    +'<div class="guide-sub">Hogyan előzd meg a holnapi katasztrófát?</div>'
+    +'<p class="bp">Kedves Vendég! Ha ezt a cikket olvasod, az azt jelenti, hogy a hangulat már a tetőfokára hágott, a DJ zseniális, a bárpult pedig gyanúsan közel van hozzád.</p>'
+    +'<p class="bp">Félreértés ne essék: az ifjú pár azért hívott meg, hogy ünnepelj, táncolj, és addig igyál a boldogságukra, amíg a hersegő rántott hús is édesnek tűnik. De hogy a holnapi napod ne a fejfájásról és a sötét szobában való kuporgásról szóljon, íme a hivatalos, lagzi közbeni túlélési stratégia – egyenesen a táncparkett közepéről!</p>'
+    +'<div class="guide-grid">'+cards+'</div>'
+    +'<p class="bp">A lényeg: Érezd jól magad, táncolj kifulladásig, és ne feledd: holnap a morzsapartin mindent ellenőrzünk! Egészségetekre!</p>'
+    +'</div>';
 }
 function B_gyik(d){
-  var items='';
-  readRows('rep_gyik').forEach(function(r){ if(!r.q)return; items+='<div class="gyik-item"><div class="gyik-q editable" contenteditable="true">'+esc(r.q)+'</div><div class="gyik-a editable" contenteditable="true">'+esc(r.a||'')+'</div></div>'; });
-  if(!items)return '';
-  return '<div class="blk"><div class="kicker">Gyakran Ismételt Kérdések</div>'+items+'</div>';
+  /* fix, statikus tartalom — nem szerkeszthető szöveg, csak a rovat mérete/pozíciója
+     állítható (akárcsak a horoszkópnál/játékoknál) */
+  var qa=[
+    ['Mikor eszünk végre?','Nyugi, senki sem fog éhen halni! A gasztronómiai menetrendet a csillagok (és a konyhafőnök) állították össze. Ha nagyon korog a gyomrod, a látótávolságon belül elhelyezett pogácsák és aprósütemények átmeneti mentőövként szolgálnak.'],
+    ['Kötelező táncolni? Nekem nincs ritmusérzékem…','Nem kötelező, de erősen ajánlott. Jó hír: éjfél után, a harmadik fröccs/pálinka után a ritmusérzék teljesen relatív fogalommá válik. Ha a lábad mozog, már táncolsz. Ha a fejed bólogat, az is fél siker. A vőfély/ceremóniamester szigorúan figyel, a lógósokat visszatereli!'],
+    ['Mit tegyek, ha meglátom a fotóst/videóst?','Azonnal alkalmazd az úgynevezett „Insta-póz” protokollt: húzd be a hasad, engedd le a falatot a torkodon, és mosolyogj úgy, mintha épp életed legfrappánsabb viccét hallottad volna. Ha a táncparketten kap el, a vad rángatózást azonnal váltsd át elegáns, ritmikus mozdulatokká.'],
+    ['Meddig tart a buli? Mikor lehet hazamenni?','Hazamenni? Ezt a szót töröltük a mai szótárból. A buli addig tart, amíg a DJ-nek van áramforrása, a bárpultnak készlete, és amíg legalább két ember képes tartani a „vonat” végét a táncparketten. Korai távozás csak orvosi igazolással vagy az Ifjú Pár írásos engedélyével lehetséges.'],
+    ['Mi a teendő, ha véletlenül a menyasszony uszályára léptem?','1. Ne ess pánikba. 2. Tegyél úgy, mintha mi sem történt volna, és dicsérd meg a ruhát. 3. Sürgősen válts asztalt vagy vonulj vissza a bárpult mögé egy békéltető italért, amit felajánlhatsz a vőlegénynek.'],
+    ['Holnap nagyon fog fájni a fejem?','Ez kizárólag azon múlik, hogy betartottad-e a lap túloldalán található Túlélési kisokos utasításait. Ha a „Pálinka-Víz Szendvics” taktika csődöt mondott, a holnapi morzsapartin várunk egy kávéval és sok együttérzéssel!']
+  ];
+  var items=qa.map(function(r){return '<div class="gyik-item"><div class="gyik-q">'+esc(r[0])+'</div><div class="gyik-a">'+esc(r[1])+'</div></div>';}).join('');
+  return '<div class="blk"><div class="kicker">'+ico('i-chat')+' Gyakran Ismételt Kérdések (GYIK) a mai estére</div>'+items+'</div>';
 }
 function B_interju(d){
   var rows=readRows('rep_interju').filter(function(r){return r.q;});
   if(!rows.length)return '';
   var hQa=rows.map(function(r){return '<div class="interview-qa"><div class="interview-q editable" contenteditable="true">'+esc(r.q)+'</div><div class="interview-a editable" contenteditable="true">'+esc(r.ha||'')+'</div></div>';}).join('');
   var wQa=rows.map(function(r){return '<div class="interview-qa"><div class="interview-q editable" contenteditable="true">'+esc(r.q)+'</div><div class="interview-a editable" contenteditable="true">'+esc(r.wa||'')+'</div></div>';}).join('');
-  return '<div class="blk"><div class="kicker">Exkluzív interjú</div><div class="interview-sub">Külön kérdeztük meg őket — nem hallották egymás válaszait…</div>'
+  return '<div class="blk"><div class="kicker">'+ico('i-chat')+' Exkluzív interjú</div><div class="interview-sub">Külön kérdeztük meg őket — nem hallották egymás válaszait…</div>'
     +'<div class="interview-grid">'
     +'<div class="interview-col"><div class="interview-photo">'+imgbox('férj fotó','fr-circle')+'</div><div class="interview-name">Férj válasza</div>'+hQa+'</div>'
     +'<div class="interview-col"><div class="interview-photo">'+imgbox('feleség fotó','fr-circle')+'</div><div class="interview-name">Feleség válasza</div>'+wQa+'</div>'
     +'</div></div>';
 }
 function B_horoszkop(d){
-  /* fix, statikus tartalom — mind a 12 csillagjegyre egy-egy vicces, "ma éjjelre" szóló jóslat */
+  /* fix, statikus tartalom — mind a 12 csillagjegyre egy-egy vicces jóslat + a csillagjegy
+     hagyományos asztrológiai jele (Unicode-glifa), méretben és stílusban a rovathoz igazítva */
   var signs=[
-    ['Kos','ma este a táncparkett ördöge lesz, de vigyázzon a bokájára.'],
-    ['Bika','a harmadik pohár után mindenkinek elmagyarázza, miért ez a legjobb pár.'],
-    ['Ikrek','egyszerre beszélget három asztalnál — és mindenhol ő a sztár.'],
-    ['Rák','könnyezik a pohárköszöntőnél, majd letagadja.'],
-    ['Oroszlán','a fényképeken mindig középre áll — akkor is, ha nem az ő napja van.'],
-    ['Szűz','pontosan tudja, ki hányadik asztalnál ül, és miért nem jó ötlet.'],
-    ['Mérleg','nem tud választani a torta és a sütemény között — végül mindkettőt megeszi.'],
-    ['Skorpió','alkut köt a DJ-vel, hogy lejátssza a kedvenc számát.'],
-    ['Nyilas','elsőként ugrik be a tánctér közepére.'],
-    ['Bak','megnézi az óráját, és mégis hajnalig marad.'],
-    ['Vízöntő','filozófiai vitába kezd valakivel a pezsgős pohár mellett.'],
-    ['Halak','a legelső, aki könnyes szemmel gratulál a párnak.']
+    ['♈','Kos','Március 21. – Április 20.','A Mars ma estére extra energiákkal ruház fel. Te leszel az, aki este 9-kor berúgja a táncparkett motorját, és hajnali 3-kor még mindig te vezeted a vonatot.','Hajjlamos vagy rávenni a násznépet olyan mutatványokra (pl. az ifjú pár levegőbe dobálása), amikre a fizika törvényei szerint még nem állunk készen.','Cseréld le a magassarkút/alkalmi cipőt még a tortavágás előtt!'],
+    ['♉','Bika','Április 21. – Május 20.','A Vénusz a te uralkodó bolygód, ami ma a gasztronómia iránti szeretetedben csúcsosodik ki. Téged nem a táncparketten kell keresni, hanem az asztalnál vagy a büfésornál. Pontosan tudod, mikor érkezik a húsleves, a pörkölt és a torta.','Ha valaki elviszi az asztalodról az utolsó pogácsát, a nézéseddel embert tudnál ölni.','Barátkozz össze a felszolgálókkal, aranyat ér!'],
+    ['♊','Ikrek','Május 21. – Június 21.','A kommunikáció nagymestere vagy, a lagzi számodra egy hatalmas networking esemény. Mire a főétel asztalra kerül, te már a vőlegény harmadunokatestvérével és a menyasszony gyerekkori barátnőjével is megvitattad az élet nagy dolgait.','Két asztal között félúton elfelejted, hova indultál, és a bárpultnál kötsz ki.','Ne felejts el enni is a nagy beszélgetések közepette!'],
+    ['♋','Rák','Június 22. – Július 22.','Készítsd a zsebkendőket! A Hold romantikus energiái teljesen elárasztanak. Te már a bevonulásnál sírsz, a fogadalomnál zokogsz, a nyitótáncnál pedig a sminked maradványait mented.','Hajnali kettőkor hajlamos vagy átmenni szentimentálisba, és minden szembejövőnek elmondani, mennyire szereted őket.','A vízálló szempillaspirál ma a legjobb barátod.'],
+    ['♌','Oroszlán','Július 23. – Augusztus 23.','A Nap ragyogása ma rád vetül. Úgy lépsz be a terembe, mintha a vörös szőnyegen járnál, és titokban azt hiszed, a fotós csak téged fényképez. Ha megszólal a kedvenc számod, a táncparkett közepét azonnal kisajátítod.','Ha a DJ nem játssza le a kérésedet 5 percen belül, hajlamos vagy átvenni az irányítást a keverőpult felett.','Engedd a menyasszonyt is érvényesülni, elvégre ez az ő napja!'],
+    ['♍','Szűz','Augusztus 24. – Szeptember 22.','A Merkúr elemzővé tesz. Te vagy az, aki észreveszi, ha a dekoráció 2 millimétert csúszott balra, vagy ha a leves egy kicsit sótlan. Mindent látsz, mindent értékelsz, és te vagy a lagzi információs központja.','Túl sokat aggódsz a menetrend miatt.','Engedd el a kontrollt! Ha a vőfély szerint minden rendben, akkor igyál egy fröccsöt és lazíts.'],
+    ['♎','Mérleg','Szeptember 23. – Október 23.','A harmónia és a diplomácia nagykövete vagy. Egész este azon fáradozol, hogy mindenki jól érezze magát, és sikeresen kibékíted a haragos rokonokat a svédasztalnál.','Képtelen vagy eldönteni, hogy a rozé fröccsöt vagy a sört válaszd, ezért a bárpultosnak veled van a legnehezebb dolga.','Ha bizonytalan vagy, kérj pálinkát, az mindenhez passzol.'],
+    ['♏','Skorpió','Október 24. – November 22.','A Plútó titokzatossá tesz. Sötét napszemüvegben, a sarokból figyeled az eseményeket, és pontosan látod, ki kivel flörtöl, és ki ivott eggyel több bort a kelleténél.','Ha beszippant a buli, te leszel az, aki a legvadabb táncot járja, de másnap úgy teszel, mintha semmire sem emlékeznél.','Ne tartsd magadban a jókedvet, a táncparkettnek szüksége van a ritmusodra!'],
+    ['♐','Nyilas','November 23. – December 21.','A Jupiter ma este gondoskodik a határtalan jókedvedről. Te vagy a lagzi hivatalos hangulatfelelőse, a poéngyáros és a koccintások kezdeményezője.','Hajlamos vagy túlbecsülni a pálinkabírásodat, és olyan bátor kijelentéseket tenni, mint: „Simán átugrom a menyasszonyi tortát!”','Maradj a talajon (szó szerint is)!'],
+    ['♑','Bak','December 22. – Január 20.','A Szaturnusz komolysága az este elején még tartja magát: te vagy az, aki elegánsan, egyenes háttal ül az asztalnál, és visszafogottan koccint. Ám ahogy telik az idő, és fogy a száraz fehérbor, a gátlások átszakadnak.','Éjfél után belőled válik a legelszántabb bulikirály, akit hajnalban a biztonsági őröknek kell lekönyörögniük az asztal tetejéről.','Ne várd meg az éjfélt a lazítással, kezdd el már a lagzi elején!'],
+    ['♒','Vízöntő','Január 21. – Február 19.','Az Uránusz az egyediséget hozza ki belőled. Olyan ruhában érkezel, ami tuti nem jön szembe senki máson, és a táncstílusod is leginkább egy kortárs avantgárd színházi előadásra emlékeztet.','Kitalálod, hogy át kell szervezni a lagzi menetrendjét, mert szerinted a tortavágás előtt kellene megtartani a csoportos dekázó versenyt.','Élvezd a bulit úgy, ahogy van, a rendhagyó ötleteidet tartogasd a morzsapartira!'],
+    ['♓','Halak','Február 20. – Március 20.','A Neptunusz miatt ma egy kicsit a fellegekben jársz. Téged teljesen elvarázsol a fényfüzérek csillogása, a romantikus zene és a szeretet ereje.','Könnyen elveszíted a fonalat (és a telefonodat, a zakódat, vagy a táskádat). Ha nem találnak meg a barátaid, valószínűleg a fotóbox kellékei között alszol épp.','Jelölj ki magad mellé egy „őrangyalt” a barátaid közül, aki figyel a holmidra!']
   ];
-  var cards=signs.map(function(s){return '<div class="horo-card"><div class="horo-sign">'+esc(s[0])+'</div><div class="horo-txt">'+esc(s[1])+'</div></div>';}).join('');
-  return '<div class="blk"><div class="kicker">Horoszkóp — ma éjjelre ✨</div><div class="horo-grid">'+cards+'</div></div>';
+  var cards=signs.map(function(s){
+    return '<div class="horo-card"><div class="horo-sign"><span class="horo-ico">'+s[0]+'</span>'+esc(s[1])+'</div>'
+      +'<div class="horo-dates">'+esc(s[2])+'</div>'
+      +'<div class="horo-txt"><p>'+esc(s[3])+'</p><p><b>Veszély:</b> '+esc(s[4])+'</p><p><b>Lagzi tipp:</b> '+esc(s[5])+'</p></div></div>';
+  }).join('');
+  return '<div class="blk"><div class="kicker">Horoszkóp — ma éjjelre ✨</div><div class="horo-grid horo-grid-2">'+cards+'</div></div>';
 }
 function B_szinezo(d){
   var svg='<svg viewBox="0 0 300 380" class="szinezo-art" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'
@@ -1617,27 +1688,27 @@ function B_negylabu(d){
 }
 function B_ismerkedes(d){
   if(!val('f_ismerkedes'))return '';
-  return '<div class="blk"><div class="kicker">Hogyan ismerkedtünk meg?</div><div class="duo"><div style="flex:1;">'+imgbox('fotó')+'</div><div style="flex:1.2;display:flex;align-items:center;"><p class="bp editable" contenteditable="true" style="text-align:left;margin:0;">'+esc(val('f_ismerkedes'))+'</p></div></div></div>';
+  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' Hogyan ismerkedtünk meg?</div><div class="duo"><div style="flex:1;">'+imgbox('fotó')+'</div><div style="flex:1.2;display:flex;align-items:center;"><p class="bp editable" contenteditable="true" style="text-align:left;margin:0;">'+esc(val('f_ismerkedes'))+'</p></div></div></div>';
 }
 function B_lanykeres(d){
   if(!val('f_lanykeres'))return '';
-  return '<div class="blk"><div class="kicker">A lánykérés</div><div class="duo"><div style="flex:1;">'+imgbox('fotó')+'</div><div style="flex:1.2;display:flex;align-items:center;"><p class="bp editable" contenteditable="true" style="text-align:left;margin:0;">'+esc(val('f_lanykeres'))+'</p></div></div></div>';
+  return '<div class="blk"><div class="kicker">'+ico('i-rings')+' A lánykérés</div><div class="duo"><div style="flex:1;">'+imgbox('fotó')+'</div><div style="flex:1.2;display:flex;align-items:center;"><p class="bp editable" contenteditable="true" style="text-align:left;margin:0;">'+esc(val('f_lanykeres'))+'</p></div></div></div>';
 }
 function B_legelsokep(d){
-  return '<div class="blk"><div class="kicker">A legelső közös kép</div><div class="duo"><div style="flex:1;">'+imgbox('legelső közös kép')+'</div>'
+  return '<div class="blk"><div class="kicker">'+ico('i-camera')+' A legelső közös kép</div><div class="duo"><div style="flex:1;">'+imgbox('legelső közös kép')+'</div>'
     +(val('f_legelsokep')?'<div style="flex:1.2;display:flex;align-items:center;"><p class="bp editable" contenteditable="true" style="text-align:left;margin:0;">'+esc(val('f_legelsokep'))+'</p></div>':'')
     +'</div></div>';
 }
 function B_jegyesfoto(d){
   var cnt=Math.max(2,Math.min(6,parseInt(val('f_jegyesfotoCount'),10)||4));
   var cells='';for(var i=0;i<cnt;i++)cells+='<div class="jf-cell">'+imgbox('jegyesfotó')+'</div>';
-  return '<div class="blk"><div class="kicker">A jegyesfotózás képei</div><div class="jf-grid">'+cells+'</div></div>';
+  return '<div class="blk"><div class="kicker">'+ico('i-camera')+' A jegyesfotózás képei</div><div class="jf-grid">'+cells+'</div></div>';
 }
 function B_sztori(d){
   var it=[['Első randi','f_s1'],['Első közös utazás','f_s2'],['Első közös otthon','f_s3'],['Eljegyzés','f_s4']];
   var steps='';it.forEach(function(a){var v=val(a[1]);if(v)steps+='<div class="step"><span><b>'+esc(a[0])+'</b> — '+esc(v)+'</span></div>';});
   if(!steps)return '';
-  return '<div class="blk"><div class="col-head">A sztorink dióhéjban</div><div class="duo">'
+  return '<div class="blk"><div class="col-head">'+ico('i-heart')+' A sztorink dióhéjban</div><div class="duo">'
     +'<div style="flex:1.3;display:flex;align-items:center;"><div class="flow" style="width:100%;">'+steps+'</div></div>'
     +'<div style="flex:1;">'+imgbox('fotó (opcionális)')+'</div></div></div>';
 }
@@ -1663,7 +1734,7 @@ function B_szulok(d){
   var cards='';
   for(var i=1;i<=2;i++){var nm=val('f_par'+i);if(nm)cards+='<div class="tm-card">'+imgbox('régi esküvői kép','bw')+'<div class="tm-name">'+esc(nm)+'</div></div>';}
   if(!cards)return '';
-  return '<div class="blk"><div class="kicker">Szerelmek, melyekből születtünk</div><div class="tm-grid tm-grid-2">'+cards+'</div></div>';
+  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' Szerelmek, melyekből születtünk</div><div class="tm-grid tm-grid-2">'+cards+'</div></div>';
 }
 /* ===== measure ===== */
 function measure(html){
@@ -2128,7 +2199,7 @@ function backToWizard(){
       +'<h2>Az újságod elkészült!</h2>'
       +'<div class="done-saved" id="doneSaveStatus"><b>💾 Mentés a rendszerbe…</b>Kérlek, várj egy pillanatot.</div>'
       +'<div class="done-email">'
-      +'<label for="doneEmail">E-mail címed (kötelező — ide tudjuk elküldeni a vízjel nélküli híradót)</label>'
+      +'<label for="doneEmail">E-mail címed (kötelező — ide tudjuk elküldeni a vízjel nélküli újságot)</label>'
       +'<input type="email" id="doneEmail" placeholder="pelda@email.hu" autocomplete="email">'
       +'<div class="hint" id="doneEmailHint">Add meg az e-mail címed a letöltéshez vagy rendeléshez.</div>'
       +'</div>'
@@ -2299,7 +2370,7 @@ function backToWizard(){
         el.innerHTML='<b>💾 Mentve a rendszerben</b>A szerkesztett újságodat a rendszer elmentette. Bármikor visszatérhetsz és folytathatod.';
         el.classList.remove('err');
       } else {
-        el.innerHTML='<b>⚠ A mentés nem sikerült</b>A híradó NEM került fel a szerverre'
+        el.innerHTML='<b>⚠ A mentés nem sikerült</b>Az újság NEM került fel a szerverre'
           +(window._lastCloudSaveError?(' ('+esc(window._lastCloudSaveError)+')'):'')
           +'. Ellenőrizd az internetkapcsolatot, és próbáld újra a "✅ Kész" gombbal, mielőtt bezárod az oldalt.';
         el.classList.add('err');
@@ -3523,7 +3594,7 @@ function calcDays(){
 }
 /* ===== mezőtippek ===== */
 var TIPS={
-  f_masthead:['Esküvői Híradó','Nászi Napilap','Esküvői Krónika','A Nagy Nap Híradója','Szerelmi Híradó','Esküvői Extra'],
+  f_masthead:['Esküvői Újság','Nászi Napilap','Esküvői Krónika','A Nagy Nap Újságja','Szerelmi Újság','Esküvői Extra'],
   f_subname:['Dorina & Patrik ünnepi lapja','A mi nagy napunk — különkiadás','Szerelmünk hivatalos lapja','Esküvői különszám','Egy életre szóló kiadás'],
   f_slogan:['Minden hír, ami a nagy napról szól','Friss hírek a boldogságról','A szerelem hivatalos lapja','Ma minden a miénk','Igen — és minden, ami utána jött'],
   f_coverCap:['A helyszín neve · a dátum','Itt mondtuk ki az igent','A nap, amikor minden megváltozott','Egy hely, egy pillanat, egy igen'],
@@ -3570,10 +3641,10 @@ var FIXED_SIZE_PREF={
   jegyesfoto:'half', /* A jegyesfotózás képei */
   utazas:'half',     /* Utazási rovat */
   igazhamis:'half',  /* Igaz-Hamis */
-  lagziszab:'half',  /* A lagzi szabályzata */
-  masnapos:'half',   /* Útmutató másnaposság ellen */
+  lagziszab:'full',  /* A lagzi szabályzata */
+  masnapos:'full',   /* Útmutató másnaposság ellen */
   horoszkop:'full',  /* Horoszkóp — ma éjjelre */
-  gyik:'half',       /* Gyakran Ismételt Kérdések */
+  gyik:'full',       /* Gyakran Ismételt Kérdések */
   interju:'full'     /* Exkluzív interjú */
 };
 function getSizePref(id){ return FIXED_SIZE_PREF[id]||''; }
@@ -3691,7 +3762,7 @@ function applyProjectState(data){
   function showResumeBar(data){
     var bar=document.createElement('div');
     bar.id='resumeBar';
-    bar.innerHTML='<span>📝 Találtunk egy korábban elkezdett híradót — utoljára mentve: <b>'+fmtWhen(data.savedAt)+'</b></span>'
+    bar.innerHTML='<span>📝 Találtunk egy korábban elkezdett újságot — utoljára mentve: <b>'+fmtWhen(data.savedAt)+'</b></span>'
       +'<span class="resumeBtns"><button type="button" id="resumeYes">Folytatom</button><button type="button" id="resumeNo">Új kezdés</button></span>';
     var wiz=document.getElementById('wizard');
     if(wiz)wiz.insertBefore(bar,wiz.firstChild);
