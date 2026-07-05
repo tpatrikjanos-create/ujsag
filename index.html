@@ -765,6 +765,16 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .intro-start:hover{filter:brightness(1.06);}
 .intro-skip{font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#8a7480;background:none;border:none;cursor:pointer;text-decoration:underline;}
 @media(max-width:520px){.intro-h{font-size:21px;}.tut-book{max-width:240px;}}
+.book-zoom-btn{display:block;margin:0 auto 20px;background:#fff;border:1.4px solid var(--wiz-rose-pale);color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:18px;padding:7px 16px;cursor:pointer;}
+.book-zoom-btn:hover{background:var(--wiz-blush);}
+.book-zoom-overlay{position:fixed;inset:0;z-index:10070;background:rgba(20,10,15,.8);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:26px 16px;}
+.book-zoom-overlay.open{display:flex;}
+.book-zoom-close{position:absolute;top:16px;right:18px;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;}
+.book-zoom-close:hover{background:rgba(255,255,255,.28);}
+.book-zoom-book{width:min(88vw,440px);max-width:min(88vw,440px);}
+.book-zoom-book .book-frame{max-height:76vh;}
+.book-zoom-overlay .book-dots .book-dot{background:rgba(255,255,255,.35);}
+.book-zoom-overlay .book-dots .book-dot.on{background:#fff;}
 </style>
 </head>
 <body class="size-a5">
@@ -804,10 +814,20 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
   </div>
   <div class="book-dots" id="bookDots"></div>
+  <button type="button" class="book-zoom-btn" id="bookZoomBtn">🔍 Nagyítás</button>
   <div class="intro-cta">
     <button type="button" class="intro-start" id="introStartBtn">Elkészítem a sajátomat! →</button>
     <button type="button" class="intro-skip" id="introSkipBtn">Kihagyom, ugrás a kitöltésre</button>
   </div>
+</div>
+<div class="book-zoom-overlay" id="bookZoomOverlay">
+  <button type="button" class="book-zoom-close" id="bookZoomClose" aria-label="Bezárás">✕</button>
+  <div class="tut-book book-zoom-book" id="zoomBook">
+    <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
+    <div class="book-frame" id="zoomFrame"></div>
+    <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
+  </div>
+  <div class="book-dots" id="zoomDots"></div>
 </div>
 <script>
 (function(){
@@ -831,6 +851,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
       +'<div class="horo-grid" style="grid-template-columns:1fr;">'
       +'<div class="horo-card"><div class="horo-sign"><span class="horo-ico">♌</span>OROSZLÁN</div><div class="horo-dates">Július 23. – Augusztus 23.</div><div class="horo-txt"><p>A Nap ragyogása ma rád vetül — a táncparkett közepét azonnal kisajátítod.</p><p><b>Lagzi tipp:</b> Engedd a menyasszonyt is érvényesülni, elvégre ez az ő napja!</p></div></div>'
       +'<div class="horo-card"><div class="horo-sign"><span class="horo-ico">♊</span>IKREK</div><div class="horo-dates">Május 21. – Június 21.</div><div class="horo-txt"><p>A lagzi számodra egy hatalmas networking esemény — mindenkivel megvitatod az élet nagy dolgait.</p><p><b>Lagzi tipp:</b> Ne felejts el enni is a nagy beszélgetések közepette!</p></div></div>'
+      +'<div class="horo-card"><div class="horo-sign"><span class="horo-ico">♋</span>RÁK</div><div class="horo-dates">Június 22. – Július 22.</div><div class="horo-txt"><p>Készítsd a zsebkendőket! A Hold romantikus energiái teljesen elárasztanak.</p><p><b>Lagzi tipp:</b> A vízálló szempillaspirál ma a legjobb barátod.</p></div></div>'
       +'</div></div>',
     '<div class="book-page-inner">'
       +'<div class="kicker">🕵️ Igaz vagy hamis?</div>'
@@ -842,53 +863,108 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
       +'<p class="hunt-lead">Kapd el a pillanatot, és küldd el a képeket az ifjú párnak!</p>'
       +'<p class="hunt-intro">Készíts képet/videót ezekről:</p>'
       +'<ul class="hunt-list"><li><span class="cbx"></span>A menyasszonyi csokor</li><li><span class="cbx"></span>A vőlegény legboldogabb pillanata</li><li><span class="cbx"></span>A legvadabb tánc a parketten</li></ul>'
-      +'</div>'
+      +'</div>',
+    '<div class="book-page-inner">'
+      +'<div class="col-head">🕐 Menetrend</div>'
+      +'<div class="flow">'
+      +'<div class="step"><span><b class="t-time">15:00</b> Érkezés, köszöntő ital</span></div>'
+      +'<div class="step"><span><b class="t-time">16:00</b> Szertartás</span></div>'
+      +'<div class="step"><span><b class="t-time">19:00</b> Vacsora</span></div>'
+      +'<div class="step"><span><b class="t-time">21:00</b> Nyitótánc, tortavágás</span></div>'
+      +'</div></div>',
+    '<div class="book-page-inner">'
+      +'<div class="kicker">💞 Számokban a szerelmünk</div>'
+      +'<div class="stats">'
+      +'<div class="stat"><div class="num">1826</div><div class="lbl">nap együtt</div></div>'
+      +'<div class="stat"><div class="num">3</div><div class="lbl">közös utazás</div></div>'
+      +'<div class="stat"><div class="num">128</div><div class="lbl">közös film</div></div>'
+      +'</div></div>',
+    '<div class="book-page-inner">'
+      +'<div class="kicker">🗨️ Gyakran Ismételt Kérdések</div>'
+      +'<div class="gyik-item"><div class="gyik-q">Mikor eszünk végre?</div><div class="gyik-a">Nyugi, senki sem fog éhen halni! A pogácsák átmeneti mentőövként szolgálnak.</div></div>'
+      +'<div class="gyik-item"><div class="gyik-q">Kötelező táncolni?</div><div class="gyik-a">Nem kötelező, de erősen ajánlott — éjfél után a ritmusérzék úgyis relatív fogalommá válik.</div></div>'
+      +'</div>',
+    '<div class="book-page-inner">'
+      +'<div class="kicker">📜 A lagzi szabályzata</div>'
+      +'<div class="guide-item"><div class="guide-h">I. Cikkely: A Táncparkett Törvénye</div><div class="guide-txt">'
+      +'<p>1. §: A táncolás nem tehetség, hanem elszántság kérdése. Minden ritmustalan rángatózás hivatalos művészeti önkifejezésnek minősül.</p>'
+      +'<p>2. §: Szigorúan tilos a menyasszony uszályára lépni, azon csúszkálni.</p>'
+      +'</div></div></div>'
   ];
-  var idx=0;
   var DESIGN_W=520; /* a .book-page-inner "tervezési" (zsugorítás előtti) szélessége px-ben */
-  var frame=document.getElementById('bookFrame');
-  var dotsEl=document.getElementById('bookDots');
-  PAGES.forEach(function(html,i){
-    var pg=document.createElement('div'); pg.className='book-page'+(i===0?' active':''); pg.innerHTML=html;
-    frame.appendChild(pg);
-    var dot=document.createElement('span'); dot.className='book-dot'+(i===0?' on':'');
-    dot.onclick=function(){ go(i); };
-    dotsEl.appendChild(dot);
-  });
-  /* a korábbi CSS `zoom` helyett futásidőben mért, a keret TÉNYLEGES szélességéhez igazodó
-     transform:scale — a `zoom` nem reagál a keret média-lekérdezés szerinti (mobilon kisebb)
-     méretére, ezért a tartalom asztali méretre kalibrálva kilógott a kis képernyős keretből;
-     a transform:scale ráadásul minden böngészőben (Safari/iOS is) megbízhatóan tiszteletben
-     tartja a szülő overflow:hidden vágását. */
-  function rescaleBook(){
-    var pageEl=frame.querySelector('.book-page');
-    if(!pageEl)return;
-    var cs=getComputedStyle(pageEl);
-    var availW=pageEl.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
-    var scale=Math.max(.01,availW/DESIGN_W);
-    frame.querySelectorAll('.book-page-inner').forEach(function(el){ el.style.transform='scale('+scale+')'; });
+  /* Egy "könyv-néző" (lapozó + pöttyök + zsugorítás) TÖBBSZÖR is felépíthető ugyanabból a
+     PAGES tömbből — ez teszi lehetővé, hogy a kis beágyazott előnézet MELLETT egy nagyított
+     (lightbox) nézet is létezzen, ugyanazzal a tartalommal, függetlenül lapozva. */
+  function mountBook(frame,dotsEl,prevBtn,nextBtn){
+    var idx=0;
+    PAGES.forEach(function(html,i){
+      var pg=document.createElement('div'); pg.className='book-page'+(i===0?' active':''); pg.innerHTML=html;
+      frame.appendChild(pg);
+      var dot=document.createElement('span'); dot.className='book-dot'+(i===0?' on':'');
+      dot.onclick=function(){ go(i); };
+      dotsEl.appendChild(dot);
+    });
+    /* a korábbi CSS `zoom` helyett futásidőben mért, a keret TÉNYLEGES szélességéhez igazodó
+       transform:scale — a `zoom` nem reagál a keret média-lekérdezés szerinti (mobilon kisebb)
+       méretére, ezért a tartalom asztali méretre kalibrálva kilógott a kis képernyős keretből;
+       a transform:scale ráadásul minden böngészőben (Safari/iOS is) megbízhatóan tiszteletben
+       tartja a szülő overflow:hidden vágását. */
+    function rescale(){
+      var pageEl=frame.querySelector('.book-page');
+      if(!pageEl)return;
+      var cs=getComputedStyle(pageEl);
+      var availW=pageEl.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+      var scale=Math.max(.01,availW/DESIGN_W);
+      frame.querySelectorAll('.book-page-inner').forEach(function(el){ el.style.transform='scale('+scale+')'; });
+    }
+    /* requestAnimationFrame-mel halasztva: a script lefutásakor a .book-frame aspect-ratio-alapú
+       mérete még nem biztos, hogy lefutott egy layout-kört — közvetlenül szinkron hívással a
+       clientWidth 0-t adna, és a tartalom mikroszkopikusra zsugorodna. */
+    requestAnimationFrame(function(){ requestAnimationFrame(rescale); });
+    window.addEventListener('resize',rescale);
+    function go(n){
+      var pages=frame.querySelectorAll('.book-page');
+      var dots=dotsEl.querySelectorAll('.book-dot');
+      var dir=n>idx?'next':'prev';
+      pages[idx].classList.remove('active');
+      pages[idx].classList.add(dir==='next'?'leaving-next':'leaving-prev');
+      setTimeout(function(){pages[idx].classList.remove('leaving-next','leaving-prev');},420);
+      idx=(n+pages.length)%pages.length;
+      pages[idx].classList.remove('leaving-next','leaving-prev');
+      pages[idx].classList.add('active');
+      dots.forEach(function(d,i2){d.classList.toggle('on',i2===idx);});
+    }
+    prevBtn.onclick=function(){go(idx-1);};
+    nextBtn.onclick=function(){go(idx+1);};
+    return {go:go,rescale:rescale,getIndex:function(){return idx;}};
   }
-  /* requestAnimationFrame-mel halasztva: a script lefutásakor a .book-frame aspect-ratio-alapú
-     mérete még nem biztos, hogy lefutott egy layout-kört — közvetlenül szinkron hívással a
-     clientWidth 0-t adna, és a tartalom mikroszkopikusra zsugorodna. */
-  requestAnimationFrame(function(){ requestAnimationFrame(rescaleBook); });
-  window.addEventListener('resize',rescaleBook);
-  function go(n){
-    var pages=frame.querySelectorAll('.book-page');
-    var dots=dotsEl.querySelectorAll('.book-dot');
-    var dir=n>idx?'next':'prev';
-    pages[idx].classList.remove('active');
-    pages[idx].classList.add(dir==='next'?'leaving-next':'leaving-prev');
-    setTimeout(function(){pages[idx].classList.remove('leaving-next','leaving-prev');},420);
-    idx=(n+pages.length)%pages.length;
-    pages[idx].classList.remove('leaving-next','leaving-prev');
-    pages[idx].classList.add('active');
-    dots.forEach(function(d,i2){d.classList.toggle('on',i2===idx);});
-  }
-  document.querySelector('.book-prev').onclick=function(){go(idx-1);};
-  document.querySelector('.book-next').onclick=function(){go(idx+1);};
-  var auto=setInterval(function(){go(idx+1);},5000);
+
+  var inlineBook=mountBook(
+    document.getElementById('bookFrame'),document.getElementById('bookDots'),
+    document.querySelector('#tutBook .book-prev'),document.querySelector('#tutBook .book-next')
+  );
+  var auto=setInterval(function(){inlineBook.go(inlineBook.getIndex()+1);},5000);
   document.getElementById('tutBook').addEventListener('pointerdown',function(){clearInterval(auto);});
+
+  /* ===== Nagyítás (lightbox): ugyanaz a PAGES-tartalom, nagyobb keretben, külön lapozva ===== */
+  var zoomBook=null;
+  document.getElementById('bookZoomBtn').addEventListener('click',function(){
+    clearInterval(auto);
+    var overlay=document.getElementById('bookZoomOverlay');
+    overlay.classList.add('open');
+    if(!zoomBook){
+      zoomBook=mountBook(
+        document.getElementById('zoomFrame'),document.getElementById('zoomDots'),
+        document.querySelector('#zoomBook .book-prev'),document.querySelector('#zoomBook .book-next')
+      );
+    }
+    zoomBook.go(inlineBook.getIndex());
+    setTimeout(zoomBook.rescale,30);
+  });
+  function closeZoom(){ document.getElementById('bookZoomOverlay').classList.remove('open'); }
+  document.getElementById('bookZoomClose').addEventListener('click',closeZoom);
+  document.getElementById('bookZoomOverlay').addEventListener('click',function(e){ if(e.target.id==='bookZoomOverlay')closeZoom(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeZoom(); });
 
   window.dismissIntroShowcase=function(){
     clearInterval(auto);
@@ -917,7 +993,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='1.9';
+  var APP_VERSION='2.0';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
