@@ -6,6 +6,17 @@
 <meta name="description" content="Készíts saját esküvői újságot percek alatt — kitöltöd az adatokat, feltöltöd a fotókat, és nyomtatható újságot kapsz a nagy napra.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💍%3C/text%3E%3C/svg%3E">
 <title>Esküvői Újság — Varázsló</title>
+<!-- Open Graph / Twitter Card — linkmegosztáshoz (WhatsApp, Messenger, Facebook, Twitter előnézet).
+     Kép nélkül, mert data: URI-t a legtöbb linkelőnézet-generátor nem tölt be — ha lesz valódi,
+     hosztolt bemutatókép (pl. egy szép lapozott oldalról), ide egy og:image/twitter:image sort
+     érdemes hozzáadni egy publikus URL-lel. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="hu_HU">
+<meta property="og:title" content="Esküvői Újság — Varázsló">
+<meta property="og:description" content="Készíts saját esküvői újságot percek alatt — vicces rovatokkal, közös fotókkal. Kitöltöd, letöltöd vagy kinyomtatva megkapod.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Esküvői Újság — Varázsló">
+<meta name="twitter:description" content="Készíts saját esküvői újságot percek alatt — vicces rovatokkal, közös fotókkal.">
 <style id="pgcss">@page{size:A4 landscape;margin:0;}</style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;600;700&display=swap');
@@ -365,6 +376,7 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .imgbox-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:#3a4a52;z-index:2;}
 .imgbox-ph .plus{font-family:'Libre Franklin',sans-serif;font-size:14px;font-weight:700;border:1.4px solid currentColor;border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;}
 .imgbox-ph .lbl{font-family:'Libre Franklin',sans-serif;font-size:6.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:0 3px;}
+.imgbox-ph .clicktip{font-family:'Libre Franklin',sans-serif;font-size:5.2px;font-weight:500;color:#6a7a82;text-align:center;padding:0 5px;line-height:1.3;}
 .imgbox.has-img .imgbox-ph{display:none;}
 .imgbox-file{display:none;}
 /* Minden kép-gomb (zoom, keret, képcsere, keret-méret, mozgatás) EGY fix, a képernyő aljához
@@ -727,6 +739,32 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .tut-bubble .tut-next:hover{filter:brightness(1.06);}
 .tut-replay{display:inline-block;margin:8px 0 0;background:#fff;border:1.4px dashed var(--wiz-rose-pale,#e7c2ce);color:var(--wiz-rose-dark,#b0355a);border-radius:20px;padding:6px 14px;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
 .tut-replay:hover{background:#fdf4f6;}
+.tut-tiny{position:fixed;z-index:10060;background:#3a2630;color:#fff;font-family:'Libre Franklin',sans-serif;font-size:12px;line-height:1.4;padding:8px 12px;border-radius:10px;max-width:230px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s;pointer-events:auto;}
+.tut-tiny.show{opacity:1;transform:translateY(0);}
+.tut-tiny b{color:#ffd6e2;}
+/* ===== Bemutató (intro) képernyő: lapozható minta-újság a varázsló előtt ===== */
+#introShowcase{display:none;}
+.intro-showcase{max-width:640px;margin:0 auto;padding:36px 18px 30px;text-align:center;}
+.intro-eyebrow{font-family:'Libre Franklin',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--wiz-rose-dark);margin-bottom:8px;}
+.intro-h{font-family:'Old Standard TT',serif;font-size:26px;line-height:1.25;margin:0 0 10px;color:#2a1a20;}
+.intro-sub{font-family:'Libre Franklin',sans-serif;font-size:14px;color:#5a4a50;max-width:480px;margin:0 auto 26px;line-height:1.55;}
+.tut-book{position:relative;max-width:360px;margin:0 auto;display:flex;align-items:center;gap:8px;}
+.book-frame{position:relative;flex:1;aspect-ratio:3/4;background:var(--wiz-cream);border:1.6px solid var(--ink);border-radius:6px;box-shadow:0 18px 46px rgba(60,20,35,.28);overflow:hidden;perspective:1200px;}
+.book-page{position:absolute;inset:0;padding:16px 14px;overflow:hidden;background:var(--wiz-cream);opacity:0;transform:rotateY(-14deg);transform-origin:left center;transition:opacity .4s ease,transform .4s ease;pointer-events:none;}
+.book-page.active{opacity:1;transform:rotateY(0deg);pointer-events:auto;z-index:2;}
+.book-page.leaving-next{transform:rotateY(-14deg);opacity:0;}
+.book-page.leaving-prev{transform:rotateY(14deg);opacity:0;}
+.book-page-inner{zoom:.58;width:520px;text-align:left;}
+.book-nav{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.4px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-size:16px;cursor:pointer;line-height:1;}
+.book-nav:hover{background:var(--wiz-blush);}
+.book-dots{display:flex;justify-content:center;gap:6px;margin:14px 0 22px;}
+.book-dot{width:7px;height:7px;border-radius:50%;background:var(--wiz-rose-pale);cursor:pointer;transition:.2s;}
+.book-dot.on{background:var(--wiz-rose-dark);transform:scale(1.3);}
+.intro-cta{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.intro-start{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:15px;background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;border:none;border-radius:24px;padding:13px 26px;cursor:pointer;box-shadow:0 8px 22px rgba(156,51,97,.32);}
+.intro-start:hover{filter:brightness(1.06);}
+.intro-skip{font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#8a7480;background:none;border:none;cursor:pointer;text-decoration:underline;}
+@media(max-width:520px){.intro-h{font-size:21px;}.tut-book{max-width:240px;}}
 </style>
 </head>
 <body class="size-a5">
@@ -755,6 +793,104 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></symbol>
 </svg>
 
+<!-- ===== BEMUTATÓ: lapozható minta-újság a varázsló előtt ===== -->
+<div class="intro-showcase" id="introShowcase">
+  <div class="intro-eyebrow">💍 Esküvői Újság — Varázsló</div>
+  <h1 class="intro-h">Egy vicces, személyes újság — a nagy napotokra</h1>
+  <p class="intro-sub">Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:</p>
+  <div class="tut-book" id="tutBook">
+    <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
+    <div class="book-frame" id="bookFrame"></div>
+    <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
+  </div>
+  <div class="book-dots" id="bookDots"></div>
+  <div class="intro-cta">
+    <button type="button" class="intro-start" id="introStartBtn">Elkészítem a sajátomat! →</button>
+    <button type="button" class="intro-skip" id="introSkipBtn">Kihagyom, ugrás a kitöltésre</button>
+  </div>
+</div>
+<script>
+(function(){
+  /* A bemutató mintaoldalak SZÁNDÉKOSAN statikus HTML (nem a valódi B_* generátorokon
+     mennek át) — a varázsló mezői ekkor még üresek, a generátorok DOM-beolvasásra
+     épülnek, ezért egy hamis kitöltést kellene szimulálni hozzájuk. A statikus minta
+     ugyanazokat a CSS-osztályokat használja, mint az éles kimenet, így vizuálisan
+     hiteles marad, kockázat nélkül. */
+  var PAGES=[
+    '<div class="book-page-inner">'
+      +'<div class="ears" style="justify-content:center;"><div class="slogan">Egy nap, amit örökre megörökítünk</div></div><hr class="rule-thin">'
+      +'<h1 class="nameplate">Esküvői Újság</h1>'
+      +'<div class="subname">Dorina &amp; Patrik ünnepi lapja</div>'
+      +'<hr class="rule-ox"><div class="dateline-strip"><span>2026. augusztus 15.</span><span>Budapest</span></div><hr class="rule-thin">'
+      +'<h2 class="lead-head" style="font-size:38px;margin:6px 0 0;">Dorina &amp; Patrik</h2>'
+      +'<div class="hero photo imgbox" style="min-height:150px;"><div class="imgbox-ph" style="position:static;height:100%;"><span class="plus">+</span><span class="lbl">Nagy kép rólunk</span></div></div>'
+      +'</div>',
+    '<div class="book-page-inner">'
+      +'<div class="kicker">✨ Horoszkóp — ma éjjelre</div>'
+      +'<div class="horo-grid" style="grid-template-columns:1fr;">'
+      +'<div class="horo-card"><div class="horo-sign"><span class="horo-ico">♌</span>OROSZLÁN</div><div class="horo-dates">Július 23. – Augusztus 23.</div><div class="horo-txt"><p>A Nap ragyogása ma rád vetül — a táncparkett közepét azonnal kisajátítod.</p><p><b>Lagzi tipp:</b> Engedd a menyasszonyt is érvényesülni, elvégre ez az ő napja!</p></div></div>'
+      +'<div class="horo-card"><div class="horo-sign"><span class="horo-ico">♊</span>IKREK</div><div class="horo-dates">Május 21. – Június 21.</div><div class="horo-txt"><p>A lagzi számodra egy hatalmas networking esemény — mindenkivel megvitatod az élet nagy dolgait.</p><p><b>Lagzi tipp:</b> Ne felejts el enni is a nagy beszélgetések közepette!</p></div></div>'
+      +'</div></div>',
+    '<div class="book-page-inner">'
+      +'<div class="kicker">👤 A csapatunk</div>'
+      +'<div class="tm-grid" style="justify-content:center;">'
+      +'<div class="tm-card"><div class="photo imgbox" style="width:74px;height:74px;margin:0 auto;"><div class="imgbox-ph" style="position:static;height:100%;"><span class="plus">+</span></div></div><div class="tm-role">TANÚ</div><div class="tm-name">Kis Petra</div></div>'
+      +'<div class="tm-card"><div class="photo imgbox" style="width:74px;height:74px;margin:0 auto;"><div class="imgbox-ph" style="position:static;height:100%;"><span class="plus">+</span></div></div><div class="tm-role">KOSZORÚSLÁNY</div><div class="tm-name">Nagy Zsófi</div></div>'
+      +'</div></div>',
+    '<div class="book-page-inner">'
+      +'<div class="rovat-h">📷 Fotóvadász játék</div>'
+      +'<p class="hunt-lead">Kapd el a pillanatot, és küldd el a képeket az ifjú párnak!</p>'
+      +'<p class="hunt-intro">Készíts képet/videót ezekről:</p>'
+      +'<ul class="hunt-list"><li><span class="cbx"></span>A menyasszonyi csokor</li><li><span class="cbx"></span>A vőlegény legboldogabb pillanata</li><li><span class="cbx"></span>A legvadabb tánc a parketten</li></ul>'
+      +'</div>'
+  ];
+  var idx=0;
+  var frame=document.getElementById('bookFrame');
+  var dotsEl=document.getElementById('bookDots');
+  PAGES.forEach(function(html,i){
+    var pg=document.createElement('div'); pg.className='book-page'+(i===0?' active':''); pg.innerHTML=html;
+    frame.appendChild(pg);
+    var dot=document.createElement('span'); dot.className='book-dot'+(i===0?' on':'');
+    dot.onclick=function(){ go(i); };
+    dotsEl.appendChild(dot);
+  });
+  function go(n){
+    var pages=frame.querySelectorAll('.book-page');
+    var dots=dotsEl.querySelectorAll('.book-dot');
+    var dir=n>idx?'next':'prev';
+    pages[idx].classList.remove('active');
+    pages[idx].classList.add(dir==='next'?'leaving-next':'leaving-prev');
+    setTimeout(function(){pages[idx].classList.remove('leaving-next','leaving-prev');},420);
+    idx=(n+pages.length)%pages.length;
+    pages[idx].classList.remove('leaving-next','leaving-prev');
+    pages[idx].classList.add('active');
+    dots.forEach(function(d,i2){d.classList.toggle('on',i2===idx);});
+  }
+  document.querySelector('.book-prev').onclick=function(){go(idx-1);};
+  document.querySelector('.book-next').onclick=function(){go(idx+1);};
+  var auto=setInterval(function(){go(idx+1);},5000);
+  document.getElementById('tutBook').addEventListener('pointerdown',function(){clearInterval(auto);});
+
+  window.dismissIntroShowcase=function(){
+    clearInterval(auto);
+    var sc=document.getElementById('introShowcase'); if(sc)sc.style.display='none';
+    var wiz=document.getElementById('wizard'); if(wiz)wiz.style.display='block';
+    /* a varázsló-bemutató eredeti, oldalbetöltés utáni időzítője a bemutató-képernyő miatt
+       elsülhetett még azelőtt, hogy a varázsló egyáltalán látszott volna — itt, a tényleges
+       megjelenéskor is megpróbáljuk elindítani (force=false, a "látta már" jelzőt tiszteletben
+       tartva, tehát csak első alkalommal fut le ténylegesen). */
+    setTimeout(function(){ if(typeof startWizardTutorial==='function')startWizardTutorial(false); },400);
+  };
+  document.getElementById('introStartBtn').onclick=window.dismissIntroShowcase;
+  document.getElementById('introSkipBtn').onclick=window.dismissIntroShowcase;
+
+  window.showIntroShowcase=function(){
+    var sc=document.getElementById('introShowcase'); if(sc)sc.style.display='block';
+    var wiz=document.getElementById('wizard'); if(wiz)wiz.style.display='none';
+  };
+})();
+</script>
+
 <!-- ===== WIZARD ===== -->
 <div class="wiz" id="wizard">
   <div id="appVersionBadge"></div>
@@ -762,7 +898,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='1.6';
+  var APP_VERSION='1.8';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság · varázsló</div>
@@ -2343,7 +2479,7 @@ function backToWizard(){
       saveOrder({email:emailInput.value.trim(),digital:st.digital,printQty:st.print?st.qty:0,total:st.total}).then(function(ok){
         if(showStatus){
           recalcOrder();
-          if(ok){ ordStatus.textContent='✓ Rögzítettük a rendelésed — hamarosan felvesszük veled a kapcsolatot a fizetéssel kapcsolatban.'; ordStatus.classList.remove('err'); }
+          if(ok){ ordStatus.innerHTML='✓ <b>Rögzítettük a rendelésed!</b> 24 órán belül e-mailt küldünk a fizetés részleteivel a megadott címre. Ha nem érkezik, nézd meg a spam mappát is.'; ordStatus.classList.remove('err'); }
           else { ordStatus.textContent='⚠ Nem sikerült rögzíteni — próbáld újra.'; ordStatus.classList.add('err'); _orderSavedSig=''; }
         }
       });
@@ -2702,7 +2838,7 @@ function initImageBox(box){
   var ph=clip.querySelector(':scope > .imgbox-ph');
   /* a getAttribute a data-label attribútumból már VISSZAFEJTETT (nyers) szöveget ad — újra
      escape-elni kell, mielőtt innerHTML-be kerül */
-  if(!ph){ph=document.createElement('div');ph.className='imgbox-ph';ph.innerHTML='<span class="plus">+</span><span class="lbl">'+esc(label)+'</span>';clip.appendChild(ph);}
+  if(!ph){ph=document.createElement('div');ph.className='imgbox-ph';ph.innerHTML='<span class="plus">+</span><span class="lbl">'+esc(label)+'</span><span class="clicktip">Kattints egy kép hozzáadásához!</span>';clip.appendChild(ph);}
   var input=box.querySelector(':scope > input.imgbox-file');
   if(!input){input=document.createElement('input');input.type='file';input.accept='image/*';input.className='imgbox-file';box.appendChild(input);}
   /* Minden gomb (zoom, keret, képcsere, keret-méret, mozgatás) EGY fix, a képernyő aljához
@@ -2939,7 +3075,9 @@ function initImageBox(box){
   var gOn=false;
   function gestures(){if(gOn)return;gOn=true;box.style.touchAction='none';var pts=new Map(),sx,sy,ox,oy,sd,ss,scx,scy;
     function rel(e){var r=box.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
-    box.addEventListener('pointerdown',function(e){if(!st.img||(e.target.closest&&(e.target.closest('.imgbox-actionbar')||e.target.closest('.imgbox-move-overlay'))))return;box.setPointerCapture(e.pointerId);var p=rel(e);pts.set(e.pointerId,p);if(pts.size===1){sx=p.x;sy=p.y;ox=st.x;oy=st.y;}else if(pts.size===2){var v=Array.from(pts.values());sd=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y)||1;ss=st.scale;scx=(v[0].x+v[1].x)/2;scy=(v[0].y+v[1].y)/2;}});
+    box.addEventListener('pointerdown',function(e){if(!st.img||(e.target.closest&&(e.target.closest('.imgbox-actionbar')||e.target.closest('.imgbox-move-overlay'))))return;
+      if(window.tutFirstUse)window.tutFirstUse('imgPan',box,'🖼️ <b>Húzd</b> a képet a jobb pozícióhoz, csippentéssel/gombokkal <b>nagyíthatod</b>.');
+      box.setPointerCapture(e.pointerId);var p=rel(e);pts.set(e.pointerId,p);if(pts.size===1){sx=p.x;sy=p.y;ox=st.x;oy=st.y;}else if(pts.size===2){var v=Array.from(pts.values());sd=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y)||1;ss=st.scale;scx=(v[0].x+v[1].x)/2;scy=(v[0].y+v[1].y)/2;}});
     box.addEventListener('pointermove',function(e){if(!pts.has(e.pointerId)||!st.img)return;var p=rel(e);pts.set(e.pointerId,p);
       if(pts.size===1){st.x=ox+(p.x-sx);st.y=oy+(p.y-sy);apply();}else if(pts.size===2){var v=Array.from(pts.values());var dd=Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y);var ns=clamp(ss*(dd/sd),st.base,st.base*10);var ox2=(scx-st.x)/st.scale,oy2=(scy-st.y)/st.scale;st.scale=ns;st.x=scx-ox2*ns;st.y=scy-oy2*ns;apply();}});
     function up(e){if(pts.has(e.pointerId))pts.delete(e.pointerId);}
@@ -3160,6 +3298,7 @@ function initBlockTools(){
     var grip=blk.querySelector(':scope > .blk-grip');
     if(!grip){grip=document.createElement('div');grip.className='blk-grip';grip.title='Mozgatás';grip.innerHTML='<span class="ic">✥</span><span class="lbl">Mozgatás</span>';blk.appendChild(grip);}
     grip.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();
+      if(window.tutFirstUse)window.tutFirstUse('blkMove',grip,'🖐️ <b>Húzással</b> bárhová mozgathatod a rovatot a lapon.');
       selectB();
       if(!_mqMobile.matches){pushUndo();startBlockMove(e,blk);}
     });
@@ -3328,7 +3467,10 @@ function initBlockTools(){
     blkDirs.forEach(function(dir){
       var hd=blk.querySelector(':scope > .rsz-'+dir);
       if(!hd){hd=document.createElement('div');hd.className='rsz rsz-'+dir;blk.appendChild(hd);}
-      hd.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();selectB();pushUndo();startBlockResize(e,blk,dir);});
+      hd.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();
+        if(window.tutFirstUse)window.tutFirstUse('blkResize',hd,'↔️ Húzd a sarkot/élt, hogy <b>átméretezd</b> a rovatot.');
+        selectB();pushUndo();startBlockResize(e,blk,dir);
+      });
     });
 
     /* TÖRLÉS gomb — jobb alsó sarok (PC), és a mobil gombsávban is */
@@ -3793,12 +3935,19 @@ function applyProjectState(data){
   }
   try{
     var raw=localStorage.getItem(KEY);
+    var hasResumable=false;
     if(raw){
       var data=JSON.parse(raw);
       if(data&&data.fields&&(data.fields.f_names||data.fields.f_masthead)){
+        hasResumable=true;
         if(document.readyState!=='loading')showResumeBar(data);
         else document.addEventListener('DOMContentLoaded',function(){showResumeBar(data);});
       }
+    }
+    /* a lapozható bemutató csak akkor jelenik meg, ha nincs folytatható korábbi munka —
+       aki már elkezdte a sajátját, azt ne terelje vissza egy marketing-bemutatóra */
+    if(!hasResumable&&location.search.indexOf('admin=1')===-1&&typeof showIntroShowcase==='function'){
+      showIntroShowcase();
     }
   }catch(e){}
 })();
@@ -3906,6 +4055,39 @@ function applyProjectState(data){
   window.startWizardTutorial=function(force){ startTut(WIZ_STEPS,'tutWizardSeen',force); };
   window.startEditorTutorial=function(force){ startTut(ED_STEPS,'tutEditorSeen',force); };
 
+  /* ===== Első-használat mini-buborékok (méretezés, mozgatás, kép-pozicionálás, stb.) =====
+     A lépésenkénti bemutatótól függetlenül: amikor a felhasználó ELŐSZÖR használ egy adott
+     interakciót (nem a scriptelt túra sorrendjében, hanem ténylegesen amikor rákattint),
+     egy rövid, magától eltűnő buborék jelenik meg mellette — csak egyszer, elemenként. */
+  function showTinyTip(el,html){
+    if(!el)return;
+    var tip=document.createElement('div');
+    tip.className='tut-tiny';
+    tip.innerHTML=html;
+    document.body.appendChild(tip);
+    function place(){
+      var r=el.getBoundingClientRect();
+      var vw=window.innerWidth,vh=window.innerHeight;
+      var tw=tip.offsetWidth,th=tip.offsetHeight;
+      var top=r.top-th-9; if(top<8)top=Math.min(vh-th-8,r.bottom+9);
+      var left=Math.max(8,Math.min(vw-tw-8,r.left+r.width/2-tw/2));
+      tip.style.top=top+'px'; tip.style.left=left+'px';
+    }
+    place(); requestAnimationFrame(place);
+    setTimeout(function(){tip.classList.add('show');},10);
+    var removed=false;
+    function remove(){ if(removed)return; removed=true; tip.remove(); document.removeEventListener('pointerdown',onDoc,true); clearTimeout(autoTimer); }
+    function onDoc(e){ if(tip.contains(e.target))return; remove(); }
+    setTimeout(function(){document.addEventListener('pointerdown',onDoc,true);},80);
+    var autoTimer=setTimeout(remove,5200);
+  }
+  window.tutFirstUse=function(key,el,html){
+    var lsKey='tutFU_'+key;
+    if(lsGet(lsKey))return;
+    lsSet(lsKey,'1');
+    showTinyTip(el,html);
+  };
+
   /* a szerkesztő-bemutató az ELSŐ sikeres generálás után indul (ha a validáció elbukik,
      a stage üres marad, és nem indítunk semmit) */
   var _tutOrigGenerate=window.generate;
@@ -3938,6 +4120,11 @@ function applyProjectState(data){
   var EMAILJS_SERVICE_ID='service_5qrjnkd';
   var EMAILJS_TEMPLATE_ID='template_fpp6yro';
   var EMAILJS_PUBLIC_KEY='mWGbriG0qlk56mTNv';
+  /* Vevő-visszaigazoló sablon — KÜLÖN EmailJS sablon kell hozzá, aminél a "To email" mező
+     nem a te fix címed, hanem a dinamikus {{customer_email}} — így a levél a VEVŐHÖZ megy,
+     nem hozzád. Amíg ez üres marad, a vevő egyszerűen nem kap automatikus visszaigazolást
+     (a tulajdonosi értesítés attól még mindig működik). */
+  var EMAILJS_CUSTOMER_TEMPLATE_ID='';
   try{ if(window.emailjs)emailjs.init({publicKey:EMAILJS_PUBLIC_KEY}); }catch(e){ console.warn('EmailJS init hiba:',e); }
   function notifyOwnerOfOrder(o){
     /* a rendelés-értesítés hibája NE akassza meg magát a rendelés-mentést — ezért ez
@@ -3953,6 +4140,18 @@ function applyProjectState(data){
         order_time:new Date().toLocaleString('hu-HU')
       }).catch(function(err){ console.warn('Rendelés-értesítő email nem sikerült:',err); });
     }catch(err){ console.warn('Rendelés-értesítő email nem sikerült:',err); }
+  }
+  function notifyCustomerOfOrder(o){
+    if(!window.emailjs||!EMAILJS_CUSTOMER_TEMPLATE_ID)return;
+    try{
+      emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_CUSTOMER_TEMPLATE_ID,{
+        customer_email:o.email,
+        to_email:o.email,
+        order_digital:o.digital?'igen':'nem',
+        order_print_qty:o.printQty||0,
+        order_total:o.total||0
+      }).catch(function(err){ console.warn('Vevő-visszaigazoló email nem sikerült:',err); });
+    }catch(err){ console.warn('Vevő-visszaigazoló email nem sikerült:',err); }
   }
   var firebaseConfig={
     apiKey:"AIzaSyBVMXSqAXg67E3aPm87eRC5EfwegCIhj10",
@@ -4110,6 +4309,7 @@ function applyProjectState(data){
         ]).then(function(){
           if(settled)return; settled=true; resolve(true);
           notifyOwnerOfOrder(o);
+          notifyCustomerOfOrder(o);
         }).catch(function(err){
           if(settled)return; settled=true;
           console.warn('Rendelés mentése sikertelen:',err);
