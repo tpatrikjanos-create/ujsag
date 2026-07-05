@@ -713,6 +713,20 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   #resumeBar .resumeBtns{width:100%;justify-content:flex-end;}
   #autosaveStatus{font-size:9.5px;}
 }
+/* ===== Tutorial (bemutató) buborékok ===== */
+.tut-backdrop{position:fixed;inset:0;z-index:10050;background:rgba(30,22,26,.45);}
+.tut-ring{position:fixed;z-index:10051;border:2.5px solid #fff;outline:2px solid var(--wiz-rose-dark,#b0355a);border-radius:10px;box-shadow:0 0 0 6px rgba(176,53,90,.22);pointer-events:none;transition:left .25s,top .25s,width .25s,height .25s;}
+.tut-bubble{position:fixed;z-index:10052;background:#fff;border-radius:14px;padding:14px 16px 12px;max-width:min(330px,calc(100vw - 24px));box-shadow:0 12px 40px rgba(0,0,0,.35);font-family:'Libre Franklin',sans-serif;font-size:13.5px;line-height:1.5;color:#3a2630;}
+.tut-bubble .tut-txt{margin-bottom:10px;}
+.tut-bubble .tut-row{display:flex;align-items:center;gap:8px;}
+.tut-bubble .tut-step{font-size:11px;color:#8a7480;flex:1;white-space:nowrap;}
+.tut-bubble button{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:10px;padding:7px 12px;cursor:pointer;}
+.tut-bubble .tut-skip{background:#fff;border:1.4px solid #e7d2da;color:#8a7480;}
+.tut-bubble .tut-skip:hover{background:#fdf4f6;}
+.tut-bubble .tut-next{background:linear-gradient(135deg,var(--wiz-rose,#d4728f),var(--wiz-rose-dark,#b0355a));border:none;color:#fff;}
+.tut-bubble .tut-next:hover{filter:brightness(1.06);}
+.tut-replay{display:inline-block;margin:8px 0 0;background:#fff;border:1.4px dashed var(--wiz-rose-pale,#e7c2ce);color:var(--wiz-rose-dark,#b0355a);border-radius:20px;padding:6px 14px;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
+.tut-replay:hover{background:#fdf4f6;}
 </style>
 </head>
 <body class="size-a5">
@@ -748,12 +762,13 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='1.5';
+  var APP_VERSION='1.6';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság · varázsló</div>
   <h1 class="wiz-h">Esküvői Újság</h1>
   <p class="wiz-note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> a bekapcsolt rovatokat a választott oldalakra rendezi, és igyekszik kitölteni a helyet. <b>Az adatok megadása után nyílik meg a szerkesztői nézet a kész lapokkal — ott tudod feltölteni a fényképeket</b>, mozgatni és méretezni a rovatokat. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.</p>
+  <button type="button" class="tut-replay" onclick="startWizardTutorial(true)">❓ Rövid bemutató — hogyan működik?</button>
 
   <div class="errbox" id="errbox"></div>
 
@@ -1200,6 +1215,7 @@ A kedvenc díszítésed
         <button class="back" onclick="backToWizard()">← Adatok</button>
         <button class="back" onclick="openAddSectionPicker()" title="Ha még marad szabad hely, ide tehetsz be egy plusz rovatot">➕ Rovat hozzáadása</button>
         <button class="mode" id="modeBtn" onclick="toggleMode()">Nyomtatási nézet</button>
+        <button class="back" onclick="startEditorTutorial(true)" title="Rövid bemutató a szerkesztő használatáról">❓ Súgó</button>
         <button class="done-btn" onclick="showDoneModal()" title="Mentés és befejezés">✅ Kész</button>
         <span id="autosaveStatus"></span>
       </div>
@@ -3785,6 +3801,128 @@ function applyProjectState(data){
       }
     }
   }catch(e){}
+})();
+</script>
+
+<!-- ===== Tutorial (bemutató) buborékok: varázsló + szerkesztő ===== -->
+<script>
+(function(){
+  /* Első látogatáskor automatikusan lefutó, lépésenkénti bemutató. A "látta már"
+     állapot localStorage-ban van (eszközönként egyszer fut le), de a ❓ gombokkal
+     bármikor újranézhető. A buborék + kiemelő gyűrű a body-ra kerül, NEM a
+     #wizard/#stage alá — így az autosave MutationObserver-eit nem triggereli. */
+  function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+
+  var WIZ_STEPS=[
+    {sel:'.fmt-grid',txt:'Először válaszd ki a <b>formátumot és az oldalszámot</b>. A „Digitális” változatok otthon is nyomtathatók, az A4-esek tőlünk rendelhetők, nyomtatva.'},
+    {sel:'#f_names',txt:'A csillagos (<span style="color:#b0355a">*</span>) mezők <b>kötelezők</b> — a pár neve, a lap címe, a dátum és a helyszín mindenképp kell a címlaphoz.'},
+    {sel:'.card.opt',txt:'Ezek a <b>rovatok</b>. Kapcsold be, amiket szeretnél — bekapcsoláskor lenyílnak a hozzájuk tartozó mezők. Nem kell mindet: a kevesebb néha több!'},
+    {sel:'.tipbtn',txt:'Ha elakadnál, a <b>💡 Tipp</b> gombok kész szövegötleteket írnak be helyetted — utána szabadon átírhatod őket.'},
+    {sel:'.gen-btn',txt:'Ha megvagy, ezzel a gombbal <b>készül el az újság</b>. Utána a szerkesztőben töltheted fel a képeket, és mindent áthelyezhetsz. Ide bármikor visszajöhetsz módosítani.'}
+  ];
+  var ED_STEPS=[
+    {sel:'#stage .imgbox',txt:'Kattints a <b>+ mezőkre</b> a fényképek feltöltéséhez. A képet húzva pozicionálhatod, a sarkánál nagyíthatod, a <b>◇</b> gombbal keretet (kör/szív) adhatsz neki.'},
+    {sel:'#stage .editable',txt:'Minden szöveg <b>átírható</b>: kattints bele és szerkeszd. Szöveg kijelölésekor lent formázósáv jelenik meg (félkövér, betűméret, betűtípus).'},
+    {sel:'#stage .blk',txt:'A rovatok <b>mozgathatók és átméretezhetők</b> — vidd az egérmutatót a rovat fölé (mobilon koppints rá), és használd a megjelenő fogantyúkat.'},
+    {sel:'#packSel',pre:'toolbar',txt:'Itt egy kattintással <b>stílust</b> válthatsz az egész újságon.'},
+    {sel:'button[onclick="openAddSectionPicker()"]',pre:'toolbar',txt:'Ha valahol üres hely maradt, itt tehetsz be egy <b>plusz rovatot</b> — a rendszer megkeresi neki a legjobb helyet.'},
+    {sel:'.done-btn',pre:'toolbar',txt:'Ha elkészültél: <b>✅ Kész</b> — itt mentődik a munkád, megadhatod az e-mail címed, és megrendelheted a vízjel nélküli változatot.'}
+  ];
+
+  var cur=null; /* {steps,key,idx,backdrop,ring,bubble,target} */
+
+  function endTut(markSeen){
+    if(!cur)return;
+    if(markSeen)lsSet(cur.key,'1');
+    ['backdrop','ring','bubble'].forEach(function(k){ if(cur[k])cur[k].remove(); });
+    cur=null;
+  }
+  function visible(el){
+    if(!el)return false;
+    var r=el.getBoundingClientRect();
+    return r.width>2&&r.height>2&&!!(el.offsetParent||el.getClientRects().length);
+  }
+  function position(){
+    if(!cur||!cur.target)return;
+    var r=cur.target.getBoundingClientRect();
+    var pad=6;
+    cur.ring.style.left=(r.left-pad)+'px';
+    cur.ring.style.top=(r.top-pad)+'px';
+    cur.ring.style.width=(r.width+pad*2)+'px';
+    cur.ring.style.height=(r.height+pad*2)+'px';
+    var vw=window.innerWidth, vh=window.innerHeight;
+    var bw=cur.bubble.offsetWidth, bh=cur.bubble.offsetHeight;
+    var top=r.bottom+12;
+    if(top+bh>vh-10)top=r.top-bh-12;
+    if(top<10)top=Math.max(10,Math.min(vh-bh-10,r.bottom+12));
+    var left=Math.max(12,Math.min(vw-bw-12,r.left));
+    cur.bubble.style.top=top+'px';
+    cur.bubble.style.left=left+'px';
+  }
+  function showStep(){
+    if(!cur)return;
+    var step=null,target=null;
+    while(cur.idx<cur.steps.length){
+      var s=cur.steps[cur.idx];
+      var el=document.querySelector(s.sel);
+      if(el&&(s.pre==='toolbar'||visible(el))){step=s;target=el;break;}
+      cur.idx++;
+    }
+    if(!step){endTut(true);return;}
+    if(step.pre==='toolbar'&&typeof showToolbar==='function')showToolbar();
+    cur.target=target;
+    var last=(function(){ /* van-e még LÁTHATÓ lépés e után? — a gombfelirathoz kell */
+      for(var i=cur.idx+1;i<cur.steps.length;i++){var e=document.querySelector(cur.steps[i].sel);if(e)return false;}
+      return true;
+    })();
+    cur.bubble.innerHTML='<div class="tut-txt">'+step.txt+'</div>'
+      +'<div class="tut-row"><span class="tut-step">'+(cur.idx+1)+' / '+cur.steps.length+'</span>'
+      +'<button type="button" class="tut-skip">Kihagyom</button>'
+      +'<button type="button" class="tut-next">'+(last?'Értem ✔':'Következő →')+'</button></div>';
+    cur.bubble.querySelector('.tut-skip').onclick=function(){endTut(true);};
+    cur.bubble.querySelector('.tut-next').onclick=function(){cur.idx++;showStep();};
+    try{target.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){target.scrollIntoView();}
+    setTimeout(position,280);
+    position();
+  }
+  function startTut(steps,key,force){
+    if(!force&&lsGet(key))return;
+    if(location.search.indexOf('admin=1')!==-1)return; /* admin nézetben soha */
+    endTut(false);
+    var backdrop=document.createElement('div');backdrop.className='tut-backdrop';
+    var ring=document.createElement('div');ring.className='tut-ring';
+    var bubble=document.createElement('div');bubble.className='tut-bubble';
+    document.body.appendChild(backdrop);document.body.appendChild(ring);document.body.appendChild(bubble);
+    cur={steps:steps,key:key,idx:0,backdrop:backdrop,ring:ring,bubble:bubble,target:null};
+    backdrop.addEventListener('click',function(){cur.idx++;showStep();});
+    showStep();
+  }
+  var _repositionRaf=null;
+  function schedulePosition(){ if(_repositionRaf)return; _repositionRaf=requestAnimationFrame(function(){_repositionRaf=null;position();}); }
+  window.addEventListener('resize',schedulePosition);
+  window.addEventListener('scroll',schedulePosition,true);
+
+  window.startWizardTutorial=function(force){ startTut(WIZ_STEPS,'tutWizardSeen',force); };
+  window.startEditorTutorial=function(force){ startTut(ED_STEPS,'tutEditorSeen',force); };
+
+  /* a szerkesztő-bemutató az ELSŐ sikeres generálás után indul (ha a validáció elbukik,
+     a stage üres marad, és nem indítunk semmit) */
+  var _tutOrigGenerate=window.generate;
+  window.generate=function(){
+    var r=_tutOrigGenerate.apply(this,arguments);
+    try{
+      var st=document.getElementById('stage');
+      if(st&&st.children.length)setTimeout(function(){window.startEditorTutorial(false);},700);
+    }catch(e){}
+    return r;
+  };
+
+  /* a varázsló-bemutató első látogatáskor, rövid késleltetéssel indul */
+  setTimeout(function(){
+    var wiz=document.getElementById('wizard');
+    if(wiz&&getComputedStyle(wiz).display!=='none')window.startWizardTutorial(false);
+  },900);
 })();
 </script>
 
