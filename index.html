@@ -648,6 +648,23 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .fitbar.ok{background:#e7f1e8;color:#2f6b3a;border:1px solid #bcd9c1;}
 .fitbar.warn{background:#fbf0db;color:#8a5a1e;border:1px solid #e7c98d;}
 .fitbar.bad{background:#fdeceb;color:#9a3327;border:1px solid #e8a49b;}
+/* ===== Élő split-screen előnézet (csak elég széles PC-képernyőn jelenik meg) ===== */
+#livePreviewPanel{position:fixed;right:22px;top:90px;width:210px;max-height:calc(100vh - 110px);background:#fff;border:1.4px solid var(--wiz-rose-pale);border-radius:16px;padding:14px 14px 16px;box-shadow:0 14px 40px rgba(60,20,35,.14);display:none;flex-direction:column;gap:8px;z-index:40;}
+@media (min-width:1320px){#livePreviewPanel{display:flex;}}
+.lp-head{display:flex;align-items:center;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:13px;color:#3a2630;}
+#lpCollapseBtn{width:22px;height:22px;border-radius:50%;border:1.2px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-size:14px;line-height:1;cursor:pointer;padding:0;}
+#lpCollapseBtn:hover{background:var(--wiz-blush);}
+.lp-sub{font-family:'Libre Franklin',sans-serif;font-size:11px;line-height:1.4;}
+.lp-sub.ok{color:#2f6b3a;}
+.lp-sub.bad{color:#9a3327;}
+.lp-pages{overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px;}
+#livePreviewPanel.collapsed .lp-sub,#livePreviewPanel.collapsed .lp-pages{display:none;}
+.lp-page{border:1.2px solid #e7d2da;border-radius:6px;background:var(--wiz-cream);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:2px;padding:3px;aspect-ratio:1/1.4142;flex-shrink:0;}
+.lp-page-num{position:absolute;top:2px;right:4px;font-family:'Libre Franklin',sans-serif;font-size:8px;color:#b09aa2;z-index:2;}
+.lp-blk{background:#f3d9e2;border:1px solid #e2b7c6;border-radius:3px;font-family:'Libre Franklin',sans-serif;font-size:7.5px;color:#6e2233;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:1px 2px;line-height:1.15;min-height:0;}
+.lp-blk.pref-half,.lp-blk.pref-full{background:#e4ecf5;border-color:#b9cbe0;color:#2a4a6b;}
+.lp-blk.cover{background:#f0e0c8;border-color:#d8bb8a;color:#6b4a1f;font-weight:700;}
+.lp-blk.filler{background:repeating-linear-gradient(45deg,#f7f0f3,#f7f0f3 4px,#f1e4e9 4px,#f1e4e9 8px);color:#b09aa2;border-color:#e7d2da;}
 .team-page{display:flex;flex-direction:column;min-width:0;}
 .team-split{display:flex;flex:1;min-width:0;}
 .team-col{flex:1;min-width:0;padding:0 4mm;}
@@ -1159,7 +1176,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.6';
+  var APP_VERSION='2.7';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -1599,6 +1616,29 @@ A kedvenc díszítésed
 
   <div class="fitbar ok" id="fitStatus">A tartalom elfér a kiválasztott formátumban.</div>
   <button class="gen-btn" onclick="generate()">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
+
+  <div id="livePreviewPanel">
+    <div class="lp-head">
+      <span>👀 Élő előnézet</span>
+      <button type="button" id="lpCollapseBtn" title="Összecsukás/kinyitás">–</button>
+    </div>
+    <div class="lp-sub ok" id="lpSub">Kezdd el kitölteni az adatokat…</div>
+    <div class="lp-pages" id="lpPages"></div>
+  </div>
+  <script>
+  (function(){
+    var panel=document.getElementById('livePreviewPanel');
+    var btn=document.getElementById('lpCollapseBtn');
+    if(!panel||!btn)return;
+    var KEY='lpCollapsed';
+    if(localStorage.getItem(KEY)==='1'){panel.classList.add('collapsed'); btn.textContent='+';}
+    btn.addEventListener('click',function(){
+      var on=panel.classList.toggle('collapsed');
+      btn.textContent=on?'+':'–';
+      try{localStorage.setItem(KEY,on?'1':'0');}catch(e){}
+    });
+  })();
+  </script>
 </div>
 
 <!-- ===== PAPER ===== -->
@@ -2349,7 +2389,10 @@ function buildPagePlan(flow,usable,GAP){
   closeHalfWithFiller();
   return {pages:pages, pagesUsed:pages.length};
 }
-function computePagesNeeded(){
+/* közös terv-számítás — az updateFit (fitbar szövege) ÉS az élő split-screen előnézet
+   (renderLivePreview) is ugyanerre az egyetlen, egyszeri mérésre/tervre épül, nehogy minden
+   billentyűleütésnél kétszer fusson le a (nem olcsó) mérés+lapkiosztás. */
+function computePagePlan(){
   var d=gatherData();
   var flow=buildFlow(d);
   var usable=usableHeight(), GAP=8;
@@ -2357,28 +2400,93 @@ function computePagesNeeded(){
   var split=splitTailFlow(flow);
   var mainPlan=buildPagePlan(split.main,usable,GAP);
   var tailPlan=buildPagePlan(split.tail,usable,GAP);
-  return 1+mainPlan.pagesUsed+tailPlan.pagesUsed; /* +1 a borító miatt */
+  return {mainPlan:mainPlan,tailPlan:tailPlan,usable:usable,GAP:GAP};
+}
+function computePagesNeeded(){
+  var p=computePagePlan();
+  return 1+p.mainPlan.pagesUsed+p.tailPlan.pagesUsed; /* +1 a borító miatt */
 }
 function updateFit(){
-  var el=document.getElementById('fitStatus'); if(!el)return;
-  var need=computePagesNeeded();
-  var cur=CFG.pages;
-  var msg,cls;
-  if(need<=cur){
-    if(cur===8 && need<8){msg='✓ Elfér — a tartalom szépen elosztva kerül a 8 oldalra.';}
-    else{msg='✓ A tartalom elfér a kiválasztott '+cur+' oldalon.';}
-    cls='ok';
-  } else if(need<=8){
-    msg='⚠ Ez nem fér el 4 oldalra (kb. '+need+' oldalnyi tartalom). Oldalszám csak 4 vagy 8 lehet — válts 8 oldalas formátumra, és a tartalmat elosztjuk a 8 lapon.';
-    cls='warn';
-  } else {
-    msg='✕ Ez 8 oldalra sem fér el (kb. '+need+' oldal). Kapcsolj ki egy-két rovatot.';
-    cls='bad';
+  var el=document.getElementById('fitStatus');
+  var plan=computePagePlan();
+  var need=1+plan.mainPlan.pagesUsed+plan.tailPlan.pagesUsed;
+  if(el){
+    var cur=CFG.pages;
+    var msg,cls;
+    if(need<=cur){
+      if(cur===8 && need<8){msg='✓ Elfér — a tartalom szépen elosztva kerül a 8 oldalra.';}
+      else{msg='✓ A tartalom elfér a kiválasztott '+cur+' oldalon.';}
+      cls='ok';
+    } else if(need<=8){
+      msg='⚠ Ez nem fér el 4 oldalra (kb. '+need+' oldalnyi tartalom). Oldalszám csak 4 vagy 8 lehet — válts 8 oldalas formátumra, és a tartalmat elosztjuk a 8 lapon.';
+      cls='warn';
+    } else {
+      msg='✕ Ez 8 oldalra sem fér el (kb. '+need+' oldal). Kapcsolj ki egy-két rovatot.';
+      cls='bad';
+    }
+    el.textContent=msg; el.className='fitbar '+cls;
   }
-  el.textContent=msg; el.className='fitbar '+cls;
+  if(typeof renderLivePreview==='function')renderLivePreview(plan,need);
 }
 var _fitTimer=null;
 function scheduleFit(){clearTimeout(_fitTimer);_fitTimer=setTimeout(updateFit,350);}
+
+/* ===== Élő, split-screen előnézet: séma-szerű, kicsinyített lapok a varázsló mellett, amik
+   adatbevitel KÖZBEN (minden mezőváltáskor, a fitbar-ral egyidőben) mutatják, melyik rovat
+   melyik lapra kerülne, és mekkora helyet foglalna — ugyanarra a tervre (computePagePlan)
+   épül, amit a "belefér-e" ellenőrzés is használ, így a kettő sosem mondhat ellent egymásnak.
+   Szándékosan NEM a valódi generate()-et futtatja (az a teljes, drága DOM-beillesztéses +
+   képpontos zoom-illesztéses folyamat) — csak egy könnyű, sematikus térképet rajzol. */
+function humanLabel(bid){
+  if(bid==='cover')return 'Borító';
+  var entry=(typeof ADDABLE_SECTIONS!=='undefined')?ADDABLE_SECTIONS.find(function(s){return s.blk===bid;}):null;
+  if(entry && typeof sectionLabel==='function')return sectionLabel(entry.chk);
+  var MENU_LABELS={welcome:'Köszöntő',etlap:'Étlap',itallap:'Itallap',italok:'Italok',menetrend:'Menetrend',vendegkonyv:'Vendégkönyv',closer:'Záró felirat'};
+  return MENU_LABELS[bid]||bid;
+}
+function renderLivePreview(plan,need){
+  var panel=document.getElementById('livePreviewPanel'); if(!panel)return;
+  var pagesEl=document.getElementById('lpPages'), subEl=document.getElementById('lpSub');
+  if(!pagesEl)return;
+  var usable=plan.usable, N=CFG.pages, contentPages=N-1;
+  var pageBlocks=[]; for(var i=0;i<N;i++)pageBlocks.push([]);
+  pageBlocks[0]=[{id:'cover',cover:true}];
+  plan.mainPlan.pages.forEach(function(pageContent,ix){ pageBlocks[1+ix]=pageContent; });
+  var tailStart=N-plan.tailPlan.pagesUsed;
+  plan.tailPlan.pages.forEach(function(pageContent,ix){ pageBlocks[tailStart+ix]=pageContent; });
+
+  if(subEl){
+    if(need>contentPages+1){
+      subEl.textContent='✕ Nem fér el '+N+' oldalra (kb. '+need+' oldal kellene).';
+      subEl.className='lp-sub bad';
+    } else {
+      var spare=contentPages-(need-1);
+      subEl.textContent = spare>0 ? ('✓ Elfér — még '+spare+' szabad tartalmi lap marad.') : '✓ Pontosan kitölti a kiválasztott oldalakat.';
+      subEl.className='lp-sub ok';
+    }
+  }
+
+  var html='';
+  for(var p=0;p<N;p++){
+    var blocks=pageBlocks[p]||[];
+    var inner='<span class="lp-page-num">'+(p+1)+'</span>';
+    if(!blocks.length){
+      inner+='<div class="lp-blk filler" style="flex:1;"></div>';
+    } else {
+      blocks.forEach(function(b){
+        if(b.cover){ inner+='<div class="lp-blk cover" style="flex:1;">Borító</div>'; return; }
+        var h=effH(b,usable);
+        var pct=Math.max(7,Math.min(100,Math.round(h/usable*100)));
+        var isFiller=(b.id||'').indexOf('filler')===0;
+        var cls='lp-blk'+(b.sizePref?' pref-'+b.sizePref:'')+(isFiller?' filler':'');
+        var label=isFiller?'':esc(humanLabel(b.id));
+        inner+='<div class="'+cls+'" style="flex:0 0 '+pct+'%;" title="'+label+'">'+label+'</div>';
+      });
+    }
+    html+='<div class="lp-page">'+inner+'</div>';
+  }
+  pagesEl.innerHTML=html;
+}
 
 function generate(){
   var miss=validateRequired();
@@ -3025,7 +3133,9 @@ window.openAddSectionPicker=function(){
   ov=document.createElement('div'); ov.id='addSecOverlay';
   var rows=ADDABLE_SECTIONS.filter(function(s){var cb=document.getElementById('chk_'+s.chk);return cb&&!cb.checked;});
   var rowsHtml=rows.length?rows.map(function(s){
-    return '<div class="adm-row"><div><b>'+esc(sectionLabel(s.chk))+'</b></div><button type="button" class="adm-open" data-chk="'+s.chk+'">Hozzáadás</button></div>';
+    var pref=typeof getSizePref==='function'?getSizePref(s.blk):'';
+    var prefHtml=pref?('<span class="size-pref-lbl">'+(pref==='full'?'(Egy egész oldal)':'(fél oldal)')+'</span>'):'';
+    return '<div class="adm-row"><div><b>'+esc(sectionLabel(s.chk))+'</b>'+prefHtml+'</div><button type="button" class="adm-open" data-chk="'+s.chk+'">Hozzáadás</button></div>';
   }).join(''):'<div class="tinyhint">Minden rovat már be van kapcsolva — nincs mit hozzáadni.</div>';
   ov.innerHTML='<div id="addSecBox">'
     +'<h2>➕ Rovat hozzáadása</h2>'
