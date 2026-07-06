@@ -706,6 +706,12 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk-resize-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover>.blk-resize-btn,.blk.bsel>.blk-resize-btn{display:flex;}
 .blk-resize-btn:hover{background:rgba(140,44,66,1);}
+/* PC-n a "Méret" gomb (mobil-stílusú alsó ±/✓ sávot nyitna meg) nem kell — ott a kijelölés
+   gombbal előhívott .rsz fogantyúkkal közvetlenül húzva méretezhető a rovat. */
+@media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
+.blk-select-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk:hover>.blk-select-btn,.blk.bsel>.blk-select-btn{display:flex;}
+.blk-select-btn:hover{background:rgba(52,110,148,1);}
 .blk.bsel>.rsz{display:block;}
 .blk.bsel{outline:1.5px dashed var(--claret);outline-offset:3px;}
 .blk.dragging{opacity:.55;}
@@ -715,7 +721,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk.swap-target{outline:2.5px solid #2f7d3a !important;outline-offset:3px;background:rgba(47,125,58,.06);}
 .page.move-target{outline:3px solid #2f7d3a;outline-offset:-3px;}
 .page.over{outline:2px solid #c0392b;outline-offset:-2px;}
-@media print{.blk-grip,.blk-del-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
+@media print{.blk-grip,.blk-del-btn,.blk-select-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
 .imgbox.lowres::after{content:'⚠ kis felbontás';position:absolute;top:3px;left:3px;z-index:30;background:rgba(154,51,39,.92);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;pointer-events:none;letter-spacing:.02em;}
 @media print{.imgbox.lowres::after{display:none!important;}}
 
@@ -737,7 +743,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   .rsz-move{width:25px;height:25px;font-size:11px;}
   /* ===== MOBIL ROVAT ESZKÖZTÁR — ugyanaz a fix, alsó rendszer, mint a képkereteknél ===== */
   /* a régi sarok-gombok (grip/resize/del) mobilon teljesen elrejtve — a .blk-actionbar veszi át a helyüket */
-  .blk-grip,.blk-resize-btn,.blk-del-btn{display:none!important;}
+  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn{display:none!important;}
   .warnbar{font-size:10.5px;padding:6px 8px;}
   #resumeBar{font-size:11px;padding:10px 12px;}
   #resumeBar .resumeBtns{width:100%;justify-content:flex-end;}
@@ -787,14 +793,18 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 #bookFrame{cursor:zoom-in;}
 .book-zoom-btn{display:block;margin:0 auto 20px;background:#fff;border:1.4px solid var(--wiz-rose-pale);color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:18px;padding:7px 16px;cursor:pointer;}
 .book-zoom-btn:hover{background:var(--wiz-blush);}
-.book-zoom-overlay{position:fixed;inset:0;z-index:10070;background:rgba(20,10,15,.8);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:26px 16px;}
+.book-zoom-overlay{position:fixed;inset:0;z-index:10070;background:rgba(20,10,15,.8);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:26px 16px;overflow:auto;}
 .book-zoom-overlay.open{display:flex;}
-.book-zoom-close{position:absolute;top:16px;right:18px;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;}
+.book-zoom-close{position:fixed;top:16px;right:18px;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;z-index:1;}
 .book-zoom-close:hover{background:rgba(255,255,255,.28);}
-.book-zoom-book{width:min(88vw,440px);max-width:min(88vw,440px);}
-.book-zoom-book .book-frame{max-height:76vh;}
+.book-zoom-book{width:min(92vw,760px);max-width:min(92vw,760px);}
+.book-zoom-book .book-frame{max-height:min(80vh,700px);touch-action:none;}
 .book-zoom-overlay .book-dots .book-dot{background:rgba(255,255,255,.35);}
 .book-zoom-overlay .book-dots .book-dot.on{background:#fff;}
+.book-zoom-tools{display:flex;gap:10px;justify-content:center;}
+.book-zoom-tool{width:34px;height:34px;border-radius:50%;border:1.4px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-size:16px;cursor:pointer;line-height:1;flex-shrink:0;}
+.book-zoom-tool:hover{background:rgba(255,255,255,.24);}
+#zoomFrame .book-page.active .book-page-img{cursor:grab;}
 .reviews-h{font-family:'Old Standard TT',serif;font-size:20px;text-align:center;margin:34px 0 16px;color:#2a1a20;}
 .reviews-wrap{display:flex;align-items:center;gap:10px;max-width:480px;margin:0 auto;}
 .review-card{flex:1;background:#fff;border:1.4px solid var(--wiz-rose-pale);border-radius:16px;padding:20px 22px;box-shadow:0 10px 30px rgba(60,20,35,.12);text-align:center;min-height:150px;display:flex;flex-direction:column;justify-content:center;opacity:1;transition:opacity .25s ease;}
@@ -807,7 +817,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .review-nav:hover{background:var(--wiz-blush);}
 .review-counter{text-align:center;font-family:'Libre Franklin',sans-serif;font-size:11.5px;color:#8a7480;margin:10px 0 4px;}
 @media(max-width:520px){.reviews-wrap{max-width:300px;}.review-card{padding:16px 14px;min-height:170px;}}
-.cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:10080;background:#2a1a20;color:#f6e9ee;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:14px 18px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;box-shadow:0 -4px 20px rgba(0,0,0,.25);}
+.cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:9000;background:#2a1a20;color:#f6e9ee;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:14px 18px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;box-shadow:0 -4px 20px rgba(0,0,0,.25);}
 .cookie-banner p{margin:0;max-width:640px;line-height:1.5;}
 .cookie-banner .cookie-btns{display:flex;gap:8px;flex-shrink:0;}
 .cookie-banner button{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:16px;padding:8px 16px;cursor:pointer;border:1.4px solid transparent;}
@@ -928,6 +938,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
   </div>
   <div class="book-dots" id="zoomDots"></div>
+  <div class="book-zoom-tools">
+    <button type="button" class="book-zoom-tool" id="zoomOutBtn" aria-label="Kicsinyítés">−</button>
+    <button type="button" class="book-zoom-tool" id="zoomResetBtn" aria-label="Alaphelyzet">⤢</button>
+    <button type="button" class="book-zoom-tool" id="zoomInBtn" aria-label="Nagyítás">+</button>
+  </div>
 </div>
 <script>
 (function(){
@@ -1008,6 +1023,72 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   document.getElementById('bookZoomOverlay').addEventListener('click',function(e){ if(e.target.id==='bookZoomOverlay')closeZoom(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeZoom(); });
 
+  /* ===== Nagyítás/pásztázás a lightbox mintaújságon belül (PC: görgő+húzás, mobil: csippentés) ===== */
+  (function(){
+    var frame=document.getElementById('zoomFrame');
+    if(!frame)return;
+    var MIN=1,MAX=4;
+    var scale=1,tx=0,ty=0;
+    var pointers={};
+    var lastDist=0,dragging=false,lastX=0,lastY=0;
+    function activeImg(){ var el=frame.querySelector('.book-page.active .book-page-img'); return el; }
+    function apply(){
+      var img=activeImg(); if(!img)return;
+      img.style.transform='translate('+tx+'px,'+ty+'px) scale('+scale+')';
+    }
+    function reset(){ scale=1;tx=0;ty=0;pointers={};lastDist=0;dragging=false; apply(); }
+    function dist(){
+      var ids=Object.keys(pointers);
+      var a=pointers[ids[0]],b=pointers[ids[1]];
+      return Math.hypot(a.x-b.x,a.y-b.y);
+    }
+    frame.addEventListener('wheel',function(e){
+      e.preventDefault();
+      var d=e.deltaY<0?0.2:-0.2;
+      scale=Math.min(MAX,Math.max(MIN,scale+d));
+      if(scale===MIN){tx=0;ty=0;}
+      apply();
+    },{passive:false});
+    frame.addEventListener('pointerdown',function(e){
+      var img=activeImg(); if(!img)return;
+      frame.setPointerCapture(e.pointerId);
+      pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+      var ids=Object.keys(pointers);
+      if(ids.length===1){ dragging=(scale>MIN); lastX=e.clientX; lastY=e.clientY; if(dragging)img.style.cursor='grabbing'; }
+      else if(ids.length===2){ dragging=false; lastDist=dist(); }
+    });
+    frame.addEventListener('pointermove',function(e){
+      if(!pointers[e.pointerId])return;
+      pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+      var ids=Object.keys(pointers);
+      if(ids.length===2){
+        var d=dist();
+        if(lastDist)scale=Math.min(MAX,Math.max(MIN,scale*(d/lastDist)));
+        lastDist=d;
+        apply();
+      } else if(dragging){
+        tx+=e.clientX-lastX; ty+=e.clientY-lastY;
+        lastX=e.clientX; lastY=e.clientY;
+        apply();
+      }
+    });
+    function endPointer(e){
+      delete pointers[e.pointerId];
+      var ids=Object.keys(pointers);
+      if(ids.length<2)lastDist=0;
+      if(ids.length===0){ dragging=false; var img=activeImg(); if(img)img.style.cursor='grab'; }
+    }
+    frame.addEventListener('pointerup',endPointer);
+    frame.addEventListener('pointercancel',endPointer);
+    frame.addEventListener('pointerleave',endPointer);
+    document.getElementById('zoomInBtn').addEventListener('click',function(){ scale=Math.min(MAX,scale+0.5); apply(); });
+    document.getElementById('zoomOutBtn').addEventListener('click',function(){ scale=Math.max(MIN,scale-0.5); if(scale===MIN){tx=0;ty=0;} apply(); });
+    document.getElementById('zoomResetBtn').addEventListener('click',reset);
+    document.getElementById('bookZoomClose').addEventListener('click',reset);
+    /* lapváltáskor (nyíl/pötty/automata lapozás) mindig alaphelyzetbe áll a nagyítás */
+    new MutationObserver(reset).observe(frame,{subtree:true,attributes:true,attributeFilter:['class']});
+  })();
+
   /* ===== Vélemények — lapozható kártyák a mintaújság alatt ===== */
   var REVIEWS=[
     ['Lagzi / Programfüzet','Dóra','A lagzira készítettük el programfüzetnek, és óriási sikere volt a vendégek körében! Nagyon egyedi, mindenkinek csak ajánlani tudom.'],
@@ -1078,7 +1159,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.5';
+  var APP_VERSION='2.6';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -2160,9 +2241,18 @@ function usableHeight(){
 }
 /* a kézi átméretezés (D-pad −/+) finom lépésközei; index 4 = 1.0 (természetes méret) */
 var ZOOM_STEPS=[0.7,0.78,0.86,0.94,1.0,1.08,1.17,1.26,1.36,1.47,1.59,1.72,1.86,2.0,2.2];
-/* a generálás alapértelmezett mérete a "normál" (nem fél/egész oldalas) rovatoknál — mintha a
-   felhasználó a mínusz gombot kétszer megnyomná az 1.0 (természetes) mérethez képest */
-var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[2];
+/* a generálás alapértelmezett mérete a "normál" (nem fél/egész oldalas) rovatoknál — szándékosan
+   a legkisebb lépésköz, hogy a rovatok kicsiben, szabad hellyel generálódjanak, és a felhasználó
+   utólag, kézzel nagyíthassa fel azt, amit valóban szeretne kiemelni (ne a generálás döntsön
+   helyette azzal, hogy eleve nagyra tölti ki a rendelkezésre álló helyet). */
+var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[1];
+/* a "fél/egész oldal" kényszerített rovatok (ld. FIXED_SIZE_PREF) generáláskori automatikus
+   kitöltése is ehhez igazodik: a doboz mérete (fél/egész oldal) fix marad, de a TARTALMAT nem
+   nagyítjuk fel automatikusan a doboz TELJES kitöltéséhez (a korábbi 2.2-es sapka szélsőségesen
+   túlnagyította a szerényebb tartalmat) — csak egy mérsékeltebb szintig, hogy maradjon LÁTHATÓ
+   szabad hely, amit a felhasználó a Kijelölés gomb + sarok-fogantyúk/Méret segítségével utólag,
+   kedve szerint tölthet ki. */
+var SIZEPREF_FIT_CAP=1.5;
 var HALFP_IDS=['qr','fotovadasz','vendegkonyv','robbantsd','etlap','itallap','szinglik','dijak'];
 /* ez a csoport MINDIG a legutolsó lap(ok)ra kerül — ld. splitTailFlow() */
 var TAIL_IDS=['igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','itallap','italok','qr','fotovadasz','robbantsd','naszut','vendegkonyv','closer'];
@@ -2363,7 +2453,7 @@ function generate(){
              (nem egymás mellé) kerül a párjával, mindkettő a teljes lapszélességet használva,
              ezért a magasságát a lap FELÉRE kell nagyítani (a szélesség már eleve teljes). */
           var target=b.sizePref==='full'?usable:(usable-GAP)/2;
-          var cap=2.2;
+          var cap=SIZEPREF_FIT_CAP;
           var zf=b.h>0?clamp(target/b.h,1,cap):1;
           zoomAttr=' style="zoom:'+zf.toFixed(3)+';" data-size-pref="'+b.sizePref+'"';
         }
@@ -2411,14 +2501,17 @@ function generate(){
   setWatermark(d.names);
   document.getElementById('wizard').style.display='none';
   document.getElementById('paper').style.display='block';
-  /* a fél/egész oldalas rovatok automatikus felnagyítása (zoomAttr) az előzetes (mérőműszeres,
+  /* a fél/egész oldalas rovatok automatikus méretezése (zoomAttr) az előzetes (mérőműszeres,
      zoom nélküli) magasságbecslésre épül, ami nem mindig pontos — most, hogy a #paper már
      látható, tényleges méréssel ellenőrizzük. FONTOS: egy "fél oldal" rovat nem a TELJES lap
      margójához igazodik, hanem a saját FELÉHEZ (a másik fél a párjáé) — ezért lapon(ként)ként,
      a fél-párokat együtt kezelve, mindegyiknek a SAJÁT szeletéhez (nem a teljes .pbody-hoz)
      mérten állítjuk be a zoomot: ha túllógna a saját szeletéből, bináris kereséssel visszavesszük
-     (de sosem 1× alá); ha alulnagyítja (nem tölti ki a rá eső helyet), amennyire csak lehet,
-     felnagyítjuk. */
+     (de sosem 1× alá — inkább kilóg egy CSS overflow-védelemig, mint hogy olvashatatlanná
+     zsugorodjon). Ha ALULnagyítja a saját szeletét (bőven marad alatta üres hely), azt
+     SZÁNDÉKOSAN nem töltjük ki automatikusan a doboz teljes méretéig (ld. SIZEPREF_FIT_CAP) —
+     a rovat inkább kicsiben generálódik, szabad hellyel, és a felhasználó a Kijelölés gomb +
+     sarok-fogantyúk (vagy a Méret ±) segítségével nagyíthatja fel utólag, ha szeretné. */
   document.querySelectorAll('#stage .pbody').forEach(function(pb){
     var pRect=pb.getBoundingClientRect();
     var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && c.matches('.blk[data-size-pref]');});
@@ -2426,19 +2519,19 @@ function generate(){
     while(i<kids.length){
       var blk=kids[i], pref=blk.getAttribute('data-size-pref');
       if(pref==='full'){
-        fitBlockToBox(blk,pRect,2.2);
+        fitBlockToBox(blk,pRect,SIZEPREF_FIT_CAP);
         i++;
       } else {
         var next=kids[i+1];
         var box;
         if(next && next.getAttribute('data-size-pref')==='half'){
           var midY=pRect.top+(pRect.height-GAP)/2;
-          fitBlockToBox(blk,{left:pRect.left,right:pRect.right,top:pRect.top,bottom:midY},2.2);
-          fitBlockToBox(next,{left:pRect.left,right:pRect.right,top:midY+GAP,bottom:pRect.bottom},2.2);
+          fitBlockToBox(blk,{left:pRect.left,right:pRect.right,top:pRect.top,bottom:midY},SIZEPREF_FIT_CAP);
+          fitBlockToBox(next,{left:pRect.left,right:pRect.right,top:midY+GAP,bottom:pRect.bottom},SIZEPREF_FIT_CAP);
           i+=2;
         } else {
           box={left:pRect.left,right:pRect.right,top:pRect.top,bottom:pRect.top+(pRect.height-GAP)/2};
-          fitBlockToBox(blk,box,2.2);
+          fitBlockToBox(blk,box,SIZEPREF_FIT_CAP);
           i++;
         }
       }
@@ -3628,7 +3721,18 @@ function initBlockTools(){
       blk._moveOv=moveOv;
     }
 
-    /* ÁTMÉRETEZÉS gomb — jobb felső sarok */
+    /* KIJELÖLÉS gomb — PC-n; ELSŐSORBAN erre van szükség, hogy a rovatot ki lehessen
+       jelölni (és így a rá kattintva megjelenő .rsz fogantyúkat elérni) anélkül, hogy ez
+       — mint a grip húzása — azonnal el is mozdítaná a rovatot. Mobilon nem jelenik meg
+       (ott a rovatra koppintás már önmagában kijelöl, ld. a pointerdown-figyelőt fentebb). */
+    var selectBtn=blk.querySelector(':scope > .blk-select-btn');
+    if(!selectBtn){selectBtn=document.createElement('button');selectBtn.type='button';selectBtn.className='blk-select-btn';selectBtn.title='Kijelölés';selectBtn.innerHTML='<span class="ic">☑</span><span class="lbl">Kijelölés</span>';blk.appendChild(selectBtn);}
+    selectBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
+    selectBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();});
+
+    /* ÁTMÉRETEZÉS gomb — jobb felső sarok; CSAK MOBILON látszik (PC-n a kijelölés után
+       megjelenő .rsz fogantyúkkal húzva méretezhető, nincs szükség a mobil-stílusú
+       alsó sávra) */
     var resizeBtn=blk.querySelector(':scope > .blk-resize-btn');
     if(!resizeBtn){resizeBtn=document.createElement('button');resizeBtn.type='button';resizeBtn.className='blk-resize-btn';resizeBtn.title='Átméretezés';resizeBtn.innerHTML='<span class="ic">⊡</span><span class="lbl">Méret</span>';blk.appendChild(resizeBtn);}
     resizeBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
@@ -3657,7 +3761,7 @@ function initBlockTools(){
       sBar.appendChild(szDone);
       document.body.appendChild(sBar);
       blk._sizeBar=sBar;
-      resizeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();sBar.classList.toggle('active');});
+      resizeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(_mqMobile.matches)sBar.classList.toggle('active');});
     }
 
     /* Drag fogantyúk: PC-n mind a 8, mobilon csak az oldalak (n/s/e/w) — sarkok nem.
@@ -3698,6 +3802,25 @@ function initBlockTools(){
     if(!delBtn){delBtn=document.createElement('button');delBtn.type='button';delBtn.className='blk-del-btn';delBtn.textContent='🗑';delBtn.title='Rovat törlése';blk.appendChild(delBtn);}
     delBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
     delBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();deleteThisBlock();});
+
+    /* PC-n a rovat tartalma zoom-mal kicsinyíthető/nagyítható (ld. clampBlockZoom) — mivel a
+       CSS zoom a rovat MINDEN gyerekét (a gombokat és a .rsz fogantyúkat is) arányosan
+       felskálázná/lekicsinyítené, itt egy ellentétes irányú transform:scale-lel visszaállítjuk
+       ezek méretét a rovat aktuális zoom-jától függetlenül állandóra. Mobilon nincs szükség
+       erre, mert ott ezek a gombok nem a .blk gyerekei (fix, a képernyő aljához rögzített sáv). */
+    function syncBtnScale(){
+      if(_mqMobile.matches)return;
+      var z=parseFloat(blk.style.zoom)||1;
+      var inv=z?1/z:1;
+      var t=(inv===1)?'':('scale('+inv+')');
+      [grip,delBtn,selectBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
+      blk.querySelectorAll(':scope > .rsz').forEach(function(h){ h.style.transform=t; });
+    }
+    syncBtnScale();
+    if(!blk._btnScaleObs){
+      blk._btnScaleObs=new MutationObserver(syncBtnScale);
+      blk._btnScaleObs.observe(blk,{attributes:true,attributeFilter:['style']});
+    }
 
     actionbar.addEventListener('click',function(e){
       var b=e.target.closest('button'); if(!b)return; e.stopPropagation();
@@ -4019,7 +4142,7 @@ var FIXED_SIZE_PREF={
   dijak:'full',      /* Díjnyerteseink */
   szinezo:'full',    /* Gyerekeknek színező */
   jatekok:'half',    /* Játékok (sudoku, keresztrejtvény, szókereső) */
-  jegyesfoto:'half', /* A jegyesfotózás képei */
+  jegyesfoto:'full', /* A jegyesfotózás képei */
   utazas:'half',     /* Utazási rovat */
   igazhamis:'half',  /* Igaz-Hamis */
   lagziszab:'full',  /* A lagzi szabályzata */
