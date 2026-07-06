@@ -807,9 +807,68 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .review-nav:hover{background:var(--wiz-blush);}
 .review-counter{text-align:center;font-family:'Libre Franklin',sans-serif;font-size:11.5px;color:#8a7480;margin:10px 0 4px;}
 @media(max-width:520px){.reviews-wrap{max-width:300px;}.review-card{padding:16px 14px;min-height:170px;}}
+.cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:10080;background:#2a1a20;color:#f6e9ee;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:14px 18px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;box-shadow:0 -4px 20px rgba(0,0,0,.25);}
+.cookie-banner p{margin:0;max-width:640px;line-height:1.5;}
+.cookie-banner .cookie-btns{display:flex;gap:8px;flex-shrink:0;}
+.cookie-banner button{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:16px;padding:8px 16px;cursor:pointer;border:1.4px solid transparent;}
+#cookieAcceptBtn{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
+#cookieDeclineBtn{background:transparent;color:#f6e9ee;border-color:rgba(246,233,238,.4);}
+#cookieDeclineBtn:hover{background:rgba(246,233,238,.12);}
 </style>
+<script>
+/* Meta Pixel — CSAK süti-elfogadás UTÁN töltődik be (GDPR). A window.__loadMetaPixel
+   függvényt a lap alján lévő cookie-sáv "Elfogadom" gombja hívja meg; ha a látogató
+   korábban már elfogadta (localStorage), akkor rögtön induláskor is lefut. */
+(function(){
+  function loadMetaPixel(){
+    if(window.__metaPixelLoaded)return;
+    window.__metaPixelLoaded=true;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1765633421037449');
+    fbq('track', 'PageView');
+  }
+  window.__loadMetaPixel=loadMetaPixel;
+  try{
+    if(localStorage.getItem('cookieConsent')==='accepted')loadMetaPixel();
+  }catch(e){}
+})();
+</script>
 </head>
 <body class="size-a5">
+
+<div class="cookie-banner" id="cookieBanner">
+  <p>Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink hatékonyságának mérése érdekében (Meta Pixel). Elfogadod?</p>
+  <div class="cookie-btns">
+    <button type="button" id="cookieAcceptBtn">Elfogadom</button>
+    <button type="button" id="cookieDeclineBtn">Elutasítom</button>
+  </div>
+</div>
+<script>
+(function(){
+  var banner=document.getElementById('cookieBanner');
+  if(!banner)return;
+  var already;
+  try{ already=localStorage.getItem('cookieConsent'); }catch(e){ already=null; }
+  if(already)return; /* már döntött korábban — nincs mit mutatni */
+  banner.style.display='flex';
+  document.getElementById('cookieAcceptBtn').addEventListener('click',function(){
+    try{ localStorage.setItem('cookieConsent','accepted'); }catch(e){}
+    banner.style.display='none';
+    if(typeof window.__loadMetaPixel==='function')window.__loadMetaPixel();
+  });
+  document.getElementById('cookieDeclineBtn').addEventListener('click',function(){
+    try{ localStorage.setItem('cookieConsent','declined'); }catch(e){}
+    banner.style.display='none';
+  });
+})();
+</script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <clipPath id="heartClip" clipPathUnits="objectBoundingBox"><path d="M0.5,1 C0.5,1 0,0.72 0,0.32 C0,0.12 0.16,0 0.3,0 C0.41,0 0.5,0.09 0.5,0.2 C0.5,0.09 0.59,0 0.7,0 C0.84,0 1,0.12 1,0.32 C1,0.72 0.5,1 0.5,1 Z"/></clipPath>
@@ -1019,7 +1078,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.4';
+  var APP_VERSION='2.5';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
