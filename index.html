@@ -528,11 +528,6 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .closer{font-size:13px;}
 .duo-row{display:flex;gap:6mm;align-items:flex-start;}
 .duo-row>.blk{flex:1 1 0;min-width:0;}
-/* "negyed oldal" rovat-pár — egymás mellett, fele-fele szélességben, EGYENLŐ magassággal
-   (align-items:stretch, ellentétben a duo-row-val, mert ez egy fix, fél-oldalnyi sort tölt ki,
-   nem csak két természetes magasságú rovatot rak egymás mellé). */
-.quarter-row{display:flex;gap:6mm;align-items:stretch;}
-.quarter-row>.blk{flex:1 1 0;min-width:0;}
 .filler-quote{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-size:13px;line-height:1.35;color:var(--claret);padding:8px 6px;border-top:1px solid var(--claret);border-bottom:1px solid var(--claret);}
 body.pack-magazine .filler-quote{position:relative;border:none;padding:14px 18px 10px;font-size:15px;}
 body.pack-magazine .filler-quote::before{content:'"';position:absolute;top:-6px;left:2px;font-family:'Grenze Gotisch',serif;font-size:42px;color:var(--claret);opacity:.4;line-height:1;}
@@ -1181,7 +1176,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.8';
+  var APP_VERSION='2.9';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -2315,10 +2310,11 @@ function effH(b,usable){
   if(!b||!b.sizePref)return b?(b.h||0)*DEFAULT_BLOCK_ZOOM:0;
   var base=b.h||0;
   if(b.sizePref==='full')return Math.max(base,usable);
-  /* a "negyed oldal" a lap FÉL magasságú sorát foglalja (a szélességben van csak fele akkora,
-     egy másik negyed-oldalas rovat mellett, ld. buildPagePlan) — a sor MAGASSÁGA szempontjából
-     tehát ugyanúgy számít, mint egy "fél oldal" rovat. */
-  if(b.sizePref==='half'||b.sizePref==='quarter')return Math.max(base,usable*0.5);
+  if(b.sizePref==='half')return Math.max(base,usable*0.5);
+  /* a "negyed oldal" a lap NEGYED magasságú sávját foglalja, TELJES szélességben (a lap
+     konkrétan negyedbe hajtva) — nem egy másik negyed MELLETT, hanem egy másik negyed ALATT/
+     FÖLÖTT, ld. buildPagePlan. */
+  if(b.sizePref==='quarter')return Math.max(base,usable*0.25);
   return base;
 }
 function buildUnits(flow){ /* egymást követő párba-rendezhető rovatokat egy egységgé von össze */
@@ -2605,10 +2601,12 @@ function generate(){
       var bh=b.html; var zoomAttr='';
       if(b.id&&b.id!=='cover'){
         if(b.sizePref){
-          /* "fél oldal" = a lapot vízszintesen kettéhajtva az egyik fél — a rovat EGYMÁS ALÁ
-             (nem egymás mellé) kerül a párjával, mindkettő a teljes lapszélességet használva,
-             ezért a magasságát a lap FELÉRE kell nagyítani (a szélesség már eleve teljes). */
-          var target=b.sizePref==='full'?usable:(usable-GAP)/2;
+          /* "fél oldal" / "negyed oldal" = a lapot vízszintes sávokra hajtva az egyik sáv — a
+             rovat EGYMÁS ALÁ (nem egymás mellé) kerül a párjával/társaival, mindegyik a TELJES
+             lapszélességet használva, ezért a magasságát a sáv méretére kell nagyítani (a
+             szélesség már eleve teljes). Ez csak egy előzetes becslés — a tényleges méretet a
+             generálás utáni, valódi méréssel dolgozó lépés pontosítja (ld. lejjebb). */
+          var target=b.sizePref==='full'?usable:b.sizePref==='half'?(usable-GAP)/2:(usable-GAP*3)/4;
           var cap=SIZEPREF_FIT_CAP;
           var zf=b.h>0?clamp(target/b.h,1,cap):1;
           zoomAttr=' style="zoom:'+zf.toFixed(3)+';" data-size-pref="'+b.sizePref+'"';
@@ -2621,16 +2619,14 @@ function generate(){
         bh=bh.replace('<div class="blk','<div data-bid="'+b.id+'"'+zoomAttr+' class="blk');
       }
       /* a "half" jelző itt KIZÁRÓLAG a régi, egymás MELLETT páros elrendezéshez tartozó
-         rovatokat (pl. Étlap+Itallap) jelöli — az új "fél oldal" terjedelmű rovatok
-         (sizePref==='half') EGYMÁS ALÁ kerülnek, nem duo-row-ban, ezért NEM half. A "negyed
-         oldal" rovatok (sizePref==='quarter') viszont EGYMÁS MELLÉ kerülnek egy külön
-         "quarter-row"-ban (ld. lejjebb) — két negyed együtt tölt ki egy fél oldalnyi sort. */
-      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,quarter:b.sizePref==='quarter',h:effH(b,usable)});
+         rovatokat (pl. Étlap+Itallap) jelöli — a "fél oldal" ÉS a "negyed oldal" terjedelmű
+         rovatok (sizePref==='half'/'quarter') EGYMÁS ALÁ kerülnek, teljes lapszélességben,
+         nem duo-row-ban, ezért NEM half. */
+      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,h:effH(b,usable)});
     });
     var sumH=0, rows=0;
     for(var qi=0;qi<parts.length;qi++){
       if(parts[qi].half && parts[qi+1] && parts[qi+1].half){ html+='<div class="duo-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
-      else if(parts[qi].quarter && parts[qi+1] && parts[qi+1].quarter){ html+='<div class="quarter-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
       else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
     }
@@ -2660,56 +2656,39 @@ function generate(){
   setWatermark(d.names);
   document.getElementById('wizard').style.display='none';
   document.getElementById('paper').style.display='block';
-  /* a fél/egész oldalas rovatok automatikus méretezése (zoomAttr) az előzetes (mérőműszeres,
-     zoom nélküli) magasságbecslésre épül, ami nem mindig pontos — most, hogy a #paper már
-     látható, tényleges méréssel ellenőrizzük. FONTOS: egy "fél oldal" rovat nem a TELJES lap
-     margójához igazodik, hanem a saját FELÉHEZ (a másik fél a párjáé) — ezért lapon(ként)ként,
-     a fél-párokat együtt kezelve, mindegyiknek a SAJÁT szeletéhez (nem a teljes .pbody-hoz)
-     mérten állítjuk be a zoomot: ha túllógna a saját szeletéből, bináris kereséssel visszavesszük
-     (de sosem 1× alá — inkább kilóg egy CSS overflow-védelemig, mint hogy olvashatatlanná
-     zsugorodjon). Ha ALULnagyítja a saját szeletét (bőven marad alatta üres hely), azt
-     SZÁNDÉKOSAN nem töltjük ki automatikusan a doboz teljes méretéig (ld. SIZEPREF_FIT_CAP) —
-     a rovat inkább kicsiben generálódik, szabad hellyel, és a felhasználó a Kijelölés gomb +
-     sarok-fogantyúk (vagy a Méret ±) segítségével nagyíthatja fel utólag, ha szeretné. */
-  function fitQuarterRow(rowEl,box){
-    /* mindkét negyed a SAJÁT (a flexbox által már kiosztott) oszlop-szélességéhez igazodik,
-       csak a magasság-célja (box.top/bottom) közös a sor egészével. */
-    Array.prototype.filter.call(rowEl.children,function(c){return c.classList.contains('blk');}).forEach(function(k){
-      var r=k.getBoundingClientRect();
-      fitBlockToBox(k,{left:r.left,right:r.right,top:box.top,bottom:box.bottom},SIZEPREF_FIT_CAP);
-    });
-  }
+  /* a fél/negyed/egész oldalas rovatok automatikus méretezése (zoomAttr) az előzetes
+     (mérőműszeres, zoom nélküli) magasságbecslésre épül, ami nem mindig pontos — most, hogy a
+     #paper már látható, tényleges méréssel ellenőrizzük: ha túllógna a saját sávjából, bináris
+     kereséssel visszavesszük (de sosem 1× alá — inkább kilóg egy CSS overflow-védelemig, mint
+     hogy olvashatatlanná zsugorodjon). Ha ALULnagyítja a saját sávját (bőven marad alatta üres
+     hely), azt SZÁNDÉKOSAN nem töltjük ki automatikusan a doboz teljes méretéig (ld.
+     SIZEPREF_FIT_CAP) — a rovat inkább kicsiben generálódik, szabad hellyel, és a felhasználó a
+     Kijelölés gomb + sarok-fogantyúk (vagy a Méret ±) segítségével nagyíthatja fel utólag, ha
+     szeretné.
+     A fél/negyed/egész oldalas rovatok mind TELJES lapszélességben, egymás ALATT sorakoznak —
+     a lap magasságát "negyed-egységekre" osztjuk (egész=4, fél=2, negyed=1), és minden rovat
+     ennyi egységnyi SÁVOT kap a lapon, a GAP-okkal csökkentett tényleges magasságból arányosan.
+     Egy teljes (nem sizePref) lap mindig pontosan 4 egységnyi tartalmat tartalmaz, mert a
+     buildPagePlan mindig ennyire zárja le a lapokat (ld. closeOpenQuarterWithFiller/
+     closeOpenPageWithFiller) — kivéve az önálló "egész oldal" lapokat, amik maguk 4 egységgel
+     egyedül vannak a lapon. */
+  function sizePrefUnits(pref){ return pref==='full'?4:pref==='half'?2:pref==='quarter'?1:0; }
   document.querySelectorAll('#stage .pbody').forEach(function(pb){
     var pRect=pb.getBoundingClientRect();
-    /* egy "szelet" vagy egy önálló fél/egész oldalas .blk (közvetlen gyerek), vagy egy
-       .quarter-row (két negyed-oldalas .blk-kal) — a negyed-oldalas rovatok NEM közvetlen
-       gyerekei a .pbody-nak, hanem a saját quarter-row-jukénak. */
-    var slots=Array.prototype.filter.call(pb.children,function(c){
-      return c.matches && (c.matches('.blk[data-size-pref="full"]')||c.matches('.blk[data-size-pref="half"]')||c.matches('.quarter-row'));
+    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && c.matches('.blk[data-size-pref]');});
+    if(!kids.length)return;
+    var totalUnits=0;
+    kids.forEach(function(k){ totalUnits+=sizePrefUnits(k.getAttribute('data-size-pref')); });
+    if(!totalUnits)return;
+    var availH=pRect.height - GAP*(kids.length-1);
+    var cumUnits=0;
+    kids.forEach(function(k,idx){
+      var u=sizePrefUnits(k.getAttribute('data-size-pref'));
+      var top=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
+      cumUnits+=u;
+      var bottom=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
+      fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
     });
-    var i=0;
-    while(i<slots.length){
-      var el=slots[i];
-      if(el.matches('.blk[data-size-pref="full"]')){
-        fitBlockToBox(el,pRect,SIZEPREF_FIT_CAP);
-        i++;
-        continue;
-      }
-      var isHalf=el.matches('.blk[data-size-pref="half"]');
-      var next=slots[i+1];
-      var midY=pRect.top+(pRect.height-GAP)/2;
-      var topBox={left:pRect.left,right:pRect.right,top:pRect.top,bottom:midY};
-      var botBox={left:pRect.left,right:pRect.right,top:midY+GAP,bottom:pRect.bottom};
-      var soloBox={left:pRect.left,right:pRect.right,top:pRect.top,bottom:pRect.top+(pRect.height-GAP)/2};
-      if(next && (next.matches('.blk[data-size-pref="half"]')||next.matches('.quarter-row'))){
-        if(isHalf)fitBlockToBox(el,topBox,SIZEPREF_FIT_CAP); else fitQuarterRow(el,topBox);
-        if(next.matches('.blk[data-size-pref="half"]'))fitBlockToBox(next,botBox,SIZEPREF_FIT_CAP); else fitQuarterRow(next,botBox);
-        i+=2;
-      } else {
-        if(isHalf)fitBlockToBox(el,soloBox,SIZEPREF_FIT_CAP); else fitQuarterRow(el,soloBox);
-        i++;
-      }
-    }
   });
   /* a "normál" (nem fél/egész oldalas) rovatok alapértelmezett generálási mérete a korábbi 1.0
      (természetes) méretnél kisebb — kb. mintha a felhasználó a kézi átméretező D-padon kétszer
@@ -3711,11 +3690,11 @@ function clampBlockZoom(blk,desired,minZ){
      megbízhatóan, ezért közvetlenül beállítjuk és lemérjük — ha túllóg a margón, bináris kereséssel
      visszavesszük, amíg bele nem fér. Ugyanaz a határ, mint a gombos mozgatásnál (a pbody tényleges
      széle), csak itt a méretre alkalmazva. */
-  /* a negyed-oldalas (és a régi, egymás melletti páros) rovatoknál a doboz nem a TELJES
-     lapszélességet foglalja, hanem csak a saját oszlopát (.quarter-row/.duo-row) — a kézi
-     nagyítás jobb-szél korlátjának ehhez, NEM a teljes .pbody szélességéhez kell igazodnia,
-     különben a rovat túlnőhetne a saját oszlopán és átfedésbe kerülne a szomszédjával. */
-  var pb=blk.closest('.quarter-row, .duo-row, .pbody');
+  /* a régi, egymás melletti páros (pl. Étlap+Itallap, ld. duo-row) rovatoknál a doboz nem a
+     TELJES lapszélességet foglalja, hanem csak a saját oszlopát — a kézi nagyítás jobb-szél
+     korlátjának ehhez, NEM a teljes .pbody szélességéhez kell igazodnia, különben a rovat
+     túlnőhetne a saját oszlopán és átfedésbe kerülne a szomszédjával. */
+  var pb=blk.closest('.duo-row, .pbody');
   if(!pb){ blk.style.zoom=desired; return desired; }
   var pRect=pb.getBoundingClientRect();
   blk.style.zoom=desired;
@@ -4340,11 +4319,13 @@ var FIXED_SIZE_PREF={
    (nem kényszerített doboz-méretű) rendszeren megy át. */
 var NO_AUTO_QUARTER_IDS=['etlap','itallap'];
 /* Új szabály: amelyik rovatnál NINCS kifejezetten megadva, hogy fél vagy egész oldalnak kell
-   lennie, ott mindig NEGYED oldallal (a lap egyik felének fele, azaz egy 2×2-es rács egy
-   cellája) számolunk — ugyanúgy fix doboz-mérettel, mint a fél/egész oldalas rovatoknál,
-   csak épp fele akkora szélességben, egy másik negyed-oldalas rovat mellett (ld. buildPagePlan
-   "openQuarter" logikáját). Ez egyben ki is váltja/általánosítja a régi, csak néhány
-   kézzel felsorolt rovatpárra (HALFP_IDS) vonatkozó, egymás-melletti elrendezést. */
+   lennie, ott mindig NEGYED oldallal számolunk — a lap TELJES szélességében, negyed magasságú
+   sávval (a lap konkrétan negyedbe hajtva, ugyanúgy fix doboz-mérettel, mint a fél/egész
+   oldalas rovatoknál). Két negyed oldal EGYMÁS ALATT/FÖLÖTT (nem egymás mellett) pontosan
+   annyi helyet foglal, mint egy fél oldal, ezért egy fél oldal társa lehet akár két negyed
+   oldal is (ld. buildPagePlan "openQuarter" logikáját). Ez egyben ki is váltja/általánosítja a
+   régi, csak néhány kézzel felsorolt rovatpárra (HALFP_IDS) vonatkozó, egymás-melletti
+   elrendezést. */
 function getSizePref(id){
   if(FIXED_SIZE_PREF[id])return FIXED_SIZE_PREF[id];
   if(NO_AUTO_QUARTER_IDS.indexOf(id)>=0)return '';
