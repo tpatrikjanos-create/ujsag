@@ -528,6 +528,11 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .closer{font-size:13px;}
 .duo-row{display:flex;gap:6mm;align-items:flex-start;}
 .duo-row>.blk{flex:1 1 0;min-width:0;}
+/* "negyed oldal" rovat-pár — egymás mellett, fele-fele szélességben, EGYENLŐ magassággal
+   (align-items:stretch, ellentétben a duo-row-val, mert ez egy fix, fél-oldalnyi sort tölt ki,
+   nem csak két természetes magasságú rovatot rak egymás mellé). */
+.quarter-row{display:flex;gap:6mm;align-items:stretch;}
+.quarter-row>.blk{flex:1 1 0;min-width:0;}
 .filler-quote{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-size:13px;line-height:1.35;color:var(--claret);padding:8px 6px;border-top:1px solid var(--claret);border-bottom:1px solid var(--claret);}
 body.pack-magazine .filler-quote{position:relative;border:none;padding:14px 18px 10px;font-size:15px;}
 body.pack-magazine .filler-quote::before{content:'"';position:absolute;top:-6px;left:2px;font-family:'Grenze Gotisch',serif;font-size:42px;color:var(--claret);opacity:.4;line-height:1;}
@@ -1176,7 +1181,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.7';
+  var APP_VERSION='2.8';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -2310,7 +2315,10 @@ function effH(b,usable){
   if(!b||!b.sizePref)return b?(b.h||0)*DEFAULT_BLOCK_ZOOM:0;
   var base=b.h||0;
   if(b.sizePref==='full')return Math.max(base,usable);
-  if(b.sizePref==='half')return Math.max(base,usable*0.5);
+  /* a "negyed oldal" a lap FÉL magasságú sorát foglalja (a szélességben van csak fele akkora,
+     egy másik negyed-oldalas rovat mellett, ld. buildPagePlan) — a sor MAGASSÁGA szempontjából
+     tehát ugyanúgy számít, mint egy "fél oldal" rovat. */
+  if(b.sizePref==='half'||b.sizePref==='quarter')return Math.max(base,usable*0.5);
   return base;
 }
 function buildUnits(flow){ /* egymást követő párba-rendezhető rovatokat egy egységgé von össze */
@@ -2328,18 +2336,28 @@ function buildUnits(flow){ /* egymást követő párba-rendezhető rovatokat egy
 /* A rovatok SZIGORÚ, felhasználó által megadott SORRENDBEN kerülnek a lapokra, felülről lefelé,
    lapról lapra haladva — nincs átrendezés/arányos elosztás. Az "egész oldal" rovat a soron
    következő SAJÁT, kizárólagos lapot kapja (előtte lezárva bármit, ami "normál" tartalomból
-   éppen gyűlt). A "fél oldal" rovat egy ÚJ, "félig kész" lapot nyit, ami egy KÉSŐBB (akár nem
-   közvetlenül utána) érkező másik "fél oldal" rovatra vár, hogy párban töltsék ki azt a lapot —
-   ha a sorrend végéig nem érkezik társ, egy díszítő idézet/ornamens tölti ki a másik felet. A
-   "normál" (méret nélküli) rovatok köztes szegmensekben gyűlnek össze, és a régi, egymás MELLETTI
-   párosítás (pl. QR+Fotóvadász, Étlap+Itallap — lásd HALFP_IDS/buildUnits) ezeken a szegmenseken
-   belül változatlanul működik. */
+   éppen gyűlt). A "fél oldal" rovat egy ÚJ lapot nyit (a lap FELSŐ fele), ami egy KÉSŐBB (akár
+   nem közvetlenül utána) érkező másik "fél oldal" rovatra VAGY KÉT "negyed oldal" rovatra vár,
+   hogy kitöltse a lap ALSÓ felét — ha a sorrend végéig nem érkezik teljes társ, egy díszítő
+   idézet/ornamens tölti ki a hiányzó részt. A "negyed oldal" rovatok is egy szinttel lejjebb
+   ugyanígy párba állnak EGYMÁSSAL (két negyed = egy "fél oldalnyi" sor, egymás mellett, fele-fele
+   szélességben), és ez a negyed-PÁR pontosan úgy viselkedik a lap felső/alsó felének
+   elfoglalásakor, mint egy önálló "fél oldal" rovat. A "normál" (méret nélküli — jelenleg
+   gyakorlatilag csak az étlap/itallap, ld. NO_AUTO_QUARTER_IDS) rovatok köztes szegmensekben
+   gyűlnek össze, és a régi, egymás MELLETTI párosítás (ld. HALFP_IDS/buildUnits) ezeken a
+   szegmenseken belül változatlanul működik. */
 function buildPagePlan(flow,usable,GAP){
   var pages=[]; // pages[0] = az első TARTALMI lap (a borító külön kezelve, nem itt)
   var curPage=0;
   var normalBuf=[];
-  var pendingHalf=null; // {pageIndex, item}
+  var openPage=null;    // {pageIndex} — a lap felső fele kész, az alsó fele még nyitva várja a társát
+  var openQuarter=null; // {item,pageIndex,isTop} — egy magányos negyed várja a párját (egy másik negyedet)
+  var _fillerSeq=0;
   function ensurePage(ix){ while(pages.length<=ix)pages.push([]); }
+  function fillerItem(pref){
+    var fhtml=(Math.random()<0.6?B_filler('quote'):B_filler('orn'));
+    return {id:'filler'+pref+(_fillerSeq++),html:fhtml,sizePref:pref,h:measure(fhtml)};
+  }
   function flushNormalBuf(){
     if(!normalBuf.length)return;
     var units=buildUnits(normalBuf);
@@ -2353,32 +2371,61 @@ function buildPagePlan(flow,usable,GAP){
     curPage++;
     normalBuf=[];
   }
-  function closeHalfWithFiller(){
-    if(!pendingHalf)return;
-    var fhtml=(Math.random()<0.6?B_filler('quote'):B_filler('orn'));
-    var filler={id:'fillerhalf'+pendingHalf.pageIndex,html:fhtml,sizePref:'half',h:measure(fhtml)};
-    pages[pendingHalf.pageIndex].push(filler);
-    pendingHalf=null;
+  /* egy magányos, párra váró negyedet lezár egy díszítő negyeddel — ha az épp a lap FELSŐ
+     felét zárta le így, a lap ALSÓ fele még mindig nyitva marad (openPage), ha az ALSÓ felét,
+     akkor a lap ezzel teljesen kész. */
+  function closeOpenQuarterWithFiller(){
+    if(!openQuarter)return;
+    pages[openQuarter.pageIndex].push(fillerItem('quarter'));
+    openPage = openQuarter.isTop ? {pageIndex:openQuarter.pageIndex} : null;
+    openQuarter=null;
+  }
+  function closeOpenPageWithFiller(){
+    if(!openPage)return;
+    pages[openPage.pageIndex].push(fillerItem('half'));
+    openPage=null;
   }
   flow.forEach(function(item){
     if(item.sizePref==='full'){
-      /* a "fél oldal" rovat várakozzon a SAJÁT párjára akkor is, ha közben egy "egész oldal"
-         rovat érkezik — az egész oldalas saját, önálló lapot kap, de ez nem "csukja be" a
-         félig kész lapot; a fél oldal csak akkor kap díszítő pótlást, ha a sorrend végéig
-         valóban nem érkezik hozzá illő társ. */
+      /* az "egész oldal" rovat saját, önálló lapot kap, és ez NEM zárja le sem a félig kész
+         lapot (openPage), sem egy magányos, párra váró negyedet (openQuarter) — azok csak
+         akkor kapnak díszítő pótlást, ha a sorrend végéig valóban nem érkezik hozzájuk illő
+         társ (ld. a forEach utáni lezárásokat). */
       flushNormalBuf();
       ensurePage(curPage);
       pages[curPage]=[item];
       curPage++;
     } else if(item.sizePref==='half'){
-      if(pendingHalf){
-        pages[pendingHalf.pageIndex].push(item);
-        pendingHalf=null;
+      /* a fél oldal MÉRETBEN nem illik egy magányos negyedhez — ha ilyen várakozik, lezárjuk
+         egy díszítő negyeddel, mielőtt a fél oldal helyet keresne magának. */
+      closeOpenQuarterWithFiller();
+      if(openPage){
+        pages[openPage.pageIndex].push(item);
+        openPage=null;
       } else {
         flushNormalBuf();
         ensurePage(curPage);
         pages[curPage]=[item];
-        pendingHalf={pageIndex:curPage,item:item};
+        openPage={pageIndex:curPage};
+        curPage++;
+      }
+    } else if(item.sizePref==='quarter'){
+      if(openQuarter){
+        /* ez a második negyed — lezárja a folyamatban lévő negyed-párt */
+        var pi=openQuarter.pageIndex, wasTop=openQuarter.isTop;
+        pages[pi].push(item);
+        openQuarter=null;
+        openPage = wasTop ? {pageIndex:pi} : null;
+      } else if(openPage){
+        /* ez az ELSŐ negyed, ami a nyitott lap ALSÓ felét próbálja kitölteni */
+        pages[openPage.pageIndex].push(item);
+        openQuarter={item:item,pageIndex:openPage.pageIndex,isTop:false};
+      } else {
+        /* ez az ELSŐ negyed egy vadonatúj lap FELSŐ felén */
+        flushNormalBuf();
+        ensurePage(curPage);
+        pages[curPage]=[item];
+        openQuarter={item:item,pageIndex:curPage,isTop:true};
         curPage++;
       }
     } else {
@@ -2386,7 +2433,8 @@ function buildPagePlan(flow,usable,GAP){
     }
   });
   flushNormalBuf();
-  closeHalfWithFiller();
+  closeOpenQuarterWithFiller();
+  closeOpenPageWithFiller();
   return {pages:pages, pagesUsed:pages.length};
 }
 /* közös terv-számítás — az updateFit (fitbar szövege) ÉS az élő split-screen előnézet
@@ -2573,13 +2621,16 @@ function generate(){
         bh=bh.replace('<div class="blk','<div data-bid="'+b.id+'"'+zoomAttr+' class="blk');
       }
       /* a "half" jelző itt KIZÁRÓLAG a régi, egymás MELLETT páros elrendezéshez tartozó
-         rovatokat (pl. QR+Fotóvadász, Étlap+Itallap) jelöli — az új "fél oldal" terjedelmű
-         rovatok (sizePref==='half') EGYMÁS ALÁ kerülnek, nem duo-row-ban, ezért NEM half. */
-      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,h:effH(b,usable)});
+         rovatokat (pl. Étlap+Itallap) jelöli — az új "fél oldal" terjedelmű rovatok
+         (sizePref==='half') EGYMÁS ALÁ kerülnek, nem duo-row-ban, ezért NEM half. A "negyed
+         oldal" rovatok (sizePref==='quarter') viszont EGYMÁS MELLÉ kerülnek egy külön
+         "quarter-row"-ban (ld. lejjebb) — két negyed együtt tölt ki egy fél oldalnyi sort. */
+      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,quarter:b.sizePref==='quarter',h:effH(b,usable)});
     });
     var sumH=0, rows=0;
     for(var qi=0;qi<parts.length;qi++){
       if(parts[qi].half && parts[qi+1] && parts[qi+1].half){ html+='<div class="duo-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
+      else if(parts[qi].quarter && parts[qi+1] && parts[qi+1].quarter){ html+='<div class="quarter-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
       else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
     }
@@ -2588,7 +2639,7 @@ function generate(){
     /* idézetet/díszítést CSAK akkor rakunk, ha NAGYON sok szabad hely maradt (nem pár apró
        leftover pixel), és a lap még nem "fél/egész oldal" rovat(ok)ét — azoknak már megvan a
        saját, szándékos párja/mérete, nem kell rájuk még egy plusz díszítés. */
-    var hasSizedPref = blocks.some(function(b){return b.sizePref==='half'||b.sizePref==='full';});
+    var hasSizedPref = blocks.some(function(b){return b.sizePref==='half'||b.sizePref==='full'||b.sizePref==='quarter';});
     var addFiller = (!isCover) && !hasSizedPref && leftover>usable*0.35;
     if(addFiller){var fh=(Math.random()<0.6?B_filler('quote'):B_filler('orn')).replace('<div class="blk','<div data-bid="filler'+p+'" class="blk');html+=fh;leftover-=110;}
     /* spacing: if moderate leftover, spread */
@@ -2620,28 +2671,43 @@ function generate(){
      SZÁNDÉKOSAN nem töltjük ki automatikusan a doboz teljes méretéig (ld. SIZEPREF_FIT_CAP) —
      a rovat inkább kicsiben generálódik, szabad hellyel, és a felhasználó a Kijelölés gomb +
      sarok-fogantyúk (vagy a Méret ±) segítségével nagyíthatja fel utólag, ha szeretné. */
+  function fitQuarterRow(rowEl,box){
+    /* mindkét negyed a SAJÁT (a flexbox által már kiosztott) oszlop-szélességéhez igazodik,
+       csak a magasság-célja (box.top/bottom) közös a sor egészével. */
+    Array.prototype.filter.call(rowEl.children,function(c){return c.classList.contains('blk');}).forEach(function(k){
+      var r=k.getBoundingClientRect();
+      fitBlockToBox(k,{left:r.left,right:r.right,top:box.top,bottom:box.bottom},SIZEPREF_FIT_CAP);
+    });
+  }
   document.querySelectorAll('#stage .pbody').forEach(function(pb){
     var pRect=pb.getBoundingClientRect();
-    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && c.matches('.blk[data-size-pref]');});
+    /* egy "szelet" vagy egy önálló fél/egész oldalas .blk (közvetlen gyerek), vagy egy
+       .quarter-row (két negyed-oldalas .blk-kal) — a negyed-oldalas rovatok NEM közvetlen
+       gyerekei a .pbody-nak, hanem a saját quarter-row-jukénak. */
+    var slots=Array.prototype.filter.call(pb.children,function(c){
+      return c.matches && (c.matches('.blk[data-size-pref="full"]')||c.matches('.blk[data-size-pref="half"]')||c.matches('.quarter-row'));
+    });
     var i=0;
-    while(i<kids.length){
-      var blk=kids[i], pref=blk.getAttribute('data-size-pref');
-      if(pref==='full'){
-        fitBlockToBox(blk,pRect,SIZEPREF_FIT_CAP);
+    while(i<slots.length){
+      var el=slots[i];
+      if(el.matches('.blk[data-size-pref="full"]')){
+        fitBlockToBox(el,pRect,SIZEPREF_FIT_CAP);
         i++;
+        continue;
+      }
+      var isHalf=el.matches('.blk[data-size-pref="half"]');
+      var next=slots[i+1];
+      var midY=pRect.top+(pRect.height-GAP)/2;
+      var topBox={left:pRect.left,right:pRect.right,top:pRect.top,bottom:midY};
+      var botBox={left:pRect.left,right:pRect.right,top:midY+GAP,bottom:pRect.bottom};
+      var soloBox={left:pRect.left,right:pRect.right,top:pRect.top,bottom:pRect.top+(pRect.height-GAP)/2};
+      if(next && (next.matches('.blk[data-size-pref="half"]')||next.matches('.quarter-row'))){
+        if(isHalf)fitBlockToBox(el,topBox,SIZEPREF_FIT_CAP); else fitQuarterRow(el,topBox);
+        if(next.matches('.blk[data-size-pref="half"]'))fitBlockToBox(next,botBox,SIZEPREF_FIT_CAP); else fitQuarterRow(next,botBox);
+        i+=2;
       } else {
-        var next=kids[i+1];
-        var box;
-        if(next && next.getAttribute('data-size-pref')==='half'){
-          var midY=pRect.top+(pRect.height-GAP)/2;
-          fitBlockToBox(blk,{left:pRect.left,right:pRect.right,top:pRect.top,bottom:midY},SIZEPREF_FIT_CAP);
-          fitBlockToBox(next,{left:pRect.left,right:pRect.right,top:midY+GAP,bottom:pRect.bottom},SIZEPREF_FIT_CAP);
-          i+=2;
-        } else {
-          box={left:pRect.left,right:pRect.right,top:pRect.top,bottom:pRect.top+(pRect.height-GAP)/2};
-          fitBlockToBox(blk,box,SIZEPREF_FIT_CAP);
-          i++;
-        }
+        if(isHalf)fitBlockToBox(el,soloBox,SIZEPREF_FIT_CAP); else fitQuarterRow(el,soloBox);
+        i++;
       }
     }
   });
@@ -3133,7 +3199,10 @@ window.openAddSectionPicker=function(){
   ov=document.createElement('div'); ov.id='addSecOverlay';
   var rows=ADDABLE_SECTIONS.filter(function(s){var cb=document.getElementById('chk_'+s.chk);return cb&&!cb.checked;});
   var rowsHtml=rows.length?rows.map(function(s){
-    var pref=typeof getSizePref==='function'?getSizePref(s.blk):'';
+    /* csak a KIFEJEZETTEN fél/egész oldalra kényszerített rovatoknál mutatunk jelzést — a
+       negyed oldal az új, hallgatólagos alapértelmezés, azt nem kell minden egyes sornál
+       külön kiemelni, feleslegesen zajossá tenné a listát. */
+    var pref=(typeof FIXED_SIZE_PREF!=='undefined')?FIXED_SIZE_PREF[s.blk]:'';
     var prefHtml=pref?('<span class="size-pref-lbl">'+(pref==='full'?'(Egy egész oldal)':'(fél oldal)')+'</span>'):'';
     return '<div class="adm-row"><div><b>'+esc(sectionLabel(s.chk))+'</b>'+prefHtml+'</div><button type="button" class="adm-open" data-chk="'+s.chk+'">Hozzáadás</button></div>';
   }).join(''):'<div class="tinyhint">Minden rovat már be van kapcsolva — nincs mit hozzáadni.</div>';
@@ -3568,7 +3637,7 @@ function blockMinZoom(blk){
        (pl. a "Méret" felirat 9px-es betűmérete) NEM számíthat bele a "sose menjen 8pt alá"
        biztonsági küszöbbe, különben a kezelőfelület saját apró feliratai miatt hamisan magasra
        (akár 1.0-ra) tornázná a minimum-zoomot. */
-    if(el.closest('.blk-grip,.blk-resize-btn,.blk-del-btn,.rsz'))return;
+    if(el.closest('.blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn,.rsz'))return;
     if(!el.childNodes.length)return; var hasText=false;
     el.childNodes.forEach(function(n){if(n.nodeType===3&&n.nodeValue.trim())hasText=true;});
     if(!hasText)return;
@@ -3642,7 +3711,11 @@ function clampBlockZoom(blk,desired,minZ){
      megbízhatóan, ezért közvetlenül beállítjuk és lemérjük — ha túllóg a margón, bináris kereséssel
      visszavesszük, amíg bele nem fér. Ugyanaz a határ, mint a gombos mozgatásnál (a pbody tényleges
      széle), csak itt a méretre alkalmazva. */
-  var pb=blk.closest('.pbody');
+  /* a negyed-oldalas (és a régi, egymás melletti páros) rovatoknál a doboz nem a TELJES
+     lapszélességet foglalja, hanem csak a saját oszlopát (.quarter-row/.duo-row) — a kézi
+     nagyítás jobb-szél korlátjának ehhez, NEM a teljes .pbody szélességéhez kell igazodnia,
+     különben a rovat túlnőhetne a saját oszlopán és átfedésbe kerülne a szomszédjával. */
+  var pb=blk.closest('.quarter-row, .duo-row, .pbody');
   if(!pb){ blk.style.zoom=desired; return desired; }
   var pRect=pb.getBoundingClientRect();
   blk.style.zoom=desired;
@@ -4261,7 +4334,22 @@ var FIXED_SIZE_PREF={
   gyik:'full',       /* Gyakran Ismételt Kérdések */
   interju:'full'     /* Exkluzív interjú */
 };
-function getSizePref(id){ return FIXED_SIZE_PREF[id]||''; }
+/* az étlap/itallap kötelezően egymás mellett, fele-fele szélességben jelenik meg (ld.
+   ensureMenuPair) — ez a saját, régebbi páros-elrendezés elsőbbséget élvez, ezért ez a két
+   rovat NEM kap automatikus "negyed oldal" besorolást, változatlanul a régi, mért-magasságú
+   (nem kényszerített doboz-méretű) rendszeren megy át. */
+var NO_AUTO_QUARTER_IDS=['etlap','itallap'];
+/* Új szabály: amelyik rovatnál NINCS kifejezetten megadva, hogy fél vagy egész oldalnak kell
+   lennie, ott mindig NEGYED oldallal (a lap egyik felének fele, azaz egy 2×2-es rács egy
+   cellája) számolunk — ugyanúgy fix doboz-mérettel, mint a fél/egész oldalas rovatoknál,
+   csak épp fele akkora szélességben, egy másik negyed-oldalas rovat mellett (ld. buildPagePlan
+   "openQuarter" logikáját). Ez egyben ki is váltja/általánosítja a régi, csak néhány
+   kézzel felsorolt rovatpárra (HALFP_IDS) vonatkozó, egymás-melletti elrendezést. */
+function getSizePref(id){
+  if(FIXED_SIZE_PREF[id])return FIXED_SIZE_PREF[id];
+  if(NO_AUTO_QUARTER_IDS.indexOf(id)>=0)return '';
+  return 'quarter';
+}
 (function(){
   document.querySelectorAll('.card.opt > h3').forEach(function(h3){
     var cb=h3.querySelector('input[type="checkbox"][id^="chk_"]'); if(!cb)return;
