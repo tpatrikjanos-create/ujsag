@@ -528,6 +528,10 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .closer{font-size:13px;}
 .duo-row{display:flex;gap:6mm;align-items:flex-start;}
 .duo-row>.blk{flex:1 1 0;min-width:0;}
+/* az utolsó-lapos csoport "nyolcadolt" negyed-párjai (ld. buildTailPagePlan) — ezeknek,
+   ellentétben a régi (természetes magasságú) duo-row-val, EGYENLŐ magassággal kell kitölteniük
+   a közösen elfoglalt sávot. */
+.duo-row.tail-pair-row{align-items:stretch;}
 .filler-quote{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-size:13px;line-height:1.35;color:var(--claret);padding:8px 6px;border-top:1px solid var(--claret);border-bottom:1px solid var(--claret);}
 body.pack-magazine .filler-quote{position:relative;border:none;padding:14px 18px 10px;font-size:15px;}
 body.pack-magazine .filler-quote::before{content:'"';position:absolute;top:-6px;left:2px;font-family:'Grenze Gotisch',serif;font-size:42px;color:var(--claret);opacity:.4;line-height:1;}
@@ -1194,7 +1198,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='3.1';
+  var APP_VERSION='3.2';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -1370,6 +1374,13 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
         <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Közösen megtanulni főzni egy nemzeti ételt"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
       </div>
       <button type="button" class="addrow" onclick="addRow('rep_bakancslista')">+ Új tétel</button>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>A nászútunk <label class="tgl"><input type="checkbox" id="chk_naszut" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_naszut">
+      <div class="fld"><label>Szöveg</label><textarea id="f_naszut"></textarea></div>
     </div>
   </div>
 
@@ -1610,13 +1621,6 @@ A kedvenc díszítésed
     <h3>Robbantsd fel a telefonunkat! <label class="tgl"><input type="checkbox" id="chk_robbantsd" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_robbantsd">
       <div class="fld"><textarea id="f_robText">A mai napon készült képeket/videókat nyugodtan küldjétek nekünk át folyamatosan Messengeren!</textarea></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A nászútunk <label class="tgl"><input type="checkbox" id="chk_naszut" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_naszut">
-      <div class="fld"><label>Szöveg</label><textarea id="f_naszut"></textarea></div>
     </div>
   </div>
 
@@ -2304,9 +2308,9 @@ function buildFlow(d){
      több, mint amennyit a tartalom ténylegesen igényel — ezt a splitTailFlow/generate() külön
      kezeli (a fölösleges lapok a fő tartalom és ez a csoport KÖZÉ kerülnek, nem e mögé). */
   var ORDER=['welcome','szuloknek','stats','sztori','childhood','ismerkedes','legelsokep','years','lanykeres','jegyesfoto',
-    'utazas','bakancslista','csapat','memorial','negylabu','szulok','szinglik','dijak',
+    'utazas','bakancslista','naszut','csapat','memorial','negylabu','szulok','szinglik','dijak',
     'igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','itallap','italok','qr','fotovadasz',
-    'robbantsd','naszut','vendegkonyv','closer'];
+    'robbantsd','vendegkonyv','closer'];
 
   var flow=[];
   ORDER.forEach(function(id){ if(B[id])flow.push({id:id,html:B[id],sizePref:getSizePref(id)}); });
@@ -2334,8 +2338,10 @@ var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[1];
    kedve szerint tölthet ki. */
 var SIZEPREF_FIT_CAP=1.5;
 var HALFP_IDS=['qr','fotovadasz','vendegkonyv','robbantsd','etlap','itallap','szinglik','dijak'];
-/* ez a csoport MINDIG a legutolsó lap(ok)ra kerül — ld. splitTailFlow() */
-var TAIL_IDS=['igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','itallap','italok','qr','fotovadasz','robbantsd','naszut','vendegkonyv','closer'];
+/* ez a csoport MINDIG a legutolsó lap(ok)ra kerül, és MÁSHOL nem jelenhet meg — ld.
+   splitTailFlow()/buildTailPagePlan(). A nászút NEM tartozik ide (feljebb, az utazási
+   rovatok közelébe került a normál sorrendben, ld. ORDER buildFlow()-ban). */
+var TAIL_IDS=['menetrend','etlap','itallap','italok','qr','fotovadasz','robbantsd','vendegkonyv','closer'];
 function splitTailFlow(flow){
   var main=[], tail=[];
   flow.forEach(function(b){ (TAIL_IDS.indexOf(b.id)>=0?tail:main).push(b); });
@@ -2475,6 +2481,41 @@ function buildPagePlan(flow,usable,GAP){
   closeOpenPageWithFiller();
   return {pages:pages, pagesUsed:pages.length};
 }
+/* Az "utolsó lapos" csoport (TAIL_IDS) speciális eset: ez a csoport MINDIG a lap 4 negyedébe
+   kellene, hogy férjen (1 lap = 1 sor / rovat), DE ha ennél több rovat van bekapcsolva, a lap
+   ALULRÓL FELFELE "nyolcadolható" — az utolsó (legalul lévő) rovatokat párba állítjuk, egymás
+   mellé, fele-fele szélességben, hogy egy sorba férjen kettő belőlük egy negyed helyett. Az
+   étlap+itallap saját (mindig meglévő) egymás-melletti párja NEM vehet részt ebben az új
+   párosításban (az saját magában már egy lezárt, 2-oszlopos "sor"). Ha még a maximális
+   párba-állítással sem férne el mind egyetlen lapon, visszaesünk a rendes, több-lapos tervre. */
+function buildTailPagePlan(tailFlow,usable,GAP){
+  var standard=buildPagePlan(tailFlow,usable,GAP);
+  if(!tailFlow.length||standard.pagesUsed<=1)return standard;
+  var units=buildUnits(tailFlow);
+  var n=units.length;
+  var pairableIdxs=[];
+  units.forEach(function(u,i){ if(u.blocks.length===1)pairableIdxs.push(i); });
+  var maxPairs=Math.floor(pairableIdxs.length/2);
+  var pairsNeeded=Math.max(0,n-4);
+  var pairsToUse=Math.min(pairsNeeded,maxPairs);
+  var rowsNeeded=n-pairsToUse;
+  if(rowsNeeded>4)return standard; /* még a nyolcadolással sem fér el 1 lapon — marad a régi, több-lapos terv */
+  var idxsToPair=pairableIdxs.slice(pairableIdxs.length-pairsToUse*2); /* az utolsó (legalulabbi) párosítható egységek */
+  var pairSet={}; idxsToPair.forEach(function(i){pairSet[i]=true;});
+  var flat=[]; var i=0;
+  while(i<units.length){
+    if(pairSet[i]&&pairSet[i+1]){
+      var a=units[i].blocks[0], b=units[i+1].blocks[0];
+      a.tailPair='start'; b.tailPair='end';
+      flat.push(a); flat.push(b);
+      i+=2;
+    } else {
+      units[i].blocks.forEach(function(bl){flat.push(bl);});
+      i++;
+    }
+  }
+  return {pages:[flat], pagesUsed:1};
+}
 /* közös terv-számítás — az updateFit (fitbar szövege) ÉS az élő split-screen előnézet
    (renderLivePreview) is ugyanerre az egyetlen, egyszeri mérésre/tervre épül, nehogy minden
    billentyűleütésnél kétszer fusson le a (nem olcsó) mérés+lapkiosztás. */
@@ -2485,7 +2526,7 @@ function computePagePlan(){
   flow.forEach(function(b){b.h=measure(b.html);});
   var split=splitTailFlow(flow);
   var mainPlan=buildPagePlan(split.main,usable,GAP);
-  var tailPlan=buildPagePlan(split.tail,usable,GAP);
+  var tailPlan=buildTailPagePlan(split.tail,usable,GAP);
   return {mainPlan:mainPlan,tailPlan:tailPlan,usable:usable,GAP:GAP};
 }
 function computePagesNeeded(){
@@ -2603,7 +2644,7 @@ function generate(){
   var contentPages=N-1;
   var split=splitTailFlow(flow);
   var mainPlan=buildPagePlan(split.main,usable,GAP);
-  var tailPlan=buildPagePlan(split.tail,usable,GAP);
+  var tailPlan=buildTailPagePlan(split.tail,usable,GAP);
   var neededPages=mainPlan.pagesUsed+tailPlan.pagesUsed;
   if(neededPages>contentPages){
     var sugg = (N===4 && neededPages<=7) ? 8 : null;
@@ -2663,12 +2704,15 @@ function generate(){
       /* a "half" jelző itt KIZÁRÓLAG a régi, egymás MELLETT páros elrendezéshez tartozó
          rovatokat (pl. Étlap+Itallap) jelöli — a "fél oldal" ÉS a "negyed oldal" terjedelmű
          rovatok (sizePref==='half'/'quarter') EGYMÁS ALÁ kerülnek, teljes lapszélességben,
-         nem duo-row-ban, ezért NEM half. */
-      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,h:effH(b,usable)});
+         nem duo-row-ban, ezért NEM half. A "tailPair" jelző az utolsó-lapos csoport (ld.
+         buildTailPagePlan) alulról-felfelé történő "nyolcadolásakor" összepárosított negyed
+         rovatokat jelöli — ők IS duo-row-ba kerülnek, mint a régi half-párok. */
+      parts.push({id:b.id,html:bh,half:HALF.indexOf(b.id)>=0 && !b.sizePref,tailPair:b.tailPair,h:effH(b,usable)});
     });
     var sumH=0, rows=0;
     for(var qi=0;qi<parts.length;qi++){
       if(parts[qi].half && parts[qi+1] && parts[qi+1].half){ html+='<div class="duo-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
+      else if(parts[qi].tailPair==='start' && parts[qi+1] && parts[qi+1].tailPair==='end'){ html+='<div class="duo-row tail-pair-row">'+parts[qi].html+parts[qi+1].html+'</div>'; sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++; }
       else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
     }
@@ -2717,19 +2761,29 @@ function generate(){
   function sizePrefUnits(pref){ return pref==='full'?4:pref==='half'?2:pref==='quarter'?1:0; }
   document.querySelectorAll('#stage .pbody').forEach(function(pb){
     var pRect=pb.getBoundingClientRect();
-    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && c.matches('.blk[data-size-pref]');});
+    /* a .tail-pair-row (ld. buildTailPagePlan "nyolcadolás") is EGY sávnyi (1 egység) helyet
+       foglal, csak a benne lévő KÉT negyed osztozik rajta fele-fele szélességben. */
+    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && (c.matches('.blk[data-size-pref]')||c.matches('.tail-pair-row'));});
     if(!kids.length)return;
+    function unitsOf(k){ return k.matches('.tail-pair-row')?1:sizePrefUnits(k.getAttribute('data-size-pref')); }
     var totalUnits=0;
-    kids.forEach(function(k){ totalUnits+=sizePrefUnits(k.getAttribute('data-size-pref')); });
+    kids.forEach(function(k){ totalUnits+=unitsOf(k); });
     if(!totalUnits)return;
     var availH=pRect.height - GAP*(kids.length-1);
     var cumUnits=0;
     kids.forEach(function(k,idx){
-      var u=sizePrefUnits(k.getAttribute('data-size-pref'));
+      var u=unitsOf(k);
       var top=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
       cumUnits+=u;
       var bottom=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
-      fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+      if(k.matches('.tail-pair-row')){
+        Array.prototype.filter.call(k.children,function(c){return c.classList.contains('blk');}).forEach(function(child){
+          var r=child.getBoundingClientRect();
+          fitBlockToBox(child,{left:r.left,right:r.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+        });
+      } else {
+        fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+      }
     });
   });
   /* a "normál" (nem fél/egész oldalas) rovatok alapértelmezett generálási mérete a korábbi 1.0
