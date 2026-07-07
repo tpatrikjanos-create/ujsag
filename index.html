@@ -648,12 +648,30 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .fitbar.ok{background:#e7f1e8;color:#2f6b3a;border:1px solid #bcd9c1;}
 .fitbar.warn{background:#fbf0db;color:#8a5a1e;border:1px solid #e7c98d;}
 .fitbar.bad{background:#fdeceb;color:#9a3327;border:1px solid #e8a49b;}
-/* ===== Élő split-screen előnézet (csak elég széles PC-képernyőn jelenik meg) ===== */
+/* ===== Élő split-screen előnézet (PC-n: mindig dokkolt panel; mobilon/keskeny nézetben:
+   lebegő gomb, ami egy alulról felcsúszó lapon nyitja meg ugyanezt a tartalmat) ===== */
 #livePreviewPanel{position:fixed;right:22px;top:90px;width:210px;max-height:calc(100vh - 110px);background:#fff;border:1.4px solid var(--wiz-rose-pale);border-radius:16px;padding:14px 14px 16px;box-shadow:0 14px 40px rgba(60,20,35,.14);display:none;flex-direction:column;gap:8px;z-index:40;}
 @media (min-width:1320px){#livePreviewPanel{display:flex;}}
 .lp-head{display:flex;align-items:center;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:13px;color:#3a2630;}
 #lpCollapseBtn{width:22px;height:22px;border-radius:50%;border:1.2px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-size:14px;line-height:1;cursor:pointer;padding:0;}
 #lpCollapseBtn:hover{background:var(--wiz-blush);}
+.lp-fab{display:none;}
+.lp-backdrop{display:none;}
+#lpMobileCloseBtn{display:none;width:26px;height:26px;border-radius:50%;border:1.2px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-size:14px;align-items:center;justify-content:center;line-height:1;cursor:pointer;padding:0;}
+#lpMobileCloseBtn:hover{background:var(--wiz-blush);}
+@media (max-width:1319.98px){
+  /* PC-n a dokkolt panelt lehet összecsukni (spórolva a helyet) — keskeny nézetben ennek
+     nincs értelme, ott a lebegő gomb MAGA a "becsukott" állapot, a "Kész" gomb a bezárás. */
+  #lpCollapseBtn{display:none;}
+  .lp-fab{position:fixed;right:16px;bottom:88px;z-index:41;display:flex;align-items:center;gap:6px;background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border:none;border-radius:22px;padding:11px 16px;box-shadow:0 8px 22px rgba(110,34,51,.4);cursor:pointer;}
+  .lp-fab:active{transform:scale(.96);}
+  .lp-fab.lp-fab-hidden{display:none;}
+  .lp-backdrop{position:fixed;inset:0;background:rgba(20,10,15,.45);z-index:38;display:none;}
+  .lp-backdrop.open{display:block;}
+  #livePreviewPanel.lp-mobile-open{display:flex;left:12px;right:12px;top:auto;bottom:12px;width:auto;max-height:78vh;z-index:39;}
+  #lpMobileCloseBtn{display:inline-flex;}
+}
+#lpMobileCloseBtn:hover{background:var(--wiz-blush);}
 .lp-sub{font-family:'Libre Franklin',sans-serif;font-size:11px;line-height:1.4;}
 .lp-sub.ok{color:#2f6b3a;}
 .lp-sub.bad{color:#9a3327;}
@@ -1176,7 +1194,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='3.0';
+  var APP_VERSION='3.1';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -1617,10 +1635,15 @@ A kedvenc díszítésed
   <div class="fitbar ok" id="fitStatus">A tartalom elfér a kiválasztott formátumban.</div>
   <button class="gen-btn" onclick="generate()">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
 
+  <button type="button" class="lp-fab" id="lpFab">👀 Előnézet</button>
+  <div class="lp-backdrop" id="lpBackdrop"></div>
   <div id="livePreviewPanel">
     <div class="lp-head">
       <span>👀 Élő előnézet</span>
-      <button type="button" id="lpCollapseBtn" title="Összecsukás/kinyitás">–</button>
+      <span>
+        <button type="button" id="lpCollapseBtn" title="Összecsukás/kinyitás">–</button>
+        <button type="button" id="lpMobileCloseBtn" title="Bezárás">✕</button>
+      </span>
     </div>
     <div class="lp-sub ok" id="lpSub">Kezdd el kitölteni az adatokat…</div>
     <div class="lp-pages" id="lpPages"></div>
@@ -1629,6 +1652,9 @@ A kedvenc díszítésed
   (function(){
     var panel=document.getElementById('livePreviewPanel');
     var btn=document.getElementById('lpCollapseBtn');
+    var fab=document.getElementById('lpFab');
+    var backdrop=document.getElementById('lpBackdrop');
+    var mobileCloseBtn=document.getElementById('lpMobileCloseBtn');
     if(!panel||!btn)return;
     var KEY='lpCollapsed';
     if(localStorage.getItem(KEY)==='1'){panel.classList.add('collapsed'); btn.textContent='+';}
@@ -1637,6 +1663,20 @@ A kedvenc díszítésed
       btn.textContent=on?'+':'–';
       try{localStorage.setItem(KEY,on?'1':'0');}catch(e){}
     });
+    function openMobilePreview(){
+      panel.classList.remove('collapsed'); /* a lebegő gombbal nyitva mindig a teljes tartalom látszik */
+      panel.classList.add('lp-mobile-open');
+      backdrop.classList.add('open');
+      if(fab)fab.classList.add('lp-fab-hidden');
+    }
+    function closeMobilePreview(){
+      if(fab)fab.classList.remove('lp-fab-hidden');
+      panel.classList.remove('lp-mobile-open');
+      backdrop.classList.remove('open');
+    }
+    if(fab)fab.addEventListener('click',openMobilePreview);
+    if(backdrop)backdrop.addEventListener('click',closeMobilePreview);
+    if(mobileCloseBtn)mobileCloseBtn.addEventListener('click',closeMobilePreview);
   })();
   </script>
 </div>
@@ -2350,8 +2390,8 @@ function buildPagePlan(flow,usable,GAP){
   var openQuarter=null; // {item,pageIndex,isTop} — egy magányos negyed várja a párját (egy másik negyedet)
   var _fillerSeq=0;
   function ensurePage(ix){ while(pages.length<=ix)pages.push([]); }
-  function fillerItem(pref){
-    var fhtml=(Math.random()<0.6?B_filler('quote'):B_filler('orn'));
+  function fillerItem(pref,forceQuote){
+    var fhtml=(forceQuote||Math.random()<0.6)?B_filler('quote'):B_filler('orn');
     return {id:'filler'+pref+(_fillerSeq++),html:fhtml,sizePref:pref,h:measure(fhtml)};
   }
   function flushNormalBuf(){
@@ -2367,12 +2407,14 @@ function buildPagePlan(flow,usable,GAP){
     curPage++;
     normalBuf=[];
   }
-  /* egy magányos, párra váró negyedet lezár egy díszítő negyeddel — ha az épp a lap FELSŐ
-     felét zárta le így, a lap ALSÓ fele még mindig nyitva marad (openPage), ha az ALSÓ felét,
-     akkor a lap ezzel teljesen kész. */
+  /* egy magányos, párra váró negyedet lezár egy idézetes negyeddel (pl. amikor egy fél oldal
+     mellé csak egy negyed kerül, és így a lap utolsó negyede üresen maradna — ott MINDIG
+     idézet kerül, nem véletlenszerűen díszítő ornamens) — ha ez a lap FELSŐ felét zárta le
+     így, a lap ALSÓ fele még mindig nyitva marad (openPage), ha az ALSÓ felét, akkor a lap
+     ezzel teljesen kész. */
   function closeOpenQuarterWithFiller(){
     if(!openQuarter)return;
-    pages[openQuarter.pageIndex].push(fillerItem('quarter'));
+    pages[openQuarter.pageIndex].push(fillerItem('quarter',true));
     openPage = openQuarter.isTop ? {pageIndex:openQuarter.pageIndex} : null;
     openQuarter=null;
   }
