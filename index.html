@@ -1176,7 +1176,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='2.9';
+  var APP_VERSION='3.0';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -1246,18 +1246,6 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   </div>
 
   <div class="card opt">
-    <h3>Akik fentről ünnepelnek <label class="tgl"><input type="checkbox" id="chk_memorial" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_memorial">
-      <div class="fld"><label>Bevezető</label><div class="fld-row"><textarea id="f_memIntro" placeholder="Vannak, akik ma testben nem lehetnek itt, de tudjuk, hogy fentről mosolyognak ránk. Egy gyertyát gyújtunk értük."></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_memIntro')">💡 Tipp</button></div></div>
-      <label class="minlbl">Egy fő / sor — név + kapcsolat (a „+ Új sor"-ral bővíthető)</label>
-      <div class="rep" id="rep_mem" data-tpl='<input class="r-in r-wide" data-k="name" placeholder="Név"><input class="r-in" data-k="rel" placeholder="kapcsolat (pl. nagymama)">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="name" placeholder="Név"><input class="r-in" data-k="rel" placeholder="kapcsolat (pl. nagymama)"><button type="button" class="rep-del" onclick="this.parentNode.remove();scheduleFit&&scheduleFit();">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_mem')">+ Új sor</button>
-    </div>
-  </div>
-
-  <div class="card opt">
     <h3>Számokban a szerelmünk <label class="tgl"><input type="checkbox" id="chk_stats" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_stats">
       <div class="grid3">
@@ -1282,9 +1270,36 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   </div>
 
   <div class="card opt">
+    <h3>A sztorink dióhéjban <label class="tgl"><input type="checkbox" id="chk_sztori" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_sztori">
+      <div class="fld"><label>Első randi</label><input id="f_s1" placeholder="dátum, hely"></div>
+      <div class="fld"><label>Első közös utazás</label><input id="f_s2" placeholder="dátum, hely"></div>
+      <div class="fld"><label>Első közös otthon</label><input id="f_s3" placeholder="dátum, hely"></div>
+      <div class="fld"><label>Eljegyzés</label><input id="f_s4" placeholder="dátum, hely"></div>
+      <div class="tinyhint">Kép a kész lapon, opcionálisan, tölthető fel.</div>
+    </div>
+  </div>
+
+  <div class="card opt">
     <h3>Gyerekkori képek <label class="tgl"><input type="checkbox" id="chk_childhood" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_childhood">
       <div class="fld"><label>Felirat</label><input id="f_duoCap" value="Ők házasodtak ma össze!"></div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Hogyan ismerkedtünk meg? <label class="tgl"><input type="checkbox" id="chk_ismerkedes" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_ismerkedes">
+      <div class="fld"><label>A történet</label><textarea id="f_ismerkedes" style="min-height:90px;" placeholder="pl. Egy közös barát mutatott be minket egymásnak — és onnantól nem volt visszaút..."></textarea></div>
+      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>A legelső közös kép <label class="tgl"><input type="checkbox" id="chk_legelsokep" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_legelsokep">
+      <div class="fld"><label>Pár mondat a képhez</label><textarea id="f_legelsokep" placeholder="Ezen a képen még nem is sejtettük, mi lesz ebből…"></textarea></div>
+      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
     </div>
   </div>
 
@@ -1300,85 +1315,43 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   </div>
 
   <div class="card opt">
-    <h3>Menetrend &amp; étlap (gerinc) <span style="font-size:11px;color:#aaa;font-weight:400;">mindig látszik</span></h3>
-    <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span>Időpontokat is mutassunk a menetrendben</label>
-    <div class="fld"><label>Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
-      <div class="rep" id="rep_prog" data-tpl='<input class="r-in r-time" data-k="time" placeholder="időpont"><input class="r-in r-wide" data-k="event" placeholder="esemény">'>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="15:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Érkezés, köszöntő ital"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Szertartás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:45"><input class="r-in r-wide" data-k="event" placeholder="pl. Gratuláció, koccintás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="17:30"><input class="r-in r-wide" data-k="event" placeholder="pl. Csoportképek"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="19:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="21:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Nyitótánc, tortavágás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+    <h3>A lánykérés <label class="tgl"><input type="checkbox" id="chk_lanykeres" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_lanykeres">
+      <div class="fld"><label>A történet</label><textarea id="f_lanykeres" style="min-height:90px;" placeholder="pl. A naplementében térdre ereszkedett, és feltette élete legfontosabb kérdését..."></textarea></div>
+      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>A jegyesfotózás képei <label class="tgl"><input type="checkbox" id="chk_jegyesfoto" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_jegyesfoto">
+      <div class="fld"><label>Hány kép legyen? (2–6)</label><input id="f_jegyesfotoCount" type="number" min="2" max="6" value="4"></div>
+      <div class="tinyhint">A képeket a kész lapon töltheted fel.</div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Utazási rovat <label class="tgl"><input type="checkbox" id="chk_utazas" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_utazas">
+      <div class="tinyhint">A legemlékezetesebb közös utak/kalandok — egy hely / sor, a fotót a kész lapon töltöd fel.</div>
+      <div class="rep" id="rep_utazas" data-tpl='<input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat">'>
+        <div class="rep-row"><input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
       </div>
-      <button type="button" class="addrow" onclick="addRow('rep_prog')">+ Új sor</button>
+      <button type="button" class="addrow" onclick="addRow('rep_utazas')">+ Új út</button>
     </div>
-    <div class="tinyhint">Az étlap fogásai — soronként egy étel, üres rész kimarad:</div>
-    <div class="grid2">
-      <div class="fld"><label>Vendégvárás / előétel</label><textarea id="f_m_app" style="min-height:54px;" placeholder="pl. Libamáj brióssal"></textarea></div>
-      <div class="fld"><label>Leves</label><textarea id="f_m_soup" style="min-height:54px;" placeholder="pl. Húsleves cérnametélttel"></textarea></div>
-      <div class="fld"><label>Főétel</label><textarea id="f_m_main" style="min-height:54px;" placeholder="pl. Vörösboros marhapofa
-Burgonyapüré, párolt zöldség"></textarea></div>
-      <div class="fld"><label>Éjféli fogás</label><textarea id="f_m_night" style="min-height:54px;" placeholder="pl. Sült kolbász, savanyúság"></textarea></div>
-    </div>
-    <div class="fld"><label>Desszert</label><textarea id="f_m_dessert" style="min-height:54px;" placeholder="pl. Menyasszonytorta"></textarea></div>
-    <div class="fld"><label>Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;" placeholder="pl. Pezsgő: Törley Gála
-Vörösbor: Egri Bikavér
-Fehérbor: Olaszrizling
-Sör: csapolt
-Alkoholmentes: limonádé, üdítők"></textarea></div>
-    <div class="opt" style="border-top:1px dashed #e4ddcf;padding-top:10px;margin-top:4px;">
-      <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_drinks" onchange="optToggle(this)"><span class="sw"></span>Férj/feleség itala</label>
-      <div class="opt-body off" data-for="chk_drinks">
-        <div class="grid2">
-          <div class="fld"><label>A férj itala</label><input id="f_husband" placeholder="pl. Jägermeister"></div>
-          <div class="fld"><label>A feleség itala</label><input id="f_wife" placeholder="pl. Gin Tonic"></div>
-        </div>
-        <div class="fld"><label>Bárpult-felirat</label><input id="f_barNote" placeholder="pl. Kérd „a férj” vagy „a feleség” italát a bárpultban!"></div>
+  </div>
+
+  <div class="card opt">
+    <h3>Közös bakancslistánk <label class="tgl"><input type="checkbox" id="chk_bakancslista" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_bakancslista">
+      <div class="tinyhint">Mit szeretnétek még együtt megélni/megcsinálni? Egy dolog / sor.</div>
+      <div class="rep" id="rep_bakancslista" data-tpl='<input class="r-in r-wide" data-k="item" placeholder="pl. Elmenni Japánba">'>
+        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Elmenni Japánba"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Kipróbálni egy sárkányrepülést"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Közösen megtanulni főzni egy nemzeti ételt"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
       </div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>QR-kód <label class="tgl"><input type="checkbox" id="chk_qr" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_qr">
-      <div class="fld"><label>QR-sáv címe</label><input id="f_qrHead" value=""></div>
-      <div class="fld"><label>QR-kód szövege</label><textarea id="f_driveCap"></textarea></div>
-      <div class="fld" style="margin-top:6px;"><label><input type="checkbox" id="chk_qr2" onchange="optToggle(this)" style="vertical-align:middle;margin-right:6px;">Még egy QR-kód</label></div>
-      <div class="opt-body off" data-for="chk_qr2">
-        <div class="fld"><label>QR-sáv középső segítség-felirat</label><input id="f_qrMid" value=""></div>
-        <div class="fld"><label>Második QR-kód szövege</label><textarea id="f_djCap"></textarea></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Robbantsd fel a telefonunkat! <label class="tgl"><input type="checkbox" id="chk_robbantsd" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_robbantsd">
-      <div class="fld"><textarea id="f_robText">A mai napon készült képeket/videókat nyugodtan küldjétek nekünk át folyamatosan Messengeren!</textarea></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Fotóvadász játék <label class="tgl"><input type="checkbox" id="chk_fotovadasz" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_fotovadasz">
-      <div class="fld"><label>Lista (soronként egy elem)</label><textarea id="f_hunt" style="min-height:150px;">Szelfi rólad/rólatok
-Szelfi az asztalotokkal
-Szelfi az ifjú párral
-Fotó a gyerekekről
-Az ifjú pár, amikor tortát vág
-Az ifjú pár csókja
-Az ifjú pár táncol
-A táncparkett
-A kedvenc díszítésed
-Ételek</textarea></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Hagyj nekünk üzenetet! <label class="tgl"><input type="checkbox" id="chk_message" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_message">
-      <div class="fld"><textarea id="f_guestText">A videós vendégkönyvbe vegyél fel egy rövid köszöntőt — évek múlva is jó lesz visszanézni.</textarea></div>
+      <button type="button" class="addrow" onclick="addRow('rep_bakancslista')">+ Új tétel</button>
     </div>
   </div>
 
@@ -1417,6 +1390,34 @@ A kedvenc díszítésed
   </div>
 
   <div class="card opt">
+    <h3>Akik fentről ünnepelnek <label class="tgl"><input type="checkbox" id="chk_memorial" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_memorial">
+      <div class="fld"><label>Bevezető</label><div class="fld-row"><textarea id="f_memIntro" placeholder="Vannak, akik ma testben nem lehetnek itt, de tudjuk, hogy fentről mosolyognak ránk. Egy gyertyát gyújtunk értük."></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_memIntro')">💡 Tipp</button></div></div>
+      <label class="minlbl">Egy fő / sor — név + kapcsolat (a „+ Új sor"-ral bővíthető)</label>
+      <div class="rep" id="rep_mem" data-tpl='<input class="r-in r-wide" data-k="name" placeholder="Név"><input class="r-in" data-k="rel" placeholder="kapcsolat (pl. nagymama)">'>
+        <div class="rep-row"><input class="r-in r-wide" data-k="name" placeholder="Név"><input class="r-in" data-k="rel" placeholder="kapcsolat (pl. nagymama)"><button type="button" class="rep-del" onclick="this.parentNode.remove();scheduleFit&&scheduleFit();">✕</button></div>
+      </div>
+      <button type="button" class="addrow" onclick="addRow('rep_mem')">+ Új sor</button>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Otthonról ünneplő négylábú <label class="tgl"><input type="checkbox" id="chk_negylabu" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_negylabu">
+      <div class="fld"><label>A kedvenc neve</label><input id="f_petName"></div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Szerelmek, melyekből születtünk <label class="tgl"><input type="checkbox" id="chk_szulok" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_szulok">
+      <div class="tinyhint">A szülők neve (a régi esküvői képet a kész lapon töltöd fel):</div>
+      <div class="fld"><label>Egyik pár (pl. menyasszony szülei)</label><input id="f_par1"></div>
+      <div class="fld"><label>Másik pár (pl. vőlegény szülei)</label><input id="f_par2"></div>
+    </div>
+  </div>
+
+  <div class="card opt">
     <h3>A szinglik <label class="tgl"><input type="checkbox" id="chk_szinglik" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_szinglik">
       <div class="fld"><label>Bevezető (opcionális)</label><input id="f_singlesIntro" value="Hátha ma este szikrázik valami…"></div>
@@ -1438,97 +1439,6 @@ A kedvenc díszítésed
       <div class="fld"><label>Legmesszebbről érkező</label><input id="f_aw3"></div>
       <div class="fld"><label>Legrégebben házasodtak</label><input id="f_aw4"></div>
       <div class="fld"><label>Legutóbb házasodtak</label><input id="f_aw5"></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Otthonról ünneplő négylábú <label class="tgl"><input type="checkbox" id="chk_negylabu" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_negylabu">
-      <div class="fld"><label>A kedvenc neve</label><input id="f_petName"></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Hogyan ismerkedtünk meg? <label class="tgl"><input type="checkbox" id="chk_ismerkedes" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_ismerkedes">
-      <div class="fld"><label>A történet</label><textarea id="f_ismerkedes" style="min-height:90px;" placeholder="pl. Egy közös barát mutatott be minket egymásnak — és onnantól nem volt visszaút..."></textarea></div>
-      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A legelső közös kép <label class="tgl"><input type="checkbox" id="chk_legelsokep" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_legelsokep">
-      <div class="fld"><label>Pár mondat a képhez</label><textarea id="f_legelsokep" placeholder="Ezen a képen még nem is sejtettük, mi lesz ebből…"></textarea></div>
-      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A lánykérés <label class="tgl"><input type="checkbox" id="chk_lanykeres" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_lanykeres">
-      <div class="fld"><label>A történet</label><textarea id="f_lanykeres" style="min-height:90px;" placeholder="pl. A naplementében térdre ereszkedett, és feltette élete legfontosabb kérdését..."></textarea></div>
-      <div class="tinyhint">A kész lapon tölthetsz fel hozzá egy fotót.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A jegyesfotózás képei <label class="tgl"><input type="checkbox" id="chk_jegyesfoto" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_jegyesfoto">
-      <div class="fld"><label>Hány kép legyen? (2–6)</label><input id="f_jegyesfotoCount" type="number" min="2" max="6" value="4"></div>
-      <div class="tinyhint">A képeket a kész lapon töltheted fel.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A sztorink dióhéjban <label class="tgl"><input type="checkbox" id="chk_sztori" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_sztori">
-      <div class="fld"><label>Első randi</label><input id="f_s1" placeholder="dátum, hely"></div>
-      <div class="fld"><label>Első közös utazás</label><input id="f_s2" placeholder="dátum, hely"></div>
-      <div class="fld"><label>Első közös otthon</label><input id="f_s3" placeholder="dátum, hely"></div>
-      <div class="fld"><label>Eljegyzés</label><input id="f_s4" placeholder="dátum, hely"></div>
-      <div class="tinyhint">Kép a kész lapon, opcionálisan, tölthető fel.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>A nászútunk <label class="tgl"><input type="checkbox" id="chk_naszut" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_naszut">
-      <div class="fld"><label>Szöveg</label><textarea id="f_naszut"></textarea></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Utazási rovat <label class="tgl"><input type="checkbox" id="chk_utazas" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_utazas">
-      <div class="tinyhint">A legemlékezetesebb közös utak/kalandok — egy hely / sor, a fotót a kész lapon töltöd fel.</div>
-      <div class="rep" id="rep_utazas" data-tpl='<input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="place" placeholder="hely"><input class="r-in r-wide" data-k="desc" placeholder="rövid mondat"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_utazas')">+ Új út</button>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Közös bakancslistánk <label class="tgl"><input type="checkbox" id="chk_bakancslista" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_bakancslista">
-      <div class="tinyhint">Mit szeretnétek még együtt megélni/megcsinálni? Egy dolog / sor.</div>
-      <div class="rep" id="rep_bakancslista" data-tpl='<input class="r-in r-wide" data-k="item" placeholder="pl. Elmenni Japánba">'>
-        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Elmenni Japánba"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Kipróbálni egy sárkányrepülést"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-        <div class="rep-row"><input class="r-in r-wide" data-k="item" placeholder="pl. Közösen megtanulni főzni egy nemzeti ételt"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      </div>
-      <button type="button" class="addrow" onclick="addRow('rep_bakancslista')">+ Új tétel</button>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3>Szerelmek, melyekből születtünk <label class="tgl"><input type="checkbox" id="chk_szulok" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_szulok">
-      <div class="tinyhint">A szülők neve (a régi esküvői képet a kész lapon töltöd fel):</div>
-      <div class="fld"><label>Egyik pár (pl. menyasszony szülei)</label><input id="f_par1"></div>
-      <div class="fld"><label>Másik pár (pl. vőlegény szülei)</label><input id="f_par2"></div>
     </div>
   </div>
 
@@ -1606,6 +1516,96 @@ A kedvenc díszítésed
     <h3>Gyerekeknek színező <label class="tgl"><input type="checkbox" id="chk_szinezo" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_szinezo">
       <div class="tinyhint">Egy egész oldalas, kifestő-jellegű rajz kerül az újság közelébe a végén — a kisebb vendégek ceruzával/zsírkrétával kiszínezhetik az esküvő alatt.</div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Menetrend &amp; étlap (gerinc) <span style="font-size:11px;color:#aaa;font-weight:400;">mindig látszik</span></h3>
+    <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span>Időpontokat is mutassunk a menetrendben</label>
+    <div class="fld"><label>Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
+      <div class="rep" id="rep_prog" data-tpl='<input class="r-in r-time" data-k="time" placeholder="időpont"><input class="r-in r-wide" data-k="event" placeholder="esemény">'>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="15:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Érkezés, köszöntő ital"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Szertartás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="16:45"><input class="r-in r-wide" data-k="event" placeholder="pl. Gratuláció, koccintás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="17:30"><input class="r-in r-wide" data-k="event" placeholder="pl. Csoportképek"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="19:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+        <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="21:00"><input class="r-in r-wide" data-k="event" placeholder="pl. Nyitótánc, tortavágás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      </div>
+      <button type="button" class="addrow" onclick="addRow('rep_prog')">+ Új sor</button>
+    </div>
+    <div class="tinyhint">Az étlap fogásai — soronként egy étel, üres rész kimarad:</div>
+    <div class="grid2">
+      <div class="fld"><label>Vendégvárás / előétel</label><textarea id="f_m_app" style="min-height:54px;" placeholder="pl. Libamáj brióssal"></textarea></div>
+      <div class="fld"><label>Leves</label><textarea id="f_m_soup" style="min-height:54px;" placeholder="pl. Húsleves cérnametélttel"></textarea></div>
+      <div class="fld"><label>Főétel</label><textarea id="f_m_main" style="min-height:54px;" placeholder="pl. Vörösboros marhapofa
+Burgonyapüré, párolt zöldség"></textarea></div>
+      <div class="fld"><label>Éjféli fogás</label><textarea id="f_m_night" style="min-height:54px;" placeholder="pl. Sült kolbász, savanyúság"></textarea></div>
+    </div>
+    <div class="fld"><label>Desszert</label><textarea id="f_m_dessert" style="min-height:54px;" placeholder="pl. Menyasszonytorta"></textarea></div>
+    <div class="fld"><label>Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;" placeholder="pl. Pezsgő: Törley Gála
+Vörösbor: Egri Bikavér
+Fehérbor: Olaszrizling
+Sör: csapolt
+Alkoholmentes: limonádé, üdítők"></textarea></div>
+    <div class="opt" style="border-top:1px dashed #e4ddcf;padding-top:10px;margin-top:4px;">
+      <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_drinks" onchange="optToggle(this)"><span class="sw"></span>Férj/feleség itala</label>
+      <div class="opt-body off" data-for="chk_drinks">
+        <div class="grid2">
+          <div class="fld"><label>A férj itala</label><input id="f_husband" placeholder="pl. Jägermeister"></div>
+          <div class="fld"><label>A feleség itala</label><input id="f_wife" placeholder="pl. Gin Tonic"></div>
+        </div>
+        <div class="fld"><label>Bárpult-felirat</label><input id="f_barNote" placeholder="pl. Kérd „a férj” vagy „a feleség” italát a bárpultban!"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>QR-kód <label class="tgl"><input type="checkbox" id="chk_qr" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_qr">
+      <div class="fld"><label>QR-sáv címe</label><input id="f_qrHead" value=""></div>
+      <div class="fld"><label>QR-kód szövege</label><textarea id="f_driveCap"></textarea></div>
+      <div class="fld" style="margin-top:6px;"><label><input type="checkbox" id="chk_qr2" onchange="optToggle(this)" style="vertical-align:middle;margin-right:6px;">Még egy QR-kód</label></div>
+      <div class="opt-body off" data-for="chk_qr2">
+        <div class="fld"><label>QR-sáv középső segítség-felirat</label><input id="f_qrMid" value=""></div>
+        <div class="fld"><label>Második QR-kód szövege</label><textarea id="f_djCap"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Fotóvadász játék <label class="tgl"><input type="checkbox" id="chk_fotovadasz" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_fotovadasz">
+      <div class="fld"><label>Lista (soronként egy elem)</label><textarea id="f_hunt" style="min-height:150px;">Szelfi rólad/rólatok
+Szelfi az asztalotokkal
+Szelfi az ifjú párral
+Fotó a gyerekekről
+Az ifjú pár, amikor tortát vág
+Az ifjú pár csókja
+Az ifjú pár táncol
+A táncparkett
+A kedvenc díszítésed
+Ételek</textarea></div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Robbantsd fel a telefonunkat! <label class="tgl"><input type="checkbox" id="chk_robbantsd" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_robbantsd">
+      <div class="fld"><textarea id="f_robText">A mai napon készült képeket/videókat nyugodtan küldjétek nekünk át folyamatosan Messengeren!</textarea></div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>A nászútunk <label class="tgl"><input type="checkbox" id="chk_naszut" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_naszut">
+      <div class="fld"><label>Szöveg</label><textarea id="f_naszut"></textarea></div>
+    </div>
+  </div>
+
+  <div class="card opt">
+    <h3>Hagyj nekünk üzenetet! <label class="tgl"><input type="checkbox" id="chk_message" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_message">
+      <div class="fld"><textarea id="f_guestText">A videós vendégkönyvbe vegyél fel egy rövid köszöntőt — évek múlva is jó lesz visszanézni.</textarea></div>
     </div>
   </div>
 
