@@ -602,10 +602,17 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    "koordináta-sűrűséget" vált, a végső képernyő-szélesség a konténer auto-szélessége miatt
    változatlan marad, így az abból aspect-ratio-val számolt magasság is változatlan — a zoom
    hatása kiesik), ezért a blokk sosem zsugorodna a fél lapba, akárhogyan is állítjuk a zoomot. */
-.jf-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:4mm;}
-.jf-cell{flex:0 0 auto;}
-.jf-cell .imgbox{width:34mm;height:34mm;}
-.size-a4 .jf-cell .imgbox{width:46mm;height:46mm;}
+/* A jegyesfotózás rovat MINDIG teljesen kitölti a saját (egész oldalas) lapját, 4/5/6 képpel
+   egyaránt — ezért itt NEM a többi rovatnál használt zoom-alapú illesztést használjuk (ami a
+   rácsnak ehhez a majdnem-négyzetes, tömör alakjához nem tudná egyszerre a szélességet ÉS a
+   magasságot is kitölteni), hanem egy 2 oszlopos, arányos (1fr) CSS-rácsot, ami a rovat teljes
+   magasságát (ld. .blk[data-bid="jegyesfoto"] lejjebb) mindig pontosan kitölti. */
+.jf-grid{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:4mm;width:100%;}
+.jf-cell{width:100%;height:100%;min-width:0;min-height:0;}
+.jf-cell .imgbox{width:100%;height:100%;}
+.blk[data-bid="jegyesfoto"]{flex:1 1 auto;display:flex;flex-direction:column;min-height:0;}
+.blk[data-bid="jegyesfoto"]>.kicker{flex:0 0 auto;}
+.blk[data-bid="jegyesfoto"] .jf-grid{flex:1 1 auto;min-height:0;}
 .tm-card .photo{width:22mm;height:22mm;aspect-ratio:1/1;margin:0 auto;}
 .size-a4 .tm-card .photo{width:32mm;height:32mm;}
 .tm-role{font-family:'Libre Franklin',sans-serif;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--claret);font-weight:700;margin-top:3px;}
@@ -1198,7 +1205,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='3.2';
+  var APP_VERSION='3.3';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <div class="wiz-sub">Esküvői újság</div>
@@ -1347,7 +1354,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   <div class="card opt">
     <h3>A jegyesfotózás képei <label class="tgl"><input type="checkbox" id="chk_jegyesfoto" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_jegyesfoto">
-      <div class="fld"><label>Hány kép legyen? (2–6)</label><input id="f_jegyesfotoCount" type="number" min="2" max="6" value="4"></div>
+      <div class="fld"><label>Hány kép legyen? (4–6)</label><input id="f_jegyesfotoCount" type="number" min="4" max="6" value="4"></div>
       <div class="tinyhint">A képeket a kész lapon töltheted fel.</div>
     </div>
   </div>
@@ -1549,7 +1556,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   </div>
 
   <div class="card opt">
-    <h3>Menetrend &amp; étlap (gerinc) <span style="font-size:11px;color:#aaa;font-weight:400;">mindig látszik</span></h3>
+    <h3>Menetrend &amp; étlap (gerinc) <span style="font-size:11px;color:#aaa;font-weight:400;">mindig látszik, az utolsó oldalon</span></h3>
     <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span>Időpontokat is mutassunk a menetrendben</label>
     <div class="fld"><label>Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
       <div class="rep" id="rep_prog" data-tpl='<input class="r-in r-time" data-k="time" placeholder="időpont"><input class="r-in r-wide" data-k="event" placeholder="esemény">'>
@@ -1591,6 +1598,7 @@ Alkoholmentes: limonádé, üdítők"></textarea></div>
   <div class="card opt">
     <h3>QR-kód <label class="tgl"><input type="checkbox" id="chk_qr" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_qr">
+      <div class="tinyhint">Ha bekapcsolod, ez a rovat mindig az utolsó oldal(ak)ra kerül, a többi lagzis alapinfóval (menetrend, étlap stb.) együtt.</div>
       <div class="fld"><label>QR-sáv címe</label><input id="f_qrHead" value=""></div>
       <div class="fld"><label>QR-kód szövege</label><textarea id="f_driveCap"></textarea></div>
       <div class="fld" style="margin-top:6px;"><label><input type="checkbox" id="chk_qr2" onchange="optToggle(this)" style="vertical-align:middle;margin-right:6px;">Még egy QR-kód</label></div>
@@ -1604,6 +1612,7 @@ Alkoholmentes: limonádé, üdítők"></textarea></div>
   <div class="card opt">
     <h3>Fotóvadász játék <label class="tgl"><input type="checkbox" id="chk_fotovadasz" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_fotovadasz">
+      <div class="tinyhint">Ha bekapcsolod, ez a rovat mindig az utolsó oldal(ak)ra kerül.</div>
       <div class="fld"><label>Lista (soronként egy elem)</label><textarea id="f_hunt" style="min-height:150px;">Szelfi rólad/rólatok
 Szelfi az asztalotokkal
 Szelfi az ifjú párral
@@ -1620,6 +1629,7 @@ A kedvenc díszítésed
   <div class="card opt">
     <h3>Robbantsd fel a telefonunkat! <label class="tgl"><input type="checkbox" id="chk_robbantsd" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_robbantsd">
+      <div class="tinyhint">Ha bekapcsolod, ez a rovat mindig az utolsó oldal(ak)ra kerül.</div>
       <div class="fld"><textarea id="f_robText">A mai napon készült képeket/videókat nyugodtan küldjétek nekünk át folyamatosan Messengeren!</textarea></div>
     </div>
   </div>
@@ -1627,12 +1637,13 @@ A kedvenc díszítésed
   <div class="card opt">
     <h3>Hagyj nekünk üzenetet! <label class="tgl"><input type="checkbox" id="chk_message" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_message">
+      <div class="tinyhint">Ha bekapcsolod, ez a rovat mindig az utolsó oldal(ak)ra kerül.</div>
       <div class="fld"><textarea id="f_guestText">A videós vendégkönyvbe vegyél fel egy rövid köszöntőt — évek múlva is jó lesz visszanézni.</textarea></div>
     </div>
   </div>
 
   <div class="card">
-    <h3><span class="num">★</span>Záró felirat</h3>
+    <h3><span class="num">★</span>Záró felirat <span style="font-size:11px;color:#aaa;font-weight:400;">mindig látszik, az utolsó oldalon</span></h3>
     <div class="fld"><input id="f_closer" value=""></div>
   </div>
 
@@ -2203,7 +2214,7 @@ function B_legelsokep(d){
     +'</div></div>';
 }
 function B_jegyesfoto(d){
-  var cnt=Math.max(2,Math.min(6,parseInt(val('f_jegyesfotoCount'),10)||4));
+  var cnt=Math.max(4,Math.min(6,parseInt(val('f_jegyesfotoCount'),10)||4));
   var cells='';for(var i=0;i<cnt;i++)cells+='<div class="jf-cell">'+imgbox('jegyesfotó')+'</div>';
   return '<div class="blk"><div class="kicker">'+ico('i-camera')+' A jegyesfotózás képei</div><div class="jf-grid">'+cells+'</div></div>';
 }
@@ -2683,7 +2694,12 @@ function generate(){
     blocks.forEach(function(b){
       var bh=b.html; var zoomAttr='';
       if(b.id&&b.id!=='cover'){
-        if(b.sizePref){
+        /* A jegyesfotózás MINDIG teljesen kitölti a saját (egész oldalas) lapját, a rács
+           saját CSS-e (flex+grid, ld. .jf-grid) útján — nem a többi fél/negyed/egész oldalas
+           rovatnál használt zoom-alapú illesztéssel, ezért itt szándékosan KIMARAD a
+           zoomAttr/data-size-pref (különben a két rendszer (CSS-arányos kitöltés és a
+           zoom-alapú "box" méretezés) ütközne egymással). */
+        if(b.sizePref && b.id!=='jegyesfoto'){
           /* "fél oldal" / "negyed oldal" = a lapot vízszintes sávokra hajtva az egyik sáv — a
              rovat EGYMÁS ALÁ (nem egymás mellé) kerül a párjával/társaival, mindegyik a TELJES
              lapszélességet használva, ezért a magasságát a sáv méretére kell nagyítani (a
@@ -2796,7 +2812,7 @@ function generate(){
      felhasználó utólag a "−" gombbal elérne. */
   document.querySelectorAll('#stage .blk[data-bid]').forEach(function(blk){
     var bid=blk.getAttribute('data-bid');
-    if(!bid || bid==='cover' || bid.indexOf('filler')===0) return;
+    if(!bid || bid==='cover' || bid.indexOf('filler')===0 || bid==='jegyesfoto') return;
     if(blk.hasAttribute('data-size-pref')) return;
     if(blk.closest('.pbody.lonely')) return;
     var minZ=Math.max(blockMinZoom(blk),blockImgMinZoom(blk,DEFAULT_BLOCK_ZOOM));
@@ -3455,14 +3471,14 @@ function initImageBox(box){
   function cycleShape(){if(_shapes[_si])box.classList.remove(_shapes[_si]);_si=(_si+1)%_shapes.length;if(_shapes[_si])box.classList.add(_shapes[_si]);}
   function setWrap(side){box.classList.remove('wrap-left','wrap-right');if(side==='left')box.classList.add('wrap-left');else if(side==='right')box.classList.add('wrap-right');}
   /* Mozgatás — a gombsor "Mozgatás" gombja nyitja meg a nyilas D-padet UGYANAZON a fix
-     alsó helyen (a gombsor eltűnik, a D-pad veszi át a helyét). Minden imgbox SZABADON,
-     a teljes lapon belül mozgatható (nem csak a saját, szűk közvetlen szülőjén belül) —
-     ugyanaz a margó-logika, mint a tartalomblokkoknál (clampXY): a lap (pbody) határain
-     belül maradva. */
+     alsó helyen (a gombsor eltűnik, a D-pad veszi át a helyét). Minden imgbox a SAJÁT
+     rovatán (negyedén/felén/egész oldalán) BELÜL mozgatható — nem lóghat át egy másik
+     rovat helyére, ugyanaz a margó-logika, mint a tartalomblokkoknál (clampXY), csak a
+     rovat (.blk) határaihoz, nem a teljes laphoz (.pbody) igazítva. */
   var moveOv=document.createElement('div'); moveOv.className='imgbox-move-overlay';
   var MOVE_STEP=2*MM; /* finomabb lépésköz a képkeretek mozgatásához (a rovatokénál kisebb) */
   function clampImgXY(nx,ny){
-    var par=box.closest('.pbody')||box.parentElement; if(!par)return[nx,ny];
+    var par=box.closest('.blk')||box.parentElement; if(!par)return[nx,ny];
     var S=elemScale(box); /* mobil lap-zoom ÉS az esetleges zoomolt ős rovat (pl. "egész oldal") összeszorzott hatása */
     var m=(box.style.transform||'').match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
     var curX=m?parseFloat(m[1]):0, curY=m?parseFloat(m[2]):0;
@@ -3474,10 +3490,12 @@ function initImageBox(box){
     if(maxX<minX)maxX=minX; if(maxY<minY)maxY=minY;
     return[clamp(nx,minX,maxX),clamp(ny,minY,maxY)];
   }
-  /* Ütközés-keresés: ha a doboz új helyzete ÁTFEDNÉ egy MÁSIK imgboxot, azt adja vissza.
-     Teljes téglalap-átfedést nézünk (nem csak azt, hogy a doboz KÖZÉPPONTJA esik-e bele) —
-     egy nagyméretű dobozon a középpont csak jóval az érintkezés UTÁN érne bele a másikba,
-     így a csere csak akkor sülne el, amikor már jelentős, "csúnya" átfedés alakult ki. */
+  /* Ütközés-keresés: ha a doboz új helyzete ÁTFEDNÉ egy MÁSIK imgboxot, azt adja vissza —
+     KIZÁRÓLAG a SAJÁT rovaton (.blk) belüli imgboxok között (nem a teljes lapon), hiszen a
+     kép immár nem hagyhatja el a saját rovatát. Teljes téglalap-átfedést nézünk (nem csak
+     azt, hogy a doboz KÖZÉPPONTJA esik-e bele) — egy nagyméretű dobozon a középpont csak
+     jóval az érintkezés UTÁN érne bele a másikba, így a csere csak akkor sülne el, amikor
+     már jelentős, "csúnya" átfedés alakult ki. */
   function findImgCollision(nx,ny){
     var S=elemScale(box);
     var m=(box.style.transform||'').match(/translate\(([-0-9.]+)px,\s*([-0-9.]+)px\)/);
@@ -3486,28 +3504,14 @@ function initImageBox(box){
     var dxPx=(nx-curX)*S, dyPx=(ny-curY)*S;
     var pLeft=bRect.left+dxPx, pTop=bRect.top+dyPx;
     var pRight=pLeft+bRect.width, pBottom=pTop+bRect.height;
+    var scope=box.closest('.blk');
     var hit=null;
-    document.querySelectorAll('#stage .imgbox').forEach(function(b){
+    (scope?scope.querySelectorAll('.imgbox'):document.querySelectorAll('#stage .imgbox')).forEach(function(b){
       if(b===box||hit)return;
       var r=b.getBoundingClientRect();
       if(pLeft<r.right&&pRight>r.left&&pTop<r.bottom&&pBottom>r.top)hit=b;
     });
     return hit;
-  }
-  /* Ha a lap tetejére/aljára ér a mozgatás, és a user továbbra is abba az irányba nyomja a
-     nyilat, a kép átkerül a szomszédos lapra (a doboz saját szülőjéből kilépve, a célt-lap
-     legelső/legutolsó rovatába kerülve, ott folytatva a szerkesztést). */
-  function tryJumpImgPage(dy){
-    if(!dy)return;
-    var page=box.closest('.page'); if(!page)return;
-    var pages=Array.from(document.querySelectorAll('#stage .page'));
-    var idx=pages.indexOf(page);
-    var tgt=dy<0?pages[idx-1]:pages[idx+1]; if(!tgt)return;
-    var tgtBody=tgt.querySelector('.pbody'); if(!tgtBody)return;
-    var tgtBlk=dy<0?tgtBody.lastElementChild:tgtBody.firstElementChild; if(!tgtBlk)return;
-    box.style.transform='';
-    if(dy<0)tgtBlk.appendChild(box); else tgtBlk.insertBefore(box,tgtBlk.firstChild);
-    if(typeof checkBlockOverflows==='function')checkBlockOverflows();
   }
   /* A kép alatti felirat (pl. név, leírás — de NEM az évszám-rács sorszáma, hiszen az a
      POZÍCIÓHOZ, nem a fotóhoz tartozik) a képpel EGYÜTT mozogjon/cseréljen helyet. */
@@ -3522,7 +3526,7 @@ function initImageBox(box){
     var ox=m?parseFloat(m[1]):0, oy=m?parseFloat(m[2]):0;
     var nx=ox+dx*MOVE_STEP, ny=oy+dy*MOVE_STEP;
     var cl=clampImgXY(nx,ny); nx=cl[0]; ny=cl[1];
-    if(nx===ox&&ny===oy){ if(dy)tryJumpImgPage(dy); return; } /* margó elérve — lapváltás, ha van hova */
+    if(nx===ox&&ny===oy)return; /* elérte a saját rovat szélét — a kép nem hagyhatja el a rovatát */
     var rawHit=findImgCollision(nx,ny);
     /* pingpong-védelem: ha épp EZZEL a dobozzal cseréltünk helyet legutóbb, ne cseréljünk megint
        vele azonnal — enélkül szoros elrendezésnél (pl. mobil kártyák) a két doboz oda-vissza
@@ -4035,6 +4039,11 @@ function initBlockTools(){
     if(blk.hasAttribute('data-size-pref')){
       blkDirs=blkDirs.filter(function(d){return d.length===2;});
     }
+    /* a jegyesfotózás rovat MINDIG teljesen kitölti a saját (egész oldalas) lapját — sem a
+       doboz, sem a benne lévő rács mérete nem állítható (nincs zoom-alapú "tartalom kicsinyítés/
+       nagyítás" fogalom itt, a rács mindig a rendelkezésre álló helyet tölti ki), ezért ennél a
+       rovatnál egyáltalán nincs átméretező fogantyú. */
+    if(blk.getAttribute('data-bid')==='jegyesfoto'){ blkDirs=[]; }
     blkDirs.forEach(function(dir){
       var hd=blk.querySelector(':scope > .rsz-'+dir);
       if(!hd){hd=document.createElement('div');hd.className='rsz rsz-'+dir;blk.appendChild(hd);}
