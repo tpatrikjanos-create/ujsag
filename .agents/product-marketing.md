@@ -1,7 +1,9 @@
 # Product Marketing Context
 
 *Last updated: 2026-07-08*
-*Draft v1 — auto-generated from the codebase (index.html: wizard copy, pricing constants, review carousel). Needs your review — see the questions flagged inline with `❓`.*
+*V1.1 — auto-draft a kódbázisból, a founderrel megbeszélve és megerősítve 2026-07-08-án. Egy nyitott kérdés maradt (a versenytárssal szembeni pontos differenciáló ok, ld. Competitive Landscape) — a többi `❓` megválaszolva vagy "nincs adat, korai szakasz" jelzéssel lezárva.*
+
+**Kulcsfontosságú kontextus, amit minden más marketing-skillnek figyelembe kell vennie:** a termék MOST lett public, **0 fizetős rendelés** történt eddig, összesen **2 fő** töltötte ki a varázslót. Ez korai, adat előtti szakasz — a cél most **ismertség növelése**, nem a meglévő tölcsér finomhangolása. A landing oldal 18 db véleménye jelenleg illusztratív minta-szöveg, nem valós ügyfél-visszajelzés (ld. Proof Points) — ezt kommunikációban figyelembe kell venni.
 
 ## Product Overview
 **One-liner:** Percek alatt elkészíthető, személyre szabott, vicces esküvői kiadvány-generátor — programfüzet, meghívó vagy Save the Date formában — otthon nyomtatható vagy vízjel nélkül megrendelhető.
@@ -19,7 +21,7 @@
 - Egyszeri **tervezési díj**: 5 000 Ft (bármelyik fizetős rendelésnél)
 - **Postaköltség**: 1 250 Ft (csak nyomtatott rendelésnél)
 
-❓ *Jó ez az árazási logika/összeg így, vagy változott azóta? Van kedvezmény/kupon rendszer?*
+*Megerősítve (2026-07-08): az árazás aktuális, de a founder nem tudja, ez-e az optimális szint — nincs adat arról, mennyit hajlandóak az emberek ténylegesen fizetni érte. Nincs kupon/kedvezmény rendszer. → Ár-érzékenység tesztelése (pl. Van Westendorp) a `pricing` skillel korai, mihelyt van pár valós fizető vásárló.*
 
 ---
 
@@ -62,7 +64,7 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 
 **Emotional tension:** Félelem, hogy a lagzijuk "olyan lesz, mint a többi" — a review-k visszatérő motívuma az "egyedi", "kreatív", "nem hittem volna, hogy ez a miénk lehet" érzés.
 
-❓ *Van ismertebb konkrét fájdalompont, amit ügyfelektől hallottatok (pl. "nem tudtam, hol kezdjem", "féltem, hogy túl drága lesz")?*
+*Megerősítve (2026-07-08): nincs még erről infó — a termék most lett public, még nem volt kellő ügyfélkontaktus ehhez. → Amint lesz pár valós kitöltő/vásárló, a `customer-research` skillel érdemes 2-3 rövid kérdést feltenni nekik pont erről ("mi volt a félelmed/kétséged, mielőtt elkezdted?").*
 
 ---
 
@@ -73,7 +75,7 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 
 **Indirect:** "Nem csinálunk semmit" (nincs programfüzet/save the date egyáltalán) — a fő indirekt versenytárs valószínűleg ez, nem egy másik termék.
 
-❓ *Ismertek konkrét magyar versenytársakat (más esküvői meghívó-generátor oldalakat)? Ez élesítené a `competitor-profiling`/`competitors` skill munkáját.*
+*Megerősítve (2026-07-08): van egy ismert, konkrét magyar versenytárs, ugyanolyan árazással dolgozik. A founder szerint a saját rendszer jobb — de a PONTOS ok (mitől jobb konkrétan?) még nincs kimondva. ❓ Ezt érdemes tisztázni, mielőtt a `competitors` skill összehasonlító tartalmat írna: a 3-az-1-ben motor (újság+meghívó+save the date egy szerkesztővel)? A rovat-könyvtár mérete? Az élő szerkesztő (kép mozgatás/méretezés)? Valami más?*
 
 ---
 
@@ -96,10 +98,10 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 | Objection | Response |
 |-----------|----------|
 | "Ez túl 'vicces'/laza lesz, nem elég elegáns az esküvőnkhöz?" | A stílus-csomag váltó (Klasszikus/Romantikus/Modern/Magazinos) és a testre szabható hangnem (a szövegek teljesen szerkeszthetők) miatt a "vicces újság" csak egy LEHETŐSÉG, nem kötelező irány. |
-| "Nem bízom benne, hogy a nyomtatás/kiszállítás rendben lesz." | ❓ *Van már garancia/minőségi ígéret, amit ide lehetne írni (pl. mintanyomat, visszaküldési garancia)?* |
+| "Nem bízom benne, hogy a nyomtatás/kiszállítás rendben lesz." | *Megerősítve (2026-07-08): jelenleg nincs garancia/minőségi ígéret — ez nyitott kérdés, mert 0 valós rendelés volt még, tehát a nyomtatási minőség/kiszállítás maga sincs élesben tesztelve.* |
 | "Túl bonyolultnak tűnik ennyi rovattal." | Az élő "előnézet" és "elfér-e" jelző már menet közben mutatja, mi hogyan fog kinézni — nem kell utólag rájönni, hogy nem működik. |
 
-**Anti-persona:** ❓ *Kit NEM érdemes megcélozni? (pl. akik teljesen egyedi, kézzel rajzolt grafikát szeretnének, vagy akiknek a büdzséje a hagyományos nyomda felé húz — érdemes tisztázni.)*
+**Anti-persona:** *Megerősítve (2026-07-08): nincs meghatározott anti-persona egyelőre.*
 
 ---
 
@@ -126,7 +128,7 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 
 **Words to use:** vicces, személyes, egyedi, kreatív, percek alatt kész, szerkeszthető, otthon nyomtatható.
 
-**Words to avoid:** ❓ *(pl. túl "vállalati"/technikai szavak — "platform", "megoldás", "workflow" — valószínűleg kerülendők a jelenlegi meleg, személyes hangnemhez képest)*
+**Words to avoid:** *Megerősítve (2026-07-08): nincs kifejezetten kerülendő szó megnevezve — az ajánlás (túl "vállalati"/technikai szavak, pl. "platform", "megoldás", "workflow" kerülése) marad érvényben, mert illeszkedik a meleg, tegeződő hangnemhez.*
 
 **Glossary:**
 | Term | Meaning |
@@ -147,9 +149,9 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 ---
 
 ## Proof Points
-**Metrics:** ❓ *(nincs nyilvános szám a kódban — hány pár használta eddig? ez erős proof point lenne, ha van rá adat az admin-panelben.)*
+**Metrics:** *Megerősítve (2026-07-08): a termék most lett public, MÉG NEM VOLT egyetlen fizetős vásárlás sem. Eddig 2 ember töltötte ki a varázslót. → Ez azt jelenti, hogy a jelenlegi 18 db review a landing oldalon NEM valódi ügyfél-vélemény, hanem illusztratív/minta-szöveg — fontos ezt tudatosítani, mert marketing-etikailag és jogilag is kockázatos lehet valós vásárlói véleményként kommunikálni azt, ami még nem az. Rövid távon két irány van: (a) egyértelműen "minta/illusztráció" jelleggel kezelni ezeket befelé (ne kerüljön ki róluk kommunikáció mintha valós lenne), vagy (b) mihelyt lesznek első valós felhasználók, gyűjteni TÉNYLEGES visszajelzéseket és azokkal felváltani.*
 
-**Customers/Notable:** Nincs márka-szintű social proof (nem céges ügyfelek) — a proof point réteg a 18 db 5 csillagos vélemény mindhárom terméktípusra (Programfüzet, Meghívó, Save the Date), keresztnévvel.
+**Customers/Notable:** Nincs márka-szintű social proof (nem céges ügyfelek). A landing oldalon jelenleg 18 db 5 csillagos, mindhárom terméktípusra (Programfüzet, Meghívó, Save the Date) szóló vélemény szerepel — ❓ *ezek illusztratív minta-szövegek, még nem valós ügyfelektől származnak (ld. Metrics fent).*
 
 **Testimonials (mintavétel):**
 > "A lagzira készítettük el programfüzetnek, és óriási sikere volt a vendégek körében! Nagyon egyedi, mindenkinek csak ajánlani tudom." — Dóra
@@ -166,8 +168,8 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 ---
 
 ## Goals
-**Business goal:** ❓ *(nincs explicit üzleti cél rögzítve a kódban — mi az elsődleges cél most: több digitális eladás, vagy a nyomtatott/kiszállított rendelések felfuttatása, vagy elsőként a felhasználószám növelése?)*
+**Business goal:** *Megerősítve (2026-07-08): jelenleg ISMERTSÉG NÖVELÉSE az elsődleges cél, nem a digitális/nyomtatott eladások aránya — a termék most lett public, és még nem volt fizetős rendelés. Ez fontos, mert a legtöbb marketing-skill (cro, paywalls, pricing) érett, meglévő forgalomra/konverziós adatra épít — ezek most korainak számítanak. Elsőbbséget élveznek azok a skillek, amik FORGALMAT hoznak az oldalra (ads, social, launch, community-marketing, public-relations, directory-submissions), plusz az analytics, hogy a forgalom mérhető legyen a kezdetektől fogva.*
 
-**Key conversion action:** A varázsló "Generálás" gombjától a "Kész" modal digitális/nyomtatott rendelés-rögzítéséig vezető út.
+**Key conversion action:** A varázsló "Generálás" gombjától a "Kész" modal digitális/nyomtatott rendelés-rögzítéséig vezető út — ELMÉLETBEN, mivel ezen még senki nem ment végig sikeresen a valóságban.
 
-**Current metrics:** ❓ *(van-e már adat a Firebase admin-panelből: hány kitöltés, hány fizetős rendelés, konverziós arány?)*
+**Current metrics:** *Megerősítve (2026-07-08): 0 fizetős rendelés, 2 fő töltötte ki eddig a varázslót. Nagyon korai szakasz — minden marketing-döntés jelenleg feltételezésekre épül, nem adatra. Első cél: a wizard-kitöltés és a "Kész" modal megjelenésének alap-analitikai mérése, hogy a következő döntések már valós számokra épülhessenek.*
