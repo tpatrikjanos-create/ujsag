@@ -916,12 +916,42 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     if(localStorage.getItem('cookieConsent')==='accepted')loadMetaPixel();
   }catch(e){}
 })();
+/* Google Analytics 4 — ugyanúgy CSAK süti-elfogadás UTÁN töltődik be, ugyanazzal a
+   mintával, mint a Meta Pixel (window.__loadGA4, cookie-sáv "Elfogadom" gomb hívja,
+   vagy induláskor, ha korábban már elfogadta a látogató). */
+(function(){
+  var GA4_ID='G-5H6Z3C3VEZ';
+  function loadGA4(){
+    if(window.__ga4Loaded)return;
+    window.__ga4Loaded=true;
+    var s=document.createElement('script'); s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id='+GA4_ID;
+    document.head.appendChild(s);
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag=gtag;
+    gtag('js', new Date());
+    gtag('config', GA4_ID);
+  }
+  window.__loadGA4=loadGA4;
+  try{
+    if(localStorage.getItem('cookieConsent')==='accepted')loadGA4();
+  }catch(e){}
+})();
+/* Egységes esemény-küldő: a tölcsér kulcspontjaira (típusválasztás, varázsló indítás,
+   generálás, "Kész" modal, e-mail-gyűjtés, rendelés) illesztve — GA4-be ÉS a Meta Pixelbe
+   is elküldi, ha az adott eszköz épp be van töltve (süti-elfogadás előtt egyik sem fut,
+   ekkor ez csendben nem csinál semmit — nincs esemény-sor/queue, egyszerűen kimarad). */
+function trackEvent(name,params){
+  try{ if(typeof window.gtag==='function')window.gtag('event',name,params||{}); }catch(e){}
+  try{ if(typeof window.fbq==='function')window.fbq('trackCustom',name,params||{}); }catch(e){}
+}
 </script>
 </head>
 <body class="size-a5">
 
 <div class="cookie-banner" id="cookieBanner">
-  <p>Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink hatékonyságának mérése érdekében (Meta Pixel). Elfogadod?</p>
+  <p>Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink/látogatottságunk mérése érdekében (Meta Pixel, Google Analytics). Elfogadod?</p>
   <div class="cookie-btns">
     <button type="button" id="cookieAcceptBtn">Elfogadom</button>
     <button type="button" id="cookieDeclineBtn">Elutasítom</button>
@@ -939,6 +969,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
     try{ localStorage.setItem('cookieConsent','accepted'); }catch(e){}
     banner.style.display='none';
     if(typeof window.__loadMetaPixel==='function')window.__loadMetaPixel();
+    if(typeof window.__loadGA4==='function')window.__loadGA4();
   });
   document.getElementById('cookieDeclineBtn').addEventListener('click',function(){
     try{ localStorage.setItem('cookieConsent','declined'); }catch(e){}
@@ -998,6 +1029,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 </div>
 <script>
 function pickProduct(type){
+  trackEvent('product_type_selected',{product_type:type});
   document.getElementById('typeSelect').style.display='none';
   CFG.product=type; CFG.size='A5'; CFG.pages=4;
   document.querySelectorAll('.fmt').forEach(function(f){f.classList.toggle('sel', f.dataset.size===CFG.size && parseInt(f.dataset.pages,10)===CFG.pages);});
@@ -1272,7 +1304,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='4.1';
+  var APP_VERSION='4.2';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
@@ -3066,9 +3098,10 @@ function renderLivePreview(plan,need){
 
 function generate(){
   applyProductTailConfig();
+  trackEvent('generate_clicked',{product_type:CFG.product,size:CFG.size,pages:CFG.pages});
   var miss=validateRequired();
   var eb=document.getElementById(activeErrboxId());
-  if(miss.length){eb.textContent='Tölts ki minden kötelező mezőt (a piros csillagosokat) a generálás előtt.';eb.style.display='block';miss[0].scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(miss.length){eb.textContent='Tölts ki minden kötelező mezőt (a piros csillagosokat) a generálás előtt.';eb.style.display='block';miss[0].scrollIntoView({behavior:'smooth',block:'center'});trackEvent('generate_failed',{product_type:CFG.product,reason:'missing_required'});return;}
   eb.style.display='none';
   _undoStack=[]; var _ub=document.getElementById('undoBtn'); if(_ub)_ub.disabled=true;
 
@@ -3102,6 +3135,7 @@ function generate(){
       ? '✕ A megadott tartalom nem fér el szépen 4 oldalra (kb. '+(neededPages+1)+' oldalnyi tartalom). Válts 8 oldalas formátumra fent, és próbáld újra.'
       : '✕ A megadott tartalom 8 oldalra sem fér el szépen (kb. '+(neededPages+1)+' oldalnyi tartalom). Kapcsolj ki egy-két rovatot, majd próbáld újra.';
     eb.style.display='block'; eb.scrollIntoView({behavior:'smooth',block:'center'});
+    trackEvent('generate_failed',{product_type:CFG.product,reason:'content_too_large',needed_pages:neededPages+1});
     return;
   }
 
@@ -3195,6 +3229,7 @@ function generate(){
   else {wb.style.display='none';wb.dataset.gen='0';}
 
   setWatermark(d.names);
+  trackEvent('generate_succeeded',{product_type:CFG.product,size:CFG.size,pages:CFG.pages});
   document.getElementById(activeWizardId()).style.display='none';
   document.getElementById('paper').style.display='block';
   /* a fél/negyed/egész oldalas rovatok automatikus méretezése (zoomAttr) az előzetes
@@ -3336,6 +3371,7 @@ function backToWizard(){
        mutatott, függetlenül attól, hogy a háttérben a Firebase-írás lefutott-e — emiatt
        egy sikertelen mentés (pl. auth/hálózati hiba) láthatatlan maradt, és a beküldés
        nem jelent meg az admin-listában, a felhasználó mégis "elmentve" üzenetet látott. */
+    trackEvent('done_modal_opened',{product_type:CFG.product});
     var ov=document.getElementById('doneOverlay');
     if(ov)ov.remove();
     ov=document.createElement('div'); ov.id='doneOverlay';
@@ -3473,6 +3509,10 @@ function backToWizard(){
       _orderSavedSig=sig;
       if(showStatus){ ordSubmitBtn.disabled=true; ordStatus.textContent='Rögzítés…'; ordStatus.classList.remove('err'); }
       saveOrder({email:emailInput.value.trim(),digital:st.digital,printQty:st.print?st.qty:0,total:st.total}).then(function(ok){
+        if(ok){
+          trackEvent('email_captured',{source:'done_modal',product_type:CFG.product});
+          trackEvent('order_submitted',{product_type:CFG.product,digital:st.digital,print:st.print,print_qty:st.print?st.qty:0,value:st.total});
+        }
         if(showStatus){
           recalcOrder();
           if(ok){ ordStatus.innerHTML='✓ <b>Rögzítettük a rendelésed!</b> 24 órán belül e-mailt küldünk a fizetés részleteivel a megadott címre. Ha nem érkezik, nézd meg a spam mappát is.'; ordStatus.classList.remove('err'); }
@@ -3497,7 +3537,7 @@ function backToWizard(){
       var o=document.getElementById('doneOverlay'); if(o)o.remove();
     }
     ov.addEventListener('click',function(e){if(e.target===ov)closeDoneOverlay();});
-    document.getElementById('doneBtnPdf').addEventListener('click',function(){ if(pdfBtn.disabled)return; persistOrderIfAny(false); closeDoneOverlay(); savePDF(); });
+    document.getElementById('doneBtnPdf').addEventListener('click',function(){ if(pdfBtn.disabled)return; trackEvent('pdf_downloaded',{product_type:CFG.product}); persistOrderIfAny(false); closeDoneOverlay(); savePDF(); });
     document.getElementById('doneBtnClose').addEventListener('click',closeDoneOverlay);
     fbBtn.addEventListener('click',function(){
       var t=fbText.value.trim();
@@ -4966,12 +5006,19 @@ function applyProjectState(data){
 }
 /* ===== élő férőhely-becslés a varázslóban (mindhárom termék-varázslóban) ===== */
 (function(){
+  var startedFired={};
   ['wizard','mhWizard','stdWizard'].forEach(function(id){
     var wiz=document.getElementById(id);
     if(!wiz)return;
     wiz.addEventListener('input',scheduleFit);
     wiz.addEventListener('change',scheduleFit);
     wiz.addEventListener('click',function(e){ if(e.target&&e.target.classList&&e.target.classList.contains('rep-del')) scheduleFit(); });
+    /* "wizard_started": az adott termék varázslójában az ELSŐ mezőkitöltés/váltás — csak
+       egyszer termékenként, hogy ne áradjon el minden billentyűleütéssel. */
+    wiz.addEventListener('input',function(){
+      if(startedFired[CFG.product])return; startedFired[CFG.product]=true;
+      trackEvent('wizard_started',{product_type:CFG.product});
+    },{capture:true,once:false});
   });
   if(document.readyState!=='loading') setTimeout(updateFit,60);
   else document.addEventListener('DOMContentLoaded',function(){setTimeout(updateFit,60);});
@@ -5485,6 +5532,7 @@ function applyProjectState(data){
         if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))return; /* csendben várunk, amíg érvényes lesz */
         lastSaved=v;
         window.saveEarlyEmail(v).then(function(ok){
+          if(ok)trackEvent('email_captured',{source:'early',product_type:CFG.product});
           if(!statusEl)return;
           statusEl.textContent=ok?'✓ Elmentve':'⚠ Nem sikerült menteni';
           statusEl.classList.toggle('err',!ok);
