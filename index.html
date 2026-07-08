@@ -1319,7 +1319,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='4.4';
+  var APP_VERSION='4.5';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
@@ -3380,6 +3380,9 @@ function backToWizard(){
 
   var ORDER_DIGITAL_PRICE=5000, ORDER_PRINT_UNIT=500, ORDER_POSTAGE=1250, ORDER_DESIGN_FEE=5000;
   var ORDER_QTY_QUICK=[10,25,50,75,100,150,200];
+  /* ❓ EZT ELLENŐRIZNI KELL: a tényleges gyártási+postázási átfutási idő (ld. .agents/offers-pricing-plan.md)
+     — jelenleg egy ÓVATOS becslés, amíg nincs valós rendelési tapasztalat. Cseréld a valódi számra! */
+  var ORDER_PRINT_LEADTIME_DAYS=10;
   window.showDoneModal=function(){
     /* Modal megjelenítése — előbb "mentés folyamatban" állapotban, majd a TÉNYLEGES
        felhő-mentés eredménye szerint frissítve. Korábban ez a felirat mindig sikert
@@ -3411,6 +3414,7 @@ function backToWizard(){
       +'<div class="opt-txt"><b>Nyomtatott példányok</b><span>Min. 10 db, '+ORDER_PRINT_UNIT+' Ft/db</span></div>'
       +'<div class="opt-price">'+ORDER_PRINT_UNIT+' Ft/db</div>'
       +'</div>'
+      +'<div class="tinyhint" style="margin:-6px 0 10px;">📦 Nyomtatott rendelésnél kérünk legalább '+ORDER_PRINT_LEADTIME_DAYS+' napot az esküvő előtt rendelni, hogy biztosan időben megérkezzen.</div>'
       +'<div class="qty-picker" id="ordQtyPicker">'
       +'<div class="qty-quick" id="ordQtyQuick">'+ORDER_QTY_QUICK.map(function(q){return '<button type="button" class="qty-btn" data-q="'+q+'">'+q+'</button>';}).join('')+'</div>'
       +'<div class="qty-manual">'
