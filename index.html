@@ -823,7 +823,8 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .type-select-inner{max-width:980px;margin:0 auto;text-align:center;}
 .type-eyebrow{font-family:'Libre Franklin',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--wiz-rose-dark);margin-bottom:10px;}
 .type-h{font-family:'Grenze Gotisch',serif;font-size:42px;margin:0 0 12px;color:#2a1a20;}
-.type-sub{font-family:'Libre Franklin',sans-serif;font-size:14.5px;color:#5a4a50;max-width:560px;margin:0 auto 34px;line-height:1.55;}
+.type-sub{font-family:'Libre Franklin',sans-serif;font-size:14.5px;color:#5a4a50;max-width:560px;margin:0 auto 16px;line-height:1.55;}
+.type-highlight{font-family:'Libre Franklin',sans-serif;font-size:13.5px;font-weight:700;color:var(--wiz-rose-dark);max-width:520px;margin:0 auto 34px;line-height:1.5;}
 .type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
 .type-card{background:#fff;border:1.6px solid var(--wiz-rose-pale,#e7c2ce);border-radius:16px;padding:28px 22px;cursor:pointer;transition:transform .15s,box-shadow .15s;text-align:left;}
 .type-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(60,20,35,.16);}
@@ -1021,6 +1022,7 @@ function trackEvent(name,params){
     <div class="type-eyebrow">💍 Esküvői kreatív stúdió</div>
     <h1 class="type-h">Mit szeretnél elkészíteni?</h1>
     <p class="type-sub">Válassz a három lehetőség közül — bármikor válthatsz, ha meggondolod magad.</p>
+    <p class="type-highlight">✦ Nem kell e-mailre várnod: itt azonnal látod és szerkesztheted a kész eredményt — mielőtt egy fillért is fizetnél.</p>
     <div class="type-grid">
       <div class="type-card" id="typeCardUjsag" onclick="pickProduct('ujsag')">
         <div class="type-ico">📰</div>
@@ -1065,7 +1067,7 @@ function backToTypeSelect(){
 <!-- ===== BEMUTATÓ: lapozható minta-újság a varázsló előtt ===== -->
 <div class="intro-showcase" id="introShowcase">
   <div class="intro-eyebrow">💍 Esküvői Újság</div>
-  <h1 class="intro-h">Egy vicces, személyes újság — a nagy napotokra</h1>
+  <h1 class="intro-h">Egy vicces, személyes újság — percek alatt kész, a nagy napotokra</h1>
   <p class="intro-sub">Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:</p>
   <div class="tut-book" id="tutBook">
     <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
@@ -1317,7 +1319,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='4.3';
+  var APP_VERSION='4.4';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
