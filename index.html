@@ -941,10 +941,23 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* Egységes esemény-küldő: a tölcsér kulcspontjaira (típusválasztás, varázsló indítás,
    generálás, "Kész" modal, e-mail-gyűjtés, rendelés) illesztve — GA4-be ÉS a Meta Pixelbe
    is elküldi, ha az adott eszköz épp be van töltve (süti-elfogadás előtt egyik sem fut,
-   ekkor ez csendben nem csinál semmit — nincs esemény-sor/queue, egyszerűen kimarad). */
+   ekkor ez csendben nem csinál semmit — nincs esemény-sor/queue, egyszerűen kimarad).
+   A 3 legfontosabb tölcsér-ponton a Meta SZABVÁNY-eseményét (Lead/InitiateCheckout/
+   Purchase) is elküldjük a saját nevű (trackCustom) esemény MELLETT — a Meta hirdetés-
+   optimalizálás (és a jövőbeli "cél = konverzió" kampánytípus) csak szabványos
+   eseményekre tud megfelelően optimalizálni, egyedi (trackCustom) eseményre nem. */
+var META_STANDARD_EVENTS={ email_captured:'Lead', done_modal_opened:'InitiateCheckout', order_submitted:'Purchase' };
 function trackEvent(name,params){
   try{ if(typeof window.gtag==='function')window.gtag('event',name,params||{}); }catch(e){}
   try{ if(typeof window.fbq==='function')window.fbq('trackCustom',name,params||{}); }catch(e){}
+  try{
+    var std=META_STANDARD_EVENTS[name];
+    if(std && typeof window.fbq==='function'){
+      var fbParams=params||{};
+      if(std==='Purchase')window.fbq('track','Purchase',{value:fbParams.value||0,currency:'HUF'});
+      else window.fbq('track',std,fbParams);
+    }
+  }catch(e){}
 }
 </script>
 </head>
