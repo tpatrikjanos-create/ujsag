@@ -1,7 +1,7 @@
 # Product Marketing Context
 
 *Last updated: 2026-07-08*
-*V1.1 — auto-draft a kódbázisból, a founderrel megbeszélve és megerősítve 2026-07-08-án. Egy nyitott kérdés maradt (a versenytárssal szembeni pontos differenciáló ok, ld. Competitive Landscape) — a többi `❓` megválaszolva vagy "nincs adat, korai szakasz" jelzéssel lezárva.*
+*V1.2 — auto-draft a kódbázisból, a founderrel megbeszélve és megerősítve 2026-07-08-án. Minden `❓` megválaszolva vagy "nincs adat, korai szakasz" jelzéssel lezárva.*
 
 **Kulcsfontosságú kontextus, amit minden más marketing-skillnek figyelembe kell vennie:** a termék MOST lett public, **0 fizetős rendelés** történt eddig, összesen **2 fő** töltötte ki a varázslót. Ez korai, adat előtti szakasz — a cél most **ismertség növelése**, nem a meglévő tölcsér finomhangolása. A landing oldal 18 db véleménye jelenleg illusztratív minta-szöveg, nem valós ügyfél-visszajelzés (ld. Proof Points) — ezt kommunikációban figyelembe kell venni.
 
@@ -75,7 +75,7 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 
 **Indirect:** "Nem csinálunk semmit" (nincs programfüzet/save the date egyáltalán) — a fő indirekt versenytárs valószínűleg ez, nem egy másik termék.
 
-*Megerősítve (2026-07-08): van egy ismert, konkrét magyar versenytárs, ugyanolyan árazással dolgozik. A founder szerint a saját rendszer jobb — de a PONTOS ok (mitől jobb konkrétan?) még nincs kimondva. ❓ Ezt érdemes tisztázni, mielőtt a `competitors` skill összehasonlító tartalmat írna: a 3-az-1-ben motor (újság+meghívó+save the date egy szerkesztővel)? A rovat-könyvtár mérete? Az élő szerkesztő (kép mozgatás/méretezés)? Valami más?*
+**Direct #1 (megnevezett, konkrét versenytárs):** Egy magyar szolgáltató, ugyanolyan árazással. Az ő folyamatuk: a vevő megad néhány adatot és képet, majd **e-mailben kapja meg a kész terméket** — nincs élő szerkesztő, nincs azonnali vizuális visszajelzés, a vevő "vakon" vár, amíg valaki (feltehetően kézzel/manuálisan) elkészíti neki. Ez a LEGERŐSEBB, konkrét differenciáló pontunk: nálunk a vevő MAGA látja és alakítja a végeredményt élőben, másodpercek alatt, fizetés előtt — a versenytársnál ez egy "fekete doboz" folyamat, várakozással.
 
 ---
 
@@ -90,7 +90,9 @@ B2C termék, nincs több stakeholder — ez a szekció nem releváns (skip, ahog
 
 **Why that's better:** Nincs "üres lap szindróma", nincs tervezői díj a kezdéshez, nincs várakozás — percek alatt kész egy nyomtatható végeredmény, amit még a fizetés előtt ki lehet próbálni.
 
-**Why customers choose us:** A review-k alapján az "egyedi", "kreatív", "senkinél nem láttam még ilyet" érzés a fő ok — a formátum maga (esküvő + újság-műfaj) egyedi meglepetés-faktor.
+**Why customers choose us:** A review-k alapján az "egyedi", "kreatív", "senkinél nem láttam még ilyet" érzés a fő ok — a formátum maga (esküvő + újság-műfaj) egyedi meglepetés-faktor. Emellett most már megerősített, konkrét ok is van: **azonnal, saját maga láthatja és szerkesztheti a végeredményt** — nem kell e-mailre várnia, nem kell "vakon" megbíznia egy ismeretlen kimenetelű folyamatban, mint a fő versenytársnál.
+
+*Megjegyzés a marketing-kommunikációhoz: ez a "láthatod, mielőtt fizetsz" / "nem kell e-mailre várnod" üzenet legyen a `copywriting`/`ads`/`competitors` munka egyik vezérfonala — ez egy konkrét, könnyen érthető, azonnal hihető ok, amiért minket válasszanak a névvel is azonosítható versenytárs helyett.*
 
 ---
 
