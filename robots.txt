@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# AI kereső/idéző botok kifejezetten engedélyezve (ne blokkolják a citációt/AI-válaszokban
+# való megjelenést) — ld. .agents/technical-seo-notes.md
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Az admin nézet (?admin=1) Firebase-bejelentkezéssel védett, de kereső-indexelésre
+# nem szánt — ne kerüljön be a találatok közé.
+Disallow: /*?admin=*

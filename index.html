@@ -3,20 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Készíts saját esküvői újságot percek alatt — kitöltöd az adatokat, feltöltöd a fotókat, és nyomtatható újságot kapsz a nagy napra.">
+<meta name="description" content="Készíts esküvői újságot, meghívót vagy Save the Date-et percek alatt — azonnal látod és szerkesztheted a kész eredményt, mielőtt fizetnél.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💍%3C/text%3E%3C/svg%3E">
-<title>Esküvői Újság</title>
+<title>Esküvői Újság, Meghívó és Save the Date — percek alatt kész</title>
 <!-- Open Graph / Twitter Card — linkmegosztáshoz (WhatsApp, Messenger, Facebook, Twitter előnézet).
      Kép nélkül, mert data: URI-t a legtöbb linkelőnézet-generátor nem tölt be — ha lesz valódi,
      hosztolt bemutatókép (pl. egy szép lapozott oldalról), ide egy og:image/twitter:image sort
      érdemes hozzáadni egy publikus URL-lel. -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="hu_HU">
-<meta property="og:title" content="Esküvői Újság">
-<meta property="og:description" content="Készíts saját esküvői újságot percek alatt — vicces rovatokkal, közös fotókkal. Kitöltöd, letöltöd vagy kinyomtatva megkapod.">
+<meta property="og:title" content="Esküvői Újság, Meghívó és Save the Date">
+<meta property="og:description" content="Készíts esküvői újságot, meghívót vagy Save the Date-et percek alatt — azonnal látod és szerkesztheted a kész eredményt, mielőtt fizetnél.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Esküvői Újság">
-<meta name="twitter:description" content="Készíts saját esküvői újságot percek alatt — vicces rovatokkal, közös fotókkal.">
+<meta name="twitter:title" content="Esküvői Újság, Meghívó és Save the Date">
+<meta name="twitter:description" content="Készíts esküvői újságot, meghívót vagy Save the Date-et percek alatt — azonnal látod, mielőtt fizetnél.">
+<!-- Strukturált adat (schema.org) — Organization + SoftwareApplication, a Google/AI-motorok
+     idézési/rich-result esélyeit javítja. Az árakat a tényleges ORDER_* konstansok tükrözik
+     (index.html), nem kitalált számok. Nincs url/logo mező, mert nincs publikus, állandó
+     hosztolt cím/logó-kép, amit megbízhatóan meg tudnánk adni. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Esküvői Újság",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web",
+  "description": "Önkiszolgáló webalkalmazás esküvői újság, meghívó és Save the Date kiadványok azonnali, élő szerkesztésű elkészítéséhez.",
+  "inLanguage": "hu",
+  "offers": [
+    {"@type":"Offer","name":"Digitális változat (vízjel nélküli letöltés)","price":"5000","priceCurrency":"HUF"},
+    {"@type":"Offer","name":"Nyomtatott példány (min. 10 db)","price":"500","priceCurrency":"HUF"}
+  ]
+}
+</script>
 <style id="pgcss">@page{size:A4 landscape;margin:0;}</style>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;600;700&display=swap');
@@ -1067,7 +1086,7 @@ function backToTypeSelect(){
 <!-- ===== BEMUTATÓ: lapozható minta-újság a varázsló előtt ===== -->
 <div class="intro-showcase" id="introShowcase">
   <div class="intro-eyebrow">💍 Esküvői Újság</div>
-  <h1 class="intro-h">Egy vicces, személyes újság — percek alatt kész, a nagy napotokra</h1>
+  <h2 class="intro-h">Egy vicces, személyes újság — percek alatt kész, a nagy napotokra</h2>
   <p class="intro-sub">Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:</p>
   <div class="tut-book" id="tutBook">
     <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
@@ -1319,12 +1338,12 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='4.5';
+  var APP_VERSION='4.6';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
   <div class="wiz-sub">Esküvői újság</div>
-  <h1 class="wiz-h">Esküvői Újság</h1>
+  <h2 class="wiz-h">Esküvői Újság</h2>
   <p class="wiz-note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> a bekapcsolt rovatokat a választott oldalakra rendezi, és igyekszik kitölteni a helyet. <b>Az adatok megadása után nyílik meg a szerkesztői nézet a kész lapokkal — ott tudod feltölteni a fényképeket</b>, mozgatni és méretezni a rovatokat. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.</p>
   <button type="button" class="tut-replay" onclick="startWizardTutorial(true)">❓ Rövid bemutató — hogyan működik?</button>
 
@@ -1815,7 +1834,7 @@ A kedvenc díszítésed
 <div class="wiz" id="mhWizard">
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
   <div class="wiz-sub">Esküvői meghívó</div>
-  <h1 class="wiz-h">Esküvői Meghívó</h1>
+  <h2 class="wiz-h">Esküvői Meghívó</h2>
   <p class="wiz-note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> után a szerkesztőben tudod feltölteni a fényképeket, mozgatni és méretezni a rovatokat — pontosan úgy, mint az Esküvői Újságnál.</p>
 
   <div class="errbox" id="mhErrbox"></div>
@@ -1934,7 +1953,7 @@ A kedvenc díszítésed
 <div class="wiz" id="stdWizard">
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
   <div class="wiz-sub">Save the date</div>
-  <h1 class="wiz-h">Save the Date</h1>
+  <h2 class="wiz-h">Save the Date</h2>
   <p class="wiz-note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> után a szerkesztőben tudod feltölteni a fényképeket, mozgatni és méretezni a rovatokat — pontosan úgy, mint az Esküvői Újságnál.</p>
 
   <div class="errbox" id="stdErrbox"></div>
