@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zöldfutár — friss élelmiszer házhoz, gyorsan</title>
+<title>Kerepesi Zöldségfutár — friss zöldség-gyümölcs házhoz, gyorsan</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
   <div class="header-inner">
     <a class="logo" href="#">
       <span class="logo-mark">🥬</span>
-      <span class="logo-text">Zöldfutár</span>
+      <span class="logo-text">Kerepesi Zöldségfutár</span>
     </a>
 
     <div class="delivery-pill" title="Becsült kiszállítási idő">
@@ -64,8 +64,7 @@
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-col">
-      <h3>Zöldfutár</h3>
-      <p>Tanulási célú demóoldal, saját tartalommal és fiktív termékadatokkal.</p>
+      <h3>Kerepesi Zöldségfutár</h3>
     </div>
     <div class="footer-col">
       <h4>Segítség</h4>
@@ -84,7 +83,7 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">© 2026 Zöldfutár demó — csak oktatási céllal készült.</div>
+  <div class="footer-bottom">© 2026 Kerepesi Zöldségfutár demó — csak oktatási céllal készült.</div>
 </footer>
 
 <div id="cart-overlay" class="cart-overlay" hidden></div>
@@ -103,6 +102,26 @@
     <button id="checkout-button" class="checkout-button" disabled>Tovább a pénztárhoz</button>
   </div>
 </aside>
+
+<nav class="bottom-toolbar" aria-label="Alsó navigáció">
+  <button class="bt-item active" data-action="home" type="button">
+    <span class="bt-icon">🏠</span>
+    <span class="bt-label">Főoldal</span>
+  </button>
+  <button class="bt-item" data-action="categories" type="button">
+    <span class="bt-icon">📋</span>
+    <span class="bt-label">Kategóriák</span>
+  </button>
+  <button class="bt-item" data-action="search" type="button">
+    <span class="bt-icon">🔍</span>
+    <span class="bt-label">Keresés</span>
+  </button>
+  <button class="bt-item" data-action="cart" type="button">
+    <span class="bt-icon">🛒</span>
+    <span class="bt-label">Kosár</span>
+    <span id="bottom-cart-count" class="bt-badge" hidden>0</span>
+  </button>
+</nav>
 
 <script src="script.js"></script>
 </body>

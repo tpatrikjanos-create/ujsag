@@ -1,33 +1,29 @@
-// Zöldfutár — learning-exercise demo storefront.
+// Kerepesi Zöldségfutár — learning-exercise demo storefront.
 // All product data below is fictitious, used only to demonstrate front-end patterns.
 
 const CATEGORIES = [
   { id: "all", label: "Összes" },
-  { id: "zoldseg", label: "Zöldség-gyümölcs" },
-  { id: "tejtermek", label: "Tejtermék" },
-  { id: "pekaru", label: "Pékáru" },
-  { id: "husaru", label: "Húsáru" },
-  { id: "innivalo", label: "Innivalók" },
-  { id: "haztartas", label: "Háztartás" },
+  { id: "zoldseg", label: "Zöldségek" },
+  { id: "gyumolcs", label: "Gyümölcsök" },
 ];
 
 const PRODUCTS = [
   { id: 1, name: "Fürtös paradicsom", unit: "500 g", price: 799, emoji: "🍅", category: "zoldseg" },
-  { id: 2, name: "Bio banán", unit: "1 kg", price: 649, emoji: "🍌", category: "zoldseg" },
-  { id: 3, name: "Új burgonya", unit: "2 kg", price: 999, emoji: "🥔", category: "zoldseg" },
-  { id: 4, name: "Fejes saláta", unit: "1 db", price: 449, emoji: "🥬", category: "zoldseg" },
-  { id: 5, name: "Félzsíros tej", unit: "1 l", price: 519, emoji: "🥛", category: "tejtermek" },
-  { id: 6, name: "Natúr joghurt", unit: "500 g", price: 599, emoji: "🥣", category: "tejtermek" },
-  { id: 7, name: "Trappista sajt", unit: "300 g", price: 1290, emoji: "🧀", category: "tejtermek" },
-  { id: 8, name: "Vajas croissant", unit: "2 db", price: 690, emoji: "🥐", category: "pekaru" },
-  { id: 9, name: "Rozskenyér", unit: "1 db", price: 899, emoji: "🍞", category: "pekaru" },
-  { id: 10, name: "Csirkemell filé", unit: "500 g", price: 1590, emoji: "🍗", category: "husaru" },
-  { id: 11, name: "Sertés karaj", unit: "600 g", price: 1890, emoji: "🥩", category: "husaru" },
-  { id: 12, name: "Ásványvíz, szénsavas", unit: "1.5 l", price: 289, emoji: "💧", category: "innivalo" },
-  { id: 13, name: "Narancslé, 100%", unit: "1 l", price: 899, emoji: "🧃", category: "innivalo" },
-  { id: 14, name: "Mosogatószer", unit: "500 ml", price: 749, emoji: "🧴", category: "haztartas" },
-  { id: 15, name: "Konyhai törlő, 2 tekercs", unit: "2 db", price: 599, emoji: "🧻", category: "haztartas" },
-  { id: 16, name: "Alma, Jonagold", unit: "1 kg", price: 549, emoji: "🍎", category: "zoldseg" },
+  { id: 2, name: "Új burgonya", unit: "2 kg", price: 999, emoji: "🥔", category: "zoldseg" },
+  { id: 3, name: "Fejes saláta", unit: "1 db", price: 449, emoji: "🥬", category: "zoldseg" },
+  { id: 4, name: "Kígyóuborka", unit: "1 db", price: 399, emoji: "🥒", category: "zoldseg" },
+  { id: 5, name: "Kaliforniai paprika", unit: "500 g", price: 899, emoji: "🫑", category: "zoldseg" },
+  { id: 6, name: "Sárgarépa", unit: "1 kg", price: 349, emoji: "🥕", category: "zoldseg" },
+  { id: 7, name: "Vöröshagyma", unit: "1 kg", price: 299, emoji: "🧅", category: "zoldseg" },
+  { id: 8, name: "Brokkoli", unit: "500 g", price: 649, emoji: "🥦", category: "zoldseg" },
+  { id: 9, name: "Bio banán", unit: "1 kg", price: 649, emoji: "🍌", category: "gyumolcs" },
+  { id: 10, name: "Alma, Jonagold", unit: "1 kg", price: 549, emoji: "🍎", category: "gyumolcs" },
+  { id: 11, name: "Körte", unit: "1 kg", price: 799, emoji: "🍐", category: "gyumolcs" },
+  { id: 12, name: "Csemegeszőlő", unit: "500 g", price: 999, emoji: "🍇", category: "gyumolcs" },
+  { id: 13, name: "Citrom", unit: "500 g", price: 449, emoji: "🍋", category: "gyumolcs" },
+  { id: 14, name: "Narancs", unit: "1 kg", price: 699, emoji: "🍊", category: "gyumolcs" },
+  { id: 15, name: "Szamóca", unit: "250 g", price: 899, emoji: "🍓", category: "gyumolcs" },
+  { id: 16, name: "Görögdinnye", unit: "1 db", price: 1490, emoji: "🍉", category: "gyumolcs" },
 ];
 
 const state = {
@@ -52,6 +48,9 @@ const el = {
   cartCount: document.getElementById("cart-count"),
   cartSubtotal: document.getElementById("cart-subtotal"),
   checkoutButton: document.getElementById("checkout-button"),
+  bottomCartCount: document.getElementById("bottom-cart-count"),
+  bottomToolbar: document.querySelector(".bottom-toolbar"),
+  categoryNav: document.querySelector(".category-nav"),
 };
 
 function formatHuf(amount) {
@@ -189,6 +188,9 @@ function renderCart() {
   el.checkoutButton.disabled = totalItems === 0;
   el.cartEmpty.hidden = lines.length > 0;
 
+  el.bottomCartCount.textContent = totalItems;
+  el.bottomCartCount.hidden = totalItems === 0;
+
   el.cartItems.innerHTML = "";
   lines.forEach(({ product, qty }) => {
     const line = document.createElement("div");
@@ -245,6 +247,30 @@ el.cartOverlay.addEventListener("click", closeCart);
 
 el.checkoutButton.addEventListener("click", () => {
   alert("Ez egy tanulási célú demó, a pénztár funkció nincs bekötve.");
+});
+
+function setActiveToolbarItem(button) {
+  el.bottomToolbar.querySelectorAll(".bt-item").forEach((item) => item.classList.remove("active"));
+  if (button) button.classList.add("active");
+}
+
+el.bottomToolbar.querySelectorAll(".bt-item").forEach((button) => {
+  button.addEventListener("click", () => {
+    const action = button.dataset.action;
+    if (action === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setActiveToolbarItem(button);
+    } else if (action === "categories") {
+      el.categoryNav.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveToolbarItem(button);
+    } else if (action === "search") {
+      el.searchInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.searchInput.focus();
+      setActiveToolbarItem(button);
+    } else if (action === "cart") {
+      openCart();
+    }
+  });
 });
 
 renderCategories();
