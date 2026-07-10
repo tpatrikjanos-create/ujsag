@@ -1003,7 +1003,25 @@ hu:{
   type_card_meghivo_title:"Esküvői Meghívó",
   type_card_meghivo_desc:"Klasszikus, elegáns meghívókártya elő- és hátlappal: nevek, dátum, helyszín, fotó és a visszajelzés módja.",
   type_card_std_title:"Save the Date",
-  type_card_std_desc:"Egyetlen, fotós értesítő kártya — foglaljátok le előre a dátumot a vendégeiteknél."
+  type_card_std_desc:"Egyetlen, fotós értesítő kártya — foglaljátok le előre a dátumot a vendégeiteknél.",
+  cookie_text:"Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink/látogatottságunk mérése érdekében (Meta Pixel, Google Analytics). Elfogadod?",
+  cookie_accept:"Elfogadom",
+  cookie_decline:"Elutasítom",
+  intro_eyebrow:"💍 Esküvői Újság",
+  intro_h:"Egy vicces, személyes újság — percek alatt kész, a nagy napotokra",
+  intro_sub:"Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:",
+  intro_zoom_btn:"🔍 Nagyítás",
+  reviews_h:"Eddigi vélemények",
+  intro_start_btn:"Elkészítem a sajátomat! →",
+  intro_skip_btn:"Kihagyom, ugrás a kitöltésre",
+  aria_prev_page:"Előző oldal",
+  aria_next_page:"Következő oldal",
+  aria_prev_review:"Előző vélemény",
+  aria_next_review:"Következő vélemény",
+  aria_close:"Bezárás",
+  aria_zoom_out:"Kicsinyítés",
+  aria_zoom_reset:"Alaphelyzet",
+  aria_zoom_in:"Nagyítás"
 },
 en:{
   type_eyebrow:"💍 Wedding Creative Studio",
@@ -1015,7 +1033,25 @@ en:{
   type_card_meghivo_title:"Wedding Invitation",
   type_card_meghivo_desc:"A classic, elegant invitation card with a front and back: names, date, venue, photo, and RSVP details.",
   type_card_std_title:"Save the Date",
-  type_card_std_desc:"A single photo announcement card — let your guests save the date well in advance."
+  type_card_std_desc:"A single photo announcement card — let your guests save the date well in advance.",
+  cookie_text:"Our website uses cookies to improve your experience and measure our ads/traffic (Meta Pixel, Google Analytics). Do you accept?",
+  cookie_accept:"Accept",
+  cookie_decline:"Decline",
+  intro_eyebrow:"💍 Wedding Gazette",
+  intro_h:"A fun, personal newspaper — ready in minutes, for your big day",
+  intro_sub:"You fill in your details, upload your photos, and in minutes you get a printable, entertaining gazette for your guests. Take a look at what yours could look like:",
+  intro_zoom_btn:"🔍 Zoom",
+  reviews_h:"What people are saying",
+  intro_start_btn:"Create my own! →",
+  intro_skip_btn:"Skip, go straight to the form",
+  aria_prev_page:"Previous page",
+  aria_next_page:"Next page",
+  aria_prev_review:"Previous review",
+  aria_next_review:"Next review",
+  aria_close:"Close",
+  aria_zoom_out:"Zoom out",
+  aria_zoom_reset:"Reset",
+  aria_zoom_in:"Zoom in"
 }
 };
 var LANG=(function(){ try{ return localStorage.getItem('lang')||'hu'; }catch(e){ return 'hu'; } })();
@@ -1025,6 +1061,7 @@ function applyI18n(root){
   scope.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
   scope.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
   scope.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.title=t(el.getAttribute('data-i18n-title')); });
+  scope.querySelectorAll('[data-i18n-aria]').forEach(function(el){ el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria'))); });
   scope.querySelectorAll('[data-i18n-html]').forEach(function(el){ el.innerHTML=t(el.getAttribute('data-i18n-html')); });
 }
 function setLang(lang){
@@ -1033,6 +1070,7 @@ function setLang(lang){
   document.documentElement.lang=LANG;
   applyI18n();
   document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===LANG); });
+  if(typeof window.__refreshReviews==='function') window.__refreshReviews();
 }
 document.addEventListener('DOMContentLoaded',function(){
   document.documentElement.lang=LANG;
@@ -1042,10 +1080,10 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 
 <div class="cookie-banner" id="cookieBanner">
-  <p>Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink/látogatottságunk mérése érdekében (Meta Pixel, Google Analytics). Elfogadod?</p>
+  <p data-i18n="cookie_text">Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink/látogatottságunk mérése érdekében (Meta Pixel, Google Analytics). Elfogadod?</p>
   <div class="cookie-btns">
-    <button type="button" id="cookieAcceptBtn">Elfogadom</button>
-    <button type="button" id="cookieDeclineBtn">Elutasítom</button>
+    <button type="button" id="cookieAcceptBtn" data-i18n="cookie_accept">Elfogadom</button>
+    <button type="button" id="cookieDeclineBtn" data-i18n="cookie_decline">Elutasítom</button>
   </div>
 </div>
 <script>
@@ -1147,42 +1185,42 @@ function backToTypeSelect(){
 
 <!-- ===== BEMUTATÓ: lapozható minta-újság a varázsló előtt ===== -->
 <div class="intro-showcase" id="introShowcase">
-  <div class="intro-eyebrow">💍 Esküvői Újság</div>
-  <h2 class="intro-h">Egy vicces, személyes újság — percek alatt kész, a nagy napotokra</h2>
-  <p class="intro-sub">Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:</p>
+  <div class="intro-eyebrow" data-i18n="intro_eyebrow">💍 Esküvői Újság</div>
+  <h2 class="intro-h" data-i18n="intro_h">Egy vicces, személyes újság — percek alatt kész, a nagy napotokra</h2>
+  <p class="intro-sub" data-i18n="intro_sub">Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:</p>
   <div class="tut-book" id="tutBook">
-    <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
+    <button type="button" class="book-nav book-prev" data-i18n-aria="aria_prev_page" aria-label="Előző oldal">‹</button>
     <div class="book-frame" id="bookFrame"></div>
-    <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
+    <button type="button" class="book-nav book-next" data-i18n-aria="aria_next_page" aria-label="Következő oldal">›</button>
   </div>
   <div class="book-dots" id="bookDots"></div>
-  <button type="button" class="book-zoom-btn" id="bookZoomBtn">🔍 Nagyítás</button>
+  <button type="button" class="book-zoom-btn" id="bookZoomBtn" data-i18n="intro_zoom_btn">🔍 Nagyítás</button>
 
-  <h2 class="reviews-h">Eddigi vélemények</h2>
+  <h2 class="reviews-h" data-i18n="reviews_h">Eddigi vélemények</h2>
   <div class="reviews-wrap">
-    <button type="button" class="review-nav review-prev" aria-label="Előző vélemény">‹</button>
+    <button type="button" class="review-nav review-prev" data-i18n-aria="aria_prev_review" aria-label="Előző vélemény">‹</button>
     <div class="review-card" id="reviewCard"></div>
-    <button type="button" class="review-nav review-next" aria-label="Következő vélemény">›</button>
+    <button type="button" class="review-nav review-next" data-i18n-aria="aria_next_review" aria-label="Következő vélemény">›</button>
   </div>
   <div class="review-counter" id="reviewCounter"></div>
 
   <div class="intro-cta">
-    <button type="button" class="intro-start" id="introStartBtn">Elkészítem a sajátomat! →</button>
-    <button type="button" class="intro-skip" id="introSkipBtn">Kihagyom, ugrás a kitöltésre</button>
+    <button type="button" class="intro-start" id="introStartBtn" data-i18n="intro_start_btn">Elkészítem a sajátomat! →</button>
+    <button type="button" class="intro-skip" id="introSkipBtn" data-i18n="intro_skip_btn">Kihagyom, ugrás a kitöltésre</button>
   </div>
 </div>
 <div class="book-zoom-overlay" id="bookZoomOverlay">
-  <button type="button" class="book-zoom-close" id="bookZoomClose" aria-label="Bezárás">✕</button>
+  <button type="button" class="book-zoom-close" id="bookZoomClose" data-i18n-aria="aria_close" aria-label="Bezárás">✕</button>
   <div class="tut-book book-zoom-book" id="zoomBook">
-    <button type="button" class="book-nav book-prev" aria-label="Előző oldal">‹</button>
+    <button type="button" class="book-nav book-prev" data-i18n-aria="aria_prev_page" aria-label="Előző oldal">‹</button>
     <div class="book-frame" id="zoomFrame"></div>
-    <button type="button" class="book-nav book-next" aria-label="Következő oldal">›</button>
+    <button type="button" class="book-nav book-next" data-i18n-aria="aria_next_page" aria-label="Következő oldal">›</button>
   </div>
   <div class="book-dots" id="zoomDots"></div>
   <div class="book-zoom-tools">
-    <button type="button" class="book-zoom-tool" id="zoomOutBtn" aria-label="Kicsinyítés">−</button>
-    <button type="button" class="book-zoom-tool" id="zoomResetBtn" aria-label="Alaphelyzet">⤢</button>
-    <button type="button" class="book-zoom-tool" id="zoomInBtn" aria-label="Nagyítás">+</button>
+    <button type="button" class="book-zoom-tool" id="zoomOutBtn" data-i18n-aria="aria_zoom_out" aria-label="Kicsinyítés">−</button>
+    <button type="button" class="book-zoom-tool" id="zoomResetBtn" data-i18n-aria="aria_zoom_reset" aria-label="Alaphelyzet">⤢</button>
+    <button type="button" class="book-zoom-tool" id="zoomInBtn" data-i18n-aria="aria_zoom_in" aria-label="Nagyítás">+</button>
   </div>
 </div>
 <script>
@@ -1331,7 +1369,7 @@ function backToTypeSelect(){
   })();
 
   /* ===== Vélemények — lapozható kártyák a mintaújság alatt ===== */
-  var REVIEWS=[
+  var REVIEWS_HU=[
     ['Lagzi / Programfüzet','Dóra','A lagzira készítettük el programfüzetnek, és óriási sikere volt a vendégek körében! Nagyon egyedi, mindenkinek csak ajánlani tudom.'],
     ['Lagzi / Programfüzet','Eszter','Szuper lett az újság! Beleírtunk minden fontos infót és a menetrendet a lagzira, így senki sem maradt le semmiről. Csillagos ötös, bátran ajánlom!'],
     ['Lagzi / Programfüzet','Viktória','A lagzi fénypontja volt az esküvői újság, a vendégek imádták olvasgatni a programok közötti szünetekben. Maximálisan ajánlom mindenkinek!'],
@@ -1351,19 +1389,44 @@ function backToTypeSelect(){
     ['Save the Date','Luca','A legjobb döntés volt ezzel kiküldeni a nagy nap dátumát! Gyors, esztétikus és rendkívül egyedi megoldás. Bátran ajánlom mindenkinek!'],
     ['Save the Date','Zita','A "save the date" újságunk egyszerűen zseniális lett, a család még mindig emlegeti. Köszönjük szépen, mindenkinek melegen ajánlom!']
   ];
+  var REVIEWS_EN=[
+    ['Wedding / Program Booklet','Dóra','We made it as a program booklet for the wedding, and it was a huge hit with the guests! Really unique, I can only recommend it to everyone.'],
+    ['Wedding / Program Booklet','Eszter','The gazette turned out great! We put all the important info and the schedule in it, so nobody missed anything. Five stars, I recommend it wholeheartedly!'],
+    ['Wedding / Program Booklet','Viktória','The wedding newspaper was the highlight of the reception, guests loved reading it between courses. I recommend it to everyone!'],
+    ['Wedding / Program Booklet','Zsófia','It was very easy to edit, and everyone at the wedding praised it. A perfect, stylish way to hand over the schedule, I can only recommend it!'],
+    ['Wedding / Program Booklet','Anikó','Fantastic idea! Everyone was flipping through the gazette during the lulls at dinner, and the schedule was completely clear in it. I recommend it wholeheartedly!'],
+    ['Wedding / Program Booklet','Kitti','We loved it! We put our wedding schedule in it, it turned out very elegant and fun. I warmly recommend it to every couple getting married!'],
+    ['Wedding Invitation','Petra','We sent out this wedding gazette instead of a classic invitation. Everyone was blown away by how creative it was, I recommend it to everyone!'],
+    ['Wedding Invitation','Lili','The most beautiful invitation I\'ve ever seen – and it\'s ours! We\'re very grateful for the chance, and we definitely recommend it to others too.'],
+    ['Wedding Invitation','Fanni','It was a huge success as an invitation! Great quality, easy editing, and a stunning end result. I can only recommend it.'],
+    ['Wedding Invitation','Boglárka','We wanted something special for an invitation, and this gazette exceeded our expectations. I recommend it warmly to every couple!'],
+    ['Wedding Invitation','Róza','The guests were amazed when they got the newspaper invitation. Very unique, creative and stylish, I recommend it to everyone!'],
+    ['Wedding Invitation','Laura','A perfect choice for an invitation. It came together quickly, the design turned out beautiful, and every important detail fit in it. Absolutely recommend it!'],
+    ['Save the Date','Anna','We sent it out as a save the date notice to friends, and everyone immediately replied about how much they loved it. Great product, highly recommend it!'],
+    ['Save the Date','Noémi','A very creative solution for a "save the date"! It set the perfect mood for our wedding. I can only recommend it!'],
+    ['Save the Date','Kata','We loved the gazette format as a save the date! It looks great, extremely unique, and everyone kept it as a keepsake. Definitely recommend it!'],
+    ['Save the Date','Rebeka','It turned into a special and fun "save the date". All our friends raved about it after they got it. I recommend it wholeheartedly!'],
+    ['Save the Date','Luca','The best decision was sending out the big day\'s date this way! A fast, aesthetic and extremely unique solution. I recommend it to everyone!'],
+    ['Save the Date','Zita','Our "save the date" gazette turned out simply brilliant, the family still talks about it. Thank you so much, I warmly recommend it to everyone!']
+  ];
+  function REVIEWS(){ return LANG==='en'?REVIEWS_EN:REVIEWS_HU; }
   var revIdx=0;
   var reviewCard=document.getElementById('reviewCard');
   var reviewCounter=document.getElementById('reviewCounter');
   function renderReview(){
-    var r=REVIEWS[revIdx];
+    var list=REVIEWS();
+    if(revIdx>=list.length)revIdx=0;
+    var r=list[revIdx];
     reviewCard.innerHTML='<div class="review-stars">★★★★★</div>'
       +'<p class="review-quote">„'+r[2]+'"</p>'
       +'<div class="review-who">'+r[1]+'</div>'
       +'<div class="review-cat">'+r[0]+'</div>';
-    reviewCounter.textContent=(revIdx+1)+' / '+REVIEWS.length;
+    reviewCounter.textContent=(revIdx+1)+' / '+list.length;
   }
+  window.__refreshReviews=renderReview;
   function goReview(n){
-    revIdx=(n+REVIEWS.length)%REVIEWS.length;
+    var list=REVIEWS();
+    revIdx=(n+list.length)%list.length;
     reviewCard.classList.add('fading');
     setTimeout(function(){ renderReview(); reviewCard.classList.remove('fading'); },220);
   }
@@ -1400,7 +1463,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='5.0';
+  var APP_VERSION='5.1';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
