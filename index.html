@@ -838,7 +838,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .tut-tiny b{color:#ffd6e2;}
 /* ===== Termék-választó: a 3 termék (újság/meghívó/save the date) közötti választás ===== */
 #wizard,#mhWizard,#stdWizard{display:none;}
-.type-select{padding:60px 18px 80px;}
+.type-select{padding:60px 18px 80px;position:relative;}
+.lang-switch{position:absolute;top:16px;right:18px;display:flex;gap:6px;z-index:2;}
+.lang-btn{font-family:'Libre Franklin',sans-serif;font-size:12.5px;font-weight:700;border:1.4px solid var(--wiz-rose-pale,#e7c2ce);background:#fff;color:#8a7480;border-radius:16px;padding:6px 12px;cursor:pointer;}
+.lang-btn.active{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;border-color:transparent;}
+@media(max-width:520px){.lang-switch{position:static;justify-content:center;margin-bottom:14px;}}
 .type-select-inner{max-width:980px;margin:0 auto;text-align:center;}
 .type-eyebrow{font-family:'Libre Franklin',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--wiz-rose-dark);margin-bottom:10px;}
 .type-h{font-family:'Grenze Gotisch',serif;font-size:42px;margin:0 0 12px;color:#2a1a20;}
@@ -982,6 +986,60 @@ function trackEvent(name,params){
 </script>
 </head>
 <body class="size-a5">
+<script>
+/* ===== Nyelv-kezelés (i18n) =====
+   Egyetlen választás a landing (típus-választó) oldalon, alapértelmezett magyar — utána a
+   teljes munkamenet (varázslók, szerkesztő, tutorial, generált tartalom feliratai) ezen a
+   nyelven jelenik meg. A FELHASZNÁLÓ ÁLTAL BEÍRT szöveg (nevek, saját sztorik, üzenetek)
+   SOSEM kerül automatikus fordításra — csak a termék saját kezelőfelületi/sablon-szövegei. */
+var I18N={
+hu:{
+  type_eyebrow:"💍 Esküvői kreatív stúdió",
+  type_h:"Mit szeretnél elkészíteni?",
+  type_sub:"Válassz a három lehetőség közül — bármikor válthatsz, ha meggondolod magad.",
+  type_highlight:"✦ Nem kell e-mailre várnod: itt azonnal látod és szerkeszted a kész eredményt — mielőtt egy fillért is fizetnél.",
+  type_card_ujsag_title:"Esküvői Újság",
+  type_card_ujsag_desc:"Vicces, személyes programfüzet a lagzi napjára — menetrenddel, sztorikkal, játékokkal. 4 vagy 8 oldal.",
+  type_card_meghivo_title:"Esküvői Meghívó",
+  type_card_meghivo_desc:"Klasszikus, elegáns meghívókártya elő- és hátlappal: nevek, dátum, helyszín, fotó és a visszajelzés módja.",
+  type_card_std_title:"Save the Date",
+  type_card_std_desc:"Egyetlen, fotós értesítő kártya — foglaljátok le előre a dátumot a vendégeiteknél."
+},
+en:{
+  type_eyebrow:"💍 Wedding Creative Studio",
+  type_h:"What would you like to create?",
+  type_sub:"Choose one of the three options below — you can switch anytime if you change your mind.",
+  type_highlight:"✦ No waiting for an email: you see and edit the finished result immediately — before you pay a cent.",
+  type_card_ujsag_title:"Wedding Gazette",
+  type_card_ujsag_desc:"A fun, personal program booklet for the wedding day — with a schedule, stories, and games. 4 or 8 pages.",
+  type_card_meghivo_title:"Wedding Invitation",
+  type_card_meghivo_desc:"A classic, elegant invitation card with a front and back: names, date, venue, photo, and RSVP details.",
+  type_card_std_title:"Save the Date",
+  type_card_std_desc:"A single photo announcement card — let your guests save the date well in advance."
+}
+};
+var LANG=(function(){ try{ return localStorage.getItem('lang')||'hu'; }catch(e){ return 'hu'; } })();
+function t(key){ return (I18N[LANG]&&I18N[LANG][key]!=null) ? I18N[LANG][key] : ((I18N.hu&&I18N.hu[key]!=null) ? I18N.hu[key] : key); }
+function applyI18n(root){
+  var scope=root||document;
+  scope.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
+  scope.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.placeholder=t(el.getAttribute('data-i18n-ph')); });
+  scope.querySelectorAll('[data-i18n-title]').forEach(function(el){ el.title=t(el.getAttribute('data-i18n-title')); });
+  scope.querySelectorAll('[data-i18n-html]').forEach(function(el){ el.innerHTML=t(el.getAttribute('data-i18n-html')); });
+}
+function setLang(lang){
+  LANG=(lang==='en')?'en':'hu';
+  try{ localStorage.setItem('lang',LANG); }catch(e){}
+  document.documentElement.lang=LANG;
+  applyI18n();
+  document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===LANG); });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  document.documentElement.lang=LANG;
+  applyI18n();
+  document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===LANG); });
+});
+</script>
 
 <div class="cookie-banner" id="cookieBanner">
   <p>Weboldalunk sütiket használ a jobb felhasználói élmény és a hirdetéseink/látogatottságunk mérése érdekében (Meta Pixel, Google Analytics). Elfogadod?</p>
@@ -1037,26 +1095,30 @@ function trackEvent(name,params){
 
 <!-- ===== TERMÉK-VÁLASZTÓ ===== -->
 <div class="type-select" id="typeSelect">
+  <div class="lang-switch">
+    <button type="button" class="lang-btn" data-lang="hu" onclick="setLang('hu')">🇭🇺 Magyar</button>
+    <button type="button" class="lang-btn" data-lang="en" onclick="setLang('en')">🇬🇧 English</button>
+  </div>
   <div class="type-select-inner">
-    <div class="type-eyebrow">💍 Esküvői kreatív stúdió</div>
-    <h1 class="type-h">Mit szeretnél elkészíteni?</h1>
-    <p class="type-sub">Válassz a három lehetőség közül — bármikor válthatsz, ha meggondolod magad.</p>
-    <p class="type-highlight">✦ Nem kell e-mailre várnod: itt azonnal látod és szerkesztheted a kész eredményt — mielőtt egy fillért is fizetnél.</p>
+    <div class="type-eyebrow" data-i18n="type_eyebrow">💍 Esküvői kreatív stúdió</div>
+    <h1 class="type-h" data-i18n="type_h">Mit szeretnél elkészíteni?</h1>
+    <p class="type-sub" data-i18n="type_sub">Válassz a három lehetőség közül — bármikor válthatsz, ha meggondolod magad.</p>
+    <p class="type-highlight" data-i18n="type_highlight">✦ Nem kell e-mailre várnod: itt azonnal látod és szerkesztheted a kész eredményt — mielőtt egy fillért is fizetnél.</p>
     <div class="type-grid">
       <div class="type-card" id="typeCardUjsag" onclick="pickProduct('ujsag')">
         <div class="type-ico">📰</div>
-        <h3>Esküvői Újság</h3>
-        <p>Vicces, személyes programfüzet a lagzi napjára — menetrenddel, sztorikkal, játékokkal. 4 vagy 8 oldal.</p>
+        <h3 data-i18n="type_card_ujsag_title">Esküvői Újság</h3>
+        <p data-i18n="type_card_ujsag_desc">Vicces, személyes programfüzet a lagzi napjára — menetrenddel, sztorikkal, játékokkal. 4 vagy 8 oldal.</p>
       </div>
       <div class="type-card" id="typeCardMeghivo" onclick="pickProduct('meghivo')">
         <div class="type-ico">💌</div>
-        <h3>Esküvői Meghívó</h3>
-        <p>Klasszikus, elegáns meghívókártya elő- és hátlappal: nevek, dátum, helyszín, fotó és a visszajelzés módja.</p>
+        <h3 data-i18n="type_card_meghivo_title">Esküvői Meghívó</h3>
+        <p data-i18n="type_card_meghivo_desc">Klasszikus, elegáns meghívókártya elő- és hátlappal: nevek, dátum, helyszín, fotó és a visszajelzés módja.</p>
       </div>
       <div class="type-card" id="typeCardStd" onclick="pickProduct('savethedate')">
         <div class="type-ico">📅</div>
-        <h3>Save the Date</h3>
-        <p>Egyetlen, fotós értesítő kártya — foglaljátok le előre a dátumot a vendégeiteknél.</p>
+        <h3 data-i18n="type_card_std_title">Save the Date</h3>
+        <p data-i18n="type_card_std_desc">Egyetlen, fotós értesítő kártya — foglaljátok le előre a dátumot a vendégeiteknél.</p>
       </div>
     </div>
   </div>
@@ -1338,7 +1400,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='4.6';
+  var APP_VERSION='5.0';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()">← Másik terméktípust választanék</button>
