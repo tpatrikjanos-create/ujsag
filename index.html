@@ -1545,7 +1545,8 @@ hu:{
   lbl_menetrend:"Menetrend",
   lbl_vendegkonyv:"Vendégkönyv",
   lbl_closer:"Záró felirat",
-  dm_price_per_unit:"Ft/db"
+  dm_price_per_unit:"Ft/db",
+  page_title:"Esküvői Újság, Meghívó és Save the Date — percek alatt kész"
 },
 en:{
   type_eyebrow:"💍 Wedding Creative Studio",
@@ -2099,7 +2100,8 @@ en:{
   lbl_menetrend:"Schedule",
   lbl_vendegkonyv:"Guestbook",
   lbl_closer:"Closing note",
-  dm_price_per_unit:"Ft/pc"
+  dm_price_per_unit:"Ft/pc",
+  page_title:"Wedding Gazette, Invitation & Save the Date — ready in minutes"
 }
 };
 var LANG=(function(){ try{ return localStorage.getItem('lang')||'hu'; }catch(e){ return 'hu'; } })();
@@ -2124,11 +2126,13 @@ function setLang(lang){
   applyI18n();
   document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===LANG); });
   if(typeof window.__refreshReviews==='function') window.__refreshReviews();
+  document.title=t('page_title');
 }
 document.addEventListener('DOMContentLoaded',function(){
   document.documentElement.lang=LANG;
   applyI18n();
   document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-lang')===LANG); });
+  document.title=t('page_title');
 });
 </script>
 
@@ -2516,7 +2520,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='5.5';
+  var APP_VERSION='5.6';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
