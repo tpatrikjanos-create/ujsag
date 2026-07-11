@@ -2597,7 +2597,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.1';
+  var APP_VERSION='6.2';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3446,11 +3446,12 @@ function B_coverUjsag(d){
     +'</div>';
 }
 function B_coverMeghivo(d){
-  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
-    +'<div class="kicker editable" contenteditable="true" style="letter-spacing:.18em;text-transform:uppercase;">'+L('Esküvői meghívó','Wedding Invitation')+'</div>'
-    +'<h1 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'64px':'44px')+';margin:10px 0 2px;">'+esc(d.names)+'</h1>'
+  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;">'
+    +'<div class="kicker editable" contenteditable="true" style="letter-spacing:.18em;text-transform:uppercase;margin-top:4px;">'+L('Esküvői meghívó','Wedding Invitation')+'</div>'
+    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'56px':'40px')+';margin:8px 0 2px;">'+esc(d.names)+'</h1>'
     +'<div class="editable" contenteditable="true" style="font-size:18px;font-weight:600;color:var(--claret);">'+esc(d.phrase||L('összeházasodnak','are getting married'))+'</div>'
-    +'<hr class="rule-hair" style="width:60px;margin-top:14px;">'
+    +'<hr class="rule-ox" style="width:80%;margin-top:12px;">'
+    +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'" style="margin-top:12px;width:100%;"></div>'
     +'</div>';
 }
 function B_coverSTD(d){
@@ -4045,13 +4046,14 @@ function buildFlowUjsag(d){
 function B_mhIntro(d){
   if(!d.intro)return '';
   var quoteHtml=d.quote?'<p class="bp editable" contenteditable="true" style="text-align:center;font-style:italic;max-width:85%;margin-top:14px;">'+esc(d.quote)+'</p>':'';
-  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
+  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;">'
     +'<div class="kicker editable" contenteditable="true">'+L('Meghívó','Invitation')+'</div>'
     +'<p class="bp editable dropcap-ready" contenteditable="true" style="text-align:center;max-width:85%;font-size:15px;line-height:1.6;">'+esc(d.intro)+'</p>'
     +'<hr class="rule-hair" style="width:50px;margin:16px 0 10px;">'
     +'<div class="editable" contenteditable="true" style="font-weight:700;font-size:18px;">'+esc(d.date)+'</div>'
     +'<div class="editable" contenteditable="true" style="font-size:15px;">'+esc(d.venue)+'</div>'
     +quoteHtml
+    +'<div class="hero imgbox photo" data-label="'+L('Pár fotója','Photo of the couple')+'" style="margin-top:12px;width:100%;"></div>'
     +'</div>';
 }
 function B_mhMenetrend(d){
@@ -4062,7 +4064,11 @@ function B_mhMenetrend(d){
     steps+='<div class="step"><span>'+tp+'<b>'+esc(ev)+'</b></span></div>';
   });
   if(!steps)return '';
-  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;justify-content:center;"><div class="col-head" style="text-align:center;">'+ico('i-clock')+' '+L('Menetrend','Schedule')+'</div><div class="flow">'+steps+'</div></div>';
+  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
+    +'<div class="col-head" style="text-align:center;">'+ico('i-clock')+' '+L('Menetrend','Schedule')+'</div>'
+    +'<div class="flow">'+steps+'</div>'
+    +'<div class="hero imgbox photo" data-label="'+L('Fotó','Photo')+'" style="margin-top:14px;width:100%;"></div>'
+    +'</div>';
 }
 function B_mhDresscode(d){
   if(d.noDresscode){
