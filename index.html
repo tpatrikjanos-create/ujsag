@@ -1564,9 +1564,15 @@ hu:{
   mh2_hint_intro:"A dátum és a helyszín mindig megjelenik a szöveg alatt is, függetlenül attól, mit írsz ide.",
   mh2_h3_menetrend:"Menetrend",
   mh2_note_page3:"3. oldal",
-  mh2_hint_menetrend:"Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető.",
+  mh2_hint_menetrend:"Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető. Az alábbi négy sor csak példa (szürke minta-szöveg) — ha üresen hagyod, nem jelenik meg a meghívón.",
   mh2_rph_time:"időpont",
   mh2_rph_event:"esemény",
+  mh2_rph_time_templom:"15:00",
+  mh2_rph_ev_templom:"Templom",
+  mh2_rph_time_ceremonia:"16:00",
+  mh2_rph_ev_ceremonia:"Ceremónia",
+  mh2_rph_time_vacsora:"18:00",
+  mh2_rph_ev_vacsora:"Vacsora",
   mh2_val_ev_templom:"Templomi szertartás",
   mh2_val_ev_ceremonia:"Ceremónia",
   mh2_val_ev_vacsora:"Vacsora",
@@ -2148,9 +2154,15 @@ en:{
   mh2_hint_intro:"The date and venue always appear below the text too, no matter what you write here.",
   mh2_h3_menetrend:"Schedule",
   mh2_note_page3:"page 3",
-  mh2_hint_menetrend:"Time + event, one per line — freely editable, deletable, extendable.",
+  mh2_hint_menetrend:"Time + event, one per line — freely editable, deletable, extendable. The four rows below are just examples (gray placeholder text) — if you leave them empty, they won't appear on the invitation.",
   mh2_rph_time:"time",
   mh2_rph_event:"event",
+  mh2_rph_time_templom:"3:00 PM",
+  mh2_rph_ev_templom:"Church",
+  mh2_rph_time_ceremonia:"4:00 PM",
+  mh2_rph_ev_ceremonia:"Ceremony",
+  mh2_rph_time_vacsora:"6:00 PM",
+  mh2_rph_ev_vacsora:"Dinner",
   mh2_val_ev_templom:"Church ceremony",
   mh2_val_ev_ceremonia:"Ceremony",
   mh2_val_ev_vacsora:"Dinner",
@@ -2585,7 +2597,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.0';
+  var APP_VERSION='6.1';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3098,23 +3110,23 @@ A kedvenc díszítésed
   <div class="card">
     <h3><span class="num">2</span><span data-i18n="mh2_h3_borito">Borító</span></h3>
     <div class="fld"><label><span data-i18n="mh2_lbl_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="mh_phrase" value="összeházasodnak" data-i18n-val="mh2_val_phrase"><button type="button" class="tipbtn" onclick="fillTip('mh_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
-    <div class="fld"><label><span data-i18n="mh2_lbl_quote">Idézet <span class="opt-tag">(opcionális)</span></span></label><div class="fld-row"><input id="mh_quote" value="" data-i18n-ph="mh2_ph_quote" placeholder="pl. A szerelem nem azt jelenti, hogy egymást nézitek…"><button type="button" class="tipbtn" onclick="fillTip('mh_quote')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
   </div>
 
   <div class="card">
     <h3><span class="num">3</span><span data-i18n="mh_h3num_megh_v_sz_veg_bor_t">Meghívó szöveg</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page2">2. oldal</span></h3>
     <div class="fld"><label><span data-i18n="mh_lbl_mh_intro">Bevezető szöveg</span></label><div class="fld-row"><textarea id="mh_intro" data-i18n-ph="mh_ph_mh_intro" placeholder="Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent." data-i18n-val="mh_ph_mh_intro">Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent.</textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillMhIntroTip()" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="tinyhint" data-i18n="mh2_hint_intro">A dátum és a helyszín mindig megjelenik a szöveg alatt is, függetlenül attól, mit írsz ide.</div>
+    <div class="fld"><label><span data-i18n="mh2_lbl_quote">Idézet <span class="opt-tag">(opcionális)</span></span></label><div class="fld-row"><input id="mh_quote" value="" data-i18n-ph="mh2_ph_quote" placeholder="pl. A szerelem nem azt jelenti, hogy egymást nézitek…"><button type="button" class="tipbtn" onclick="fillTip('mh_quote')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
   </div>
 
   <div class="card">
     <h3><span class="num">4</span><span data-i18n="mh2_h3_menetrend">Menetrend</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page3">3. oldal</span></h3>
-    <div class="tinyhint" data-i18n="mh2_hint_menetrend">Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető.</div>
+    <div class="tinyhint" data-i18n="mh2_hint_menetrend">Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető. Az alábbi négy sor csak példa (szürke minta-szöveg) — ha üresen hagyod, nem jelenik meg a meghívón.</div>
     <div class="rep" id="rep_mh_menetrend" data-tpl='<input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time" placeholder="időpont"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_event" placeholder="esemény">'>
-      <div class="rep-row"><input class="r-in r-time" data-k="time" value="15:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_templom" value="Templomi szertartás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      <div class="rep-row"><input class="r-in r-time" data-k="time" value="16:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_ceremonia" value="Ceremónia"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      <div class="rep-row"><input class="r-in r-time" data-k="time" value="18:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_vacsora" value="Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
-      <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="" value=""><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_lagzihelyszin" placeholder="Lagzi helyszíne"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time_templom" placeholder="15:00"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_ev_templom" placeholder="Templom"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time_ceremonia" placeholder="16:00"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_ev_ceremonia" placeholder="Ceremónia"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time_vacsora" placeholder="18:00"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_ev_vacsora" placeholder="Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time" placeholder="időpont"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_lagzihelyszin" placeholder="Lagzi helyszíne"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
     </div>
     <button type="button" class="addrow" onclick="addRow('rep_mh_menetrend')" data-i18n="mh2_addrow_menetrend">+ Új sor</button>
   </div>
@@ -3434,13 +3446,11 @@ function B_coverUjsag(d){
     +'</div>';
 }
 function B_coverMeghivo(d){
-  var quoteHtml=d.quote?'<p class="bp editable" contenteditable="true" style="text-align:center;font-style:italic;max-width:85%;margin-top:14px;">'+esc(d.quote)+'</p>':'';
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
     +'<div class="kicker editable" contenteditable="true" style="letter-spacing:.18em;text-transform:uppercase;">'+L('Esküvői meghívó','Wedding Invitation')+'</div>'
     +'<h1 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'64px':'44px')+';margin:10px 0 2px;">'+esc(d.names)+'</h1>'
     +'<div class="editable" contenteditable="true" style="font-size:18px;font-weight:600;color:var(--claret);">'+esc(d.phrase||L('összeházasodnak','are getting married'))+'</div>'
     +'<hr class="rule-hair" style="width:60px;margin-top:14px;">'
-    +quoteHtml
     +'</div>';
 }
 function B_coverSTD(d){
@@ -4034,12 +4044,14 @@ function buildFlowUjsag(d){
 /* ===== Meghívó: rovat-építő függvények + flow ===== */
 function B_mhIntro(d){
   if(!d.intro)return '';
+  var quoteHtml=d.quote?'<p class="bp editable" contenteditable="true" style="text-align:center;font-style:italic;max-width:85%;margin-top:14px;">'+esc(d.quote)+'</p>':'';
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
     +'<div class="kicker editable" contenteditable="true">'+L('Meghívó','Invitation')+'</div>'
     +'<p class="bp editable dropcap-ready" contenteditable="true" style="text-align:center;max-width:85%;font-size:15px;line-height:1.6;">'+esc(d.intro)+'</p>'
     +'<hr class="rule-hair" style="width:50px;margin:16px 0 10px;">'
     +'<div class="editable" contenteditable="true" style="font-weight:700;font-size:18px;">'+esc(d.date)+'</div>'
     +'<div class="editable" contenteditable="true" style="font-size:15px;">'+esc(d.venue)+'</div>'
+    +quoteHtml
     +'</div>';
 }
 function B_mhMenetrend(d){
