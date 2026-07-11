@@ -655,6 +655,13 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .rep-del:hover{background:#eec2d4;}
 .addrow{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;background:var(--wiz-blush);color:var(--wiz-rose-dark);border:1.4px dashed var(--wiz-rose-pale);border-radius:20px;padding:7px 14px;cursor:pointer;}
 .addrow:hover{background:#f6dbe6;}
+.dresscode-picker{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 10px;transition:opacity .15s;}
+.dresscode-picker.off{opacity:.35;pointer-events:none;filter:grayscale(.5);}
+.dcs{width:34px;height:34px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;padding:0;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.22);flex-shrink:0;}
+.dcs.sel{border-color:var(--claret);box-shadow:0 0 0 3px rgba(180,28,60,.2);}
+.dcs.sel::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.dress-dots{display:flex;justify-content:center;gap:7px;margin:8px 0 2px;}
+.dress-dot{width:13px;height:13px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1px rgba(0,0,0,.15);}
 .side-h{font-family:'Old Standard TT',serif;font-weight:700;font-size:14px;border-bottom:1px solid #ecd2dc;padding-bottom:4px;margin:0 0 8px;color:var(--wiz-rose-dark);}
 .minlbl{display:block;font-family:'Libre Franklin',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.05em;color:#a4728a;margin:6px 0 4px;text-transform:uppercase;}
 .team-stack>div{margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed #ecd2dc;}
@@ -1546,7 +1553,36 @@ hu:{
   lbl_vendegkonyv:"Vendégkönyv",
   lbl_closer:"Záró felirat",
   dm_price_per_unit:"Ft/db",
-  page_title:"Esküvői Újság, Meghívó és Save the Date — percek alatt kész"
+  page_title:"Esküvői Újság, Meghívó és Save the Date — percek alatt kész",
+  mh2_wiz_note:"Egy letisztult, 4 oldalas meghívó: <b>borító</b> (nevek + idézet), <b>meghívó szöveg</b>, <b>menetrend</b>, és egy <b>gyakorlati oldal</b> (dresscode, ajándék, RSVP). Töltsd ki a <b>kötelező</b> mezőket, a többi opcionális.",
+  mh2_h3_borito:"Borító",
+  mh2_lbl_phrase:"Kapcsolat-kifejezés",
+  mh2_val_phrase:"összeházasodnak",
+  mh2_lbl_quote:"Idézet",
+  mh2_ph_quote:"pl. A szerelem nem azt jelenti, hogy egymást nézitek…",
+  mh2_note_page2:"2. oldal",
+  mh2_hint_intro:"A dátum és a helyszín mindig megjelenik a szöveg alatt is, függetlenül attól, mit írsz ide.",
+  mh2_h3_menetrend:"Menetrend",
+  mh2_note_page3:"3. oldal",
+  mh2_hint_menetrend:"Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető.",
+  mh2_rph_time:"időpont",
+  mh2_rph_event:"esemény",
+  mh2_val_ev_templom:"Templomi szertartás",
+  mh2_val_ev_ceremonia:"Ceremónia",
+  mh2_val_ev_vacsora:"Vacsora",
+  mh2_rph_lagzihelyszin:"Lagzi helyszíne",
+  mh2_addrow_menetrend:"+ Új sor",
+  mh2_note_page4:"4. oldal",
+  mh2_lbl_nodresscode:"Nincs dresscode",
+  mh2_hint_dresscode:"Válassz 1–10 színt, amit ajánlasz a vendégeknek (kattints a körökre):",
+  mh2_h3_ajandek:"Ajándék / pénzkérő vers",
+  mh2_lbl_ajandek:"Szöveg",
+  mh2_hint_ajandek:"A Tipp gombhoz hamarosan kész pénzkérő-vers javaslatok érkeznek — addig is szabadon írhatsz saját szöveget.",
+  mh2_h3_qr:"QR-kód",
+  mh2_lbl_qrhead:"QR-sáv címe",
+  mh2_ph_qrhead:"pl. Esküvői weboldalunk",
+  mh2_lbl_qrcap:"QR-kód szövege",
+  mh2_ph_qrcap:"pl. Scanneld be és nézd meg részletes programunkat!"
 },
 en:{
   type_eyebrow:"💍 Wedding Creative Studio",
@@ -2101,7 +2137,36 @@ en:{
   lbl_vendegkonyv:"Guestbook",
   lbl_closer:"Closing note",
   dm_price_per_unit:"Ft/pc",
-  page_title:"Wedding Gazette, Invitation & Save the Date — ready in minutes"
+  page_title:"Wedding Gazette, Invitation & Save the Date — ready in minutes",
+  mh2_wiz_note:"A clean, 4-page invitation: <b>cover</b> (names + quote), <b>invitation text</b>, <b>schedule</b>, and a <b>practical page</b> (dress code, gift, RSVP). Fill in the <b>required</b> fields, everything else is optional.",
+  mh2_h3_borito:"Cover",
+  mh2_lbl_phrase:"Relationship phrase",
+  mh2_val_phrase:"are getting married",
+  mh2_lbl_quote:"Quote",
+  mh2_ph_quote:"e.g. Love does not mean staring at each other…",
+  mh2_note_page2:"page 2",
+  mh2_hint_intro:"The date and venue always appear below the text too, no matter what you write here.",
+  mh2_h3_menetrend:"Schedule",
+  mh2_note_page3:"page 3",
+  mh2_hint_menetrend:"Time + event, one per line — freely editable, deletable, extendable.",
+  mh2_rph_time:"time",
+  mh2_rph_event:"event",
+  mh2_val_ev_templom:"Church ceremony",
+  mh2_val_ev_ceremonia:"Ceremony",
+  mh2_val_ev_vacsora:"Dinner",
+  mh2_rph_lagzihelyszin:"Reception venue",
+  mh2_addrow_menetrend:"+ New line",
+  mh2_note_page4:"page 4",
+  mh2_lbl_nodresscode:"No dress code",
+  mh2_hint_dresscode:"Choose 1–10 colors to suggest to your guests (click the circles):",
+  mh2_h3_ajandek:"Gift / money-request poem",
+  mh2_lbl_ajandek:"Text",
+  mh2_hint_ajandek:"Ready-made money-request poem suggestions for the Tip button are coming soon — for now, feel free to write your own text.",
+  mh2_h3_qr:"QR code",
+  mh2_lbl_qrhead:"QR strip title",
+  mh2_ph_qrhead:"e.g. Our wedding website",
+  mh2_lbl_qrcap:"QR code caption",
+  mh2_ph_qrcap:"e.g. Scan to see our detailed program!"
 }
 };
 var LANG=(function(){ try{ return localStorage.getItem('lang')||'hu'; }catch(e){ return 'hu'; } })();
@@ -2520,7 +2585,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='5.6';
+  var APP_VERSION='6.0';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3017,22 +3082,12 @@ A kedvenc díszítésed
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="mh_back_to_types">← Másik terméktípust választanék</button>
   <div class="wiz-sub" data-i18n="mh_wiz_sub">Esküvői meghívó</div>
   <h2 class="wiz-h" data-i18n="mh_wiz_h">Esküvői Meghívó</h2>
-  <p class="wiz-note" data-i18n-html="mh_wiz_note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> után a szerkesztőben tudod feltölteni a fényképeket, mozgatni és méretezni a rovatokat — pontosan úgy, mint az Esküvői Újságnál.</p>
+  <p class="wiz-note" data-i18n-html="mh2_wiz_note">Egy letisztult, 4 oldalas meghívó: <b>borító</b> (nevek + idézet), <b>meghívó szöveg</b>, <b>menetrend</b>, és egy <b>gyakorlati oldal</b> (dresscode, ajándék, RSVP). Töltsd ki a <b>kötelező</b> mezőket, a többi opcionális.</p>
 
   <div class="errbox" id="mhErrbox"></div>
 
   <div class="card">
-    <h3><span class="num">1</span><span data-i18n="mh_h3num_form_tum_amp_oldalsz_m">Formátum &amp; oldalszám</span></h3>
-    <div class="fmt-grid">
-      <div class="fmt sel" data-size="A5" data-pages="4" onclick="pickFmt(this)"><div class="ttl" data-i18n="mh_fmt_a5_4_ttl">A5 · 4 oldal</div><span class="tag dig" data-i18n="mh_fmt_a5_4_tag">Digitális</span><div class="desc" data-i18n="mh_fmt_a5_4_desc">Hajtott kártya: borító, 2 belső oldal, hátlap. Otthon nyomtatható.</div></div>
-      <div class="fmt" data-size="A5" data-pages="8" onclick="pickFmt(this)"><div class="ttl" data-i18n="mh_fmt_a5_8_ttl">A5 · 8 oldal</div><span class="tag dig" data-i18n="mh_fmt_a5_8_tag">Digitális</span><div class="desc" data-i18n="mh_fmt_a5_8_desc">Bővebb, több rovatnak hely — 2 db A4 egymásba hajtva.</div></div>
-      <div class="fmt" data-size="A4" data-pages="4" onclick="pickFmt(this)"><div class="ttl" data-i18n="mh_fmt_a4_4_ttl">A4 · 4 oldal</div><span class="tag print" data-i18n="mh_fmt_a4_4_tag">Csak nyomtatva</span><div class="desc" data-i18n="mh_fmt_a4_4_desc">Nagyobb, elegánsabb kártya — tőlünk, házhozszállítva.</div></div>
-      <div class="fmt" data-size="A4" data-pages="8" onclick="pickFmt(this)"><div class="ttl" data-i18n="mh_fmt_a4_8_ttl">A4 · 8 oldal</div><span class="tag print" data-i18n="mh_fmt_a4_8_tag">Csak nyomtatva</span><div class="desc" data-i18n="mh_fmt_a4_8_desc">2 db A3 — tőlünk, házhozszállítva.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3><span class="num">2</span><span data-i18n="mh_h3num_k_telez_adatok">Kötelező adatok</span></h3>
+    <h3><span class="num">1</span><span data-i18n="mh_h3num_k_telez_adatok">Kötelező adatok</span></h3>
     <div class="fld"><label><span data-i18n="mh_lbl_mh_names">A pár neve</span> <span class="req">*</span></label><input id="mh_names" data-req value="" data-i18n-ph="mh_ph_mh_names" placeholder="pl. Anna &amp; Péter"></div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="mh_lbl_mh_date">Dátum</span> <span class="req">*</span></label><input id="mh_date" data-req value="" data-i18n-ph="mh_ph_mh_date" placeholder="pl. 2026. augusztus 22."></div>
@@ -3041,53 +3096,56 @@ A kedvenc díszítésed
   </div>
 
   <div class="card">
-    <h3><span class="num">3</span><span data-i18n="mh_h3num_megh_v_sz_veg_bor_t">Meghívó szöveg (borító)</span></h3>
-    <div class="fld"><label><span data-i18n="mh_lbl_mh_intro">Bevezető szöveg</span></label><textarea id="mh_intro" data-i18n-ph="mh_ph_mh_intro" placeholder="Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent." data-i18n-val="mh_ph_mh_intro">Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent.</textarea></div>
+    <h3><span class="num">2</span><span data-i18n="mh2_h3_borito">Borító</span></h3>
+    <div class="fld"><label><span data-i18n="mh2_lbl_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="mh_phrase" value="összeházasodnak" data-i18n-val="mh2_val_phrase"><button type="button" class="tipbtn" onclick="fillTip('mh_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="fld"><label><span data-i18n="mh2_lbl_quote">Idézet <span class="opt-tag">(opcionális)</span></span></label><div class="fld-row"><input id="mh_quote" value="" data-i18n-ph="mh2_ph_quote" placeholder="pl. A szerelem nem azt jelenti, hogy egymást nézitek…"><button type="button" class="tipbtn" onclick="fillTip('mh_quote')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
   </div>
 
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_idopont">Program időrendje</span> <label class="tgl"><input type="checkbox" id="chk_mh_idopont" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_idopont">
-      <div class="grid2">
-        <div class="fld"><label><span data-i18n="mh_lbl_mh_ceremonytime">Szertartás időpontja</span></label><input id="mh_ceremonyTime" value="" data-i18n-ph="mh_ph_mh_ceremonytime" placeholder="pl. 15:00"></div>
-        <div class="fld"><label><span data-i18n="mh_lbl_mh_receptiontime">Fogadás/vacsora időpontja</span></label><input id="mh_receptionTime" value="" data-i18n-ph="mh_ph_mh_receptiontime" placeholder="pl. 18:00"></div>
-      </div>
-    </div>
+  <div class="card">
+    <h3><span class="num">3</span><span data-i18n="mh_h3num_megh_v_sz_veg_bor_t">Meghívó szöveg</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page2">2. oldal</span></h3>
+    <div class="fld"><label><span data-i18n="mh_lbl_mh_intro">Bevezető szöveg</span></label><div class="fld-row"><textarea id="mh_intro" data-i18n-ph="mh_ph_mh_intro" placeholder="Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent." data-i18n-val="mh_ph_mh_intro">Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor egymásnak mondjuk ki a boldogító igent.</textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillMhIntroTip()" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="tinyhint" data-i18n="mh2_hint_intro">A dátum és a helyszín mindig megjelenik a szöveg alatt is, függetlenül attól, mit írsz ide.</div>
   </div>
 
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_helyszinreszletek">Helyszín részletei</span> <label class="tgl"><input type="checkbox" id="chk_mh_helyszinReszletek" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_helyszinReszletek">
-      <div class="fld"><label><span data-i18n="mh_lbl_mh_helyszinleiras">Megközelítés / parkolás</span></label><textarea id="mh_helyszinLeiras" data-i18n-ph="mh_ph_mh_helyszinleiras" placeholder="pl. A kastély parkolójában ingyenes parkolás biztosított, a főbejárattól 100 méterre."></textarea></div>
+  <div class="card">
+    <h3><span class="num">4</span><span data-i18n="mh2_h3_menetrend">Menetrend</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page3">3. oldal</span></h3>
+    <div class="tinyhint" data-i18n="mh2_hint_menetrend">Időpont + esemény, soronként egy — szabadon módosítható, törölhető, bővíthető.</div>
+    <div class="rep" id="rep_mh_menetrend" data-tpl='<input class="r-in r-time" data-k="time" data-i18n-ph="mh2_rph_time" placeholder="időpont"><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_event" placeholder="esemény">'>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" value="15:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_templom" value="Templomi szertartás"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" value="16:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_ceremonia" value="Ceremónia"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" value="18:00"><input class="r-in r-wide" data-k="event" data-i18n-val="mh2_val_ev_vacsora" value="Vacsora"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
+      <div class="rep-row"><input class="r-in r-time" data-k="time" placeholder="" value=""><input class="r-in r-wide" data-k="event" data-i18n-ph="mh2_rph_lagzihelyszin" placeholder="Lagzi helyszíne"><button type="button" class="rep-del" onclick="this.parentNode.remove()">✕</button></div>
     </div>
+    <button type="button" class="addrow" onclick="addRow('rep_mh_menetrend')" data-i18n="mh2_addrow_menetrend">+ Új sor</button>
   </div>
 
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_terkep">Térkép / útvonal link</span> <label class="tgl"><input type="checkbox" id="chk_mh_terkep" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_terkep">
-      <div class="fld"><label><span data-i18n="mh_lbl_mh_terkeplink">Útvonaltervező link vagy QR-kód szövege</span></label><input id="mh_terkepLink" value="" data-i18n-ph="mh_ph_mh_terkeplink" placeholder="pl. maps.app.goo.gl/..."></div>
+  <div class="card">
+    <h3><span class="num">5</span><span data-i18n="mh_h3_chk_mh_dresscode">Dresscode</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page4">4. oldal</span></h3>
+    <label class="tgl" style="margin-bottom:10px;"><input type="checkbox" id="chk_mh_nodresscode" onchange="toggleNoDresscode(this)"><span class="sw"></span><span data-i18n="mh2_lbl_nodresscode">Nincs dresscode</span></label>
+    <div class="tinyhint" data-i18n="mh2_hint_dresscode">Válassz 1–10 színt, amit ajánlasz a vendégeknek (kattints a körökre):</div>
+    <div class="dresscode-picker" id="dresscodePicker">
+      <button type="button" class="dcs" data-color="#C08497" style="background:#C08497;" onclick="toggleDressColor(this)" title="Dusty rose"></button>
+      <button type="button" class="dcs" data-color="#9CAF88" style="background:#9CAF88;" onclick="toggleDressColor(this)" title="Sage green"></button>
+      <button type="button" class="dcs" data-color="#2C3E60" style="background:#2C3E60;" onclick="toggleDressColor(this)" title="Navy"></button>
+      <button type="button" class="dcs" data-color="#6E1E33" style="background:#6E1E33;" onclick="toggleDressColor(this)" title="Burgundy"></button>
+      <button type="button" class="dcs" data-color="#D4B996" style="background:#D4B996;" onclick="toggleDressColor(this)" title="Champagne gold"></button>
+      <button type="button" class="dcs" data-color="#C1663A" style="background:#C1663A;" onclick="toggleDressColor(this)" title="Terracotta"></button>
+      <button type="button" class="dcs" data-color="#F0C4C4" style="background:#F0C4C4;" onclick="toggleDressColor(this)" title="Blush pink"></button>
+      <button type="button" class="dcs" data-color="#1F6650" style="background:#1F6650;" onclick="toggleDressColor(this)" title="Emerald"></button>
+      <button type="button" class="dcs" data-color="#B49BC7" style="background:#B49BC7;" onclick="toggleDressColor(this)" title="Lavender"></button>
+      <button type="button" class="dcs" data-color="#D4A521" style="background:#D4A521;" onclick="toggleDressColor(this)" title="Mustard"></button>
+      <button type="button" class="dcs" data-color="#3B3B3D" style="background:#3B3B3D;" onclick="toggleDressColor(this)" title="Charcoal"></button>
+      <button type="button" class="dcs" data-color="#F1E9DD" style="background:#F1E9DD;" onclick="toggleDressColor(this)" title="Ivory"></button>
+      <button type="button" class="dcs" data-color="#7C93A3" style="background:#7C93A3;" onclick="toggleDressColor(this)" title="Dusty blue"></button>
+      <button type="button" class="dcs" data-color="#6B3F5C" style="background:#6B3F5C;" onclick="toggleDressColor(this)" title="Plum"></button>
     </div>
+    <input type="hidden" id="mh_dresscodeColors" value="">
   </div>
 
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_dresscode">Dresscode</span> <label class="tgl"><input type="checkbox" id="chk_mh_dresscode" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_dresscode">
-      <div class="fld"><label><span data-i18n="mh_lbl_mh_dresscode">Öltözködési kód</span></label><input id="mh_dresscode" value="" data-i18n-ph="mh_ph_mh_dresscode" placeholder="pl. Elegáns, pasztell színek kerülésével"></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_szallas">Szállás-ajánlás</span> <label class="tgl"><input type="checkbox" id="chk_mh_szallas" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_szallas">
-      <div class="fld"><label><span data-i18n="mh_lbl_mh_szallas">Ajánlott szállások (soronként egy)</span></label><textarea id="mh_szallas" style="min-height:80px;" data-i18n-ph="mh_ph_mh_szallas" placeholder="pl. Hotel Kastély — kedvezményes ár a &quot;ANNA-PÉTER&quot; kódszóval"></textarea></div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_ajandek">Ajándéklista</span> <label class="tgl"><input type="checkbox" id="chk_mh_ajandek" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_ajandek">
-      <div class="fld"><label><span data-i18n="mh_lbl_mh_ajandek">Ajándékkal kapcsolatos üzenet</span></label><textarea id="mh_ajandek" data-i18n-ph="mh_ph_mh_ajandek" placeholder="pl. A jelenléteteket tartjuk a legnagyobb ajándéknak — ha mégis meglepnétek minket, közös utazásunkhoz járulnátok hozzá a legjobban."></textarea></div>
-    </div>
+  <div class="card">
+    <h3><span class="num">6</span><span data-i18n="mh2_h3_ajandek">Ajándék / pénzkérő vers</span></h3>
+    <div class="fld"><label><span data-i18n="mh2_lbl_ajandek">Szöveg</span></label><div class="fld-row"><textarea id="mh_ajandek" data-i18n-ph="mh_ph_mh_ajandek" placeholder="pl. A jelenléteteket tartjuk a legnagyobb ajándéknak — ha mégis meglepnétek minket, közös utazásunkhoz járulnátok hozzá a legjobban."></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('mh_ajandek')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="tinyhint" data-i18n="mh2_hint_ajandek">A Tipp gombhoz hamarosan kész pénzkérő-vers javaslatok érkeznek — addig is szabadon írhatsz saját szöveget.</div>
   </div>
 
   <div class="card opt">
@@ -3098,24 +3156,15 @@ A kedvenc díszítésed
   </div>
 
   <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_foto">Pár fotója</span> <label class="tgl"><input type="checkbox" id="chk_mh_foto" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_foto">
-      <div class="tinyhint" data-i18n-html="mh_hint_1">A fotót a generálás után, a kész kártyán tudod feltölteni.</div>
-    </div>
-  </div>
-
-  <div class="card opt">
-    <h3><span data-i18n="mh_h3_chk_mh_tanuk">Tanúk bemutatása</span> <label class="tgl"><input type="checkbox" id="chk_mh_tanuk" onchange="optToggle(this)"><span class="sw"></span></label></h3>
-    <div class="opt-body off" data-for="chk_mh_tanuk">
-      <div class="grid2">
-        <div class="fld"><label><span data-i18n="mh_lbl_mh_tanuferj">Férj tanúja</span></label><input id="mh_tanuFerj" value="" data-i18n-ph="mh_ph_mh_tanuferj" placeholder="pl. Kovács Béla"></div>
-        <div class="fld"><label><span data-i18n="mh_lbl_mh_tanufeleseg">Feleség tanúja</span></label><input id="mh_tanuFeleseg" value="" data-i18n-ph="mh_ph_mh_tanufeleseg" placeholder="pl. Szabó Anna"></div>
-      </div>
+    <h3><span data-i18n="mh2_h3_qr">QR-kód</span> <label class="tgl"><input type="checkbox" id="chk_mh_qr" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_mh_qr">
+      <div class="fld"><label><span data-i18n="mh2_lbl_qrhead">QR-sáv címe</span></label><input id="mh_qrHead" value="" data-i18n-ph="mh2_ph_qrhead" placeholder="pl. Esküvői weboldalunk"></div>
+      <div class="fld"><label><span data-i18n="mh2_lbl_qrcap">QR-kód szövege</span></label><textarea id="mh_qrCap" data-i18n-ph="mh2_ph_qrcap" placeholder="pl. Scanneld be és nézd meg részletes programunkat!"></textarea></div>
     </div>
   </div>
 
   <div class="card">
-    <h3><span class="num">4</span><span data-i18n="mh_h3num_visszajelz_s_rsvp">Visszajelzés (RSVP) </span><span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh_note_mindig_l_tszik_az_utols_olda">mindig látszik, az utolsó oldalon</span></h3>
+    <h3><span class="num">7</span><span data-i18n="mh_h3num_visszajelz_s_rsvp">Visszajelzés (RSVP) </span><span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page4">4. oldal</span></h3>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="mh_lbl_mh_rsvpdate">Visszajelzési határidő</span></label><input id="mh_rsvpDate" value="" data-i18n-ph="mh_ph_mh_rsvpdate" placeholder="pl. 2026. július 1."></div>
       <div class="fld"><label><span data-i18n="mh_lbl_mh_rsvpcontact">Visszajelzés elérhetősége</span></label><input id="mh_rsvpContact" value="" data-i18n-ph="mh_ph_mh_rsvpcontact" placeholder="pl. +36 30 123 4567"></div>
@@ -3123,13 +3172,14 @@ A kedvenc díszítésed
   </div>
 
   <div class="card">
-    <h3><span class="num">★</span><span data-i18n="mh_h3num_z_r_al_r_s">Záró aláírás </span><span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
+    <h3><span class="num">★</span><span data-i18n="mh_h3num_z_r_al_r_s">Záró aláírás </span><span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="mh2_note_page4">4. oldal</span></h3>
     <div class="fld"><input id="mh_zaro" value="" data-i18n-ph="mh_ph_mh_zaro" placeholder="pl. Szeretettel: Anna &amp; Péter"></div>
   </div>
 
   <div class="fitbar ok" id="mhFitStatus" data-i18n="mh_fitbar_ok_text">A tartalom elfér a kiválasztott formátumban.</div>
   <button class="gen-btn" onclick="generate()" data-i18n="mh_gen_btn">✦ Tovább a szerkesztőbe — Meghívó generálása ✦</button>
 </div>
+
 
 <!-- ===== SAVE THE DATE VARÁZSLÓ ===== -->
 <div class="wiz" id="stdWizard">
@@ -3299,6 +3349,25 @@ function optToggle(cb){
   updateOptCount();
   scheduleFit();
 }
+/* ===== Meghívó dresscode: körökből választható színpaletta (max 10) ===== */
+function toggleDressColor(btn){
+  var hidden=document.getElementById('mh_dresscodeColors'); if(!hidden)return;
+  var cur=hidden.value?hidden.value.split(','):[];
+  var color=btn.getAttribute('data-color');
+  var idx=cur.indexOf(color);
+  if(idx>=0){ cur.splice(idx,1); btn.classList.remove('sel'); }
+  else{
+    if(cur.length>=10)return; /* max 10 szín */
+    cur.push(color); btn.classList.add('sel');
+  }
+  hidden.value=cur.join(',');
+  scheduleFit();
+}
+function toggleNoDresscode(cb){
+  var picker=document.getElementById('dresscodePicker');
+  if(picker)picker.classList.toggle('off',cb.checked);
+  scheduleFit();
+}
 function updateOptCount(){
   var badge=document.getElementById('optCountBadge'); if(!badge)return;
   var n=document.querySelectorAll('#'+activeWizardId()+' .card.opt .opt-body:not(.off)').length;
@@ -3365,14 +3434,13 @@ function B_coverUjsag(d){
     +'</div>';
 }
 function B_coverMeghivo(d){
+  var quoteHtml=d.quote?'<p class="bp editable" contenteditable="true" style="text-align:center;font-style:italic;max-width:85%;margin-top:14px;">'+esc(d.quote)+'</p>':'';
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
     +'<div class="kicker editable" contenteditable="true" style="letter-spacing:.18em;text-transform:uppercase;">'+L('Esküvői meghívó','Wedding Invitation')+'</div>'
-    +'<h1 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'64px':'44px')+';margin:8px 0;">'+esc(d.names)+'</h1>'
-    +'<hr class="rule-hair" style="width:60px;">'
-    +(d.intro?'<p class="bp editable" contenteditable="true" style="text-align:center;max-width:90%;">'+esc(d.intro)+'</p>':'')
-    +'<div class="hero imgbox photo" data-label="'+L('Pár fotója','Photo of the couple')+'" style="margin-top:10px;width:100%;"></div>'
-    +'<div class="editable" contenteditable="true" style="margin-top:10px;font-weight:700;font-size:17px;">'+esc(d.date)+(d.ceremonyTime?' · '+esc(d.ceremonyTime):'')+'</div>'
-    +'<div class="editable" contenteditable="true">'+esc(d.venue)+'</div>'
+    +'<h1 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'64px':'44px')+';margin:10px 0 2px;">'+esc(d.names)+'</h1>'
+    +'<div class="editable" contenteditable="true" style="font-size:18px;font-weight:600;color:var(--claret);">'+esc(d.phrase||L('összeházasodnak','are getting married'))+'</div>'
+    +'<hr class="rule-hair" style="width:60px;margin-top:14px;">'
+    +quoteHtml
     +'</div>';
 }
 function B_coverSTD(d){
@@ -3889,10 +3957,12 @@ function gatherData(){
     drinks:on('chk_drinks'),robbantsd:on('chk_robbantsd'),message:on('chk_message'),foto:on('chk_fotovadasz')};
 }
 function gatherMeghivoData(){
-  return {names:val('mh_names'),date:val('mh_date'),venue:val('mh_venue'),intro:val('mh_intro'),
-    ceremonyTime:val('mh_ceremonyTime'),receptionTime:val('mh_receptionTime'),helyszinLeiras:val('mh_helyszinLeiras'),
-    terkepLink:val('mh_terkepLink'),dresscode:val('mh_dresscode'),szallas:val('mh_szallas'),ajandek:val('mh_ajandek'),
-    gyerekek:val('mh_gyerekek'),tanuFerj:val('mh_tanuFerj'),tanuFeleseg:val('mh_tanuFeleseg'),
+  return {names:val('mh_names'),date:val('mh_date'),venue:val('mh_venue'),
+    phrase:val('mh_phrase'),quote:val('mh_quote'),intro:val('mh_intro'),
+    dresscodeColors:(val('mh_dresscodeColors')||'').split(',').filter(Boolean),
+    noDresscode:on('chk_mh_nodresscode'),
+    ajandek:val('mh_ajandek'),gyerekek:val('mh_gyerekek'),
+    qrHead:val('mh_qrHead'),qrCap:val('mh_qrCap'),
     rsvpDate:val('mh_rsvpDate'),rsvpContact:val('mh_rsvpContact'),zaro:val('mh_zaro')};
 }
 function gatherSTDData(){
@@ -3962,36 +4032,40 @@ function buildFlowUjsag(d){
 }
 
 /* ===== Meghívó: rovat-építő függvények + flow ===== */
-function B_mhIdopont(d){
-  if(!d.ceremonyTime && !d.receptionTime)return '';
-  var rows='';
-  if(d.ceremonyTime)rows+='<div class="bp editable" contenteditable="true"><b>'+L('Szertartás','Ceremony')+':</b> '+esc(d.ceremonyTime)+'</div>';
-  if(d.receptionTime)rows+='<div class="bp editable" contenteditable="true"><b>'+L('Fogadás','Reception')+':</b> '+esc(d.receptionTime)+'</div>';
-  return '<div class="blk"><div class="kicker">'+ico('i-clock')+' '+L('Program időrendje','Program schedule')+'</div><hr class="rule-hair">'+rows+'</div>';
+function B_mhIntro(d){
+  if(!d.intro)return '';
+  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;justify-content:center;">'
+    +'<div class="kicker editable" contenteditable="true">'+L('Meghívó','Invitation')+'</div>'
+    +'<p class="bp editable dropcap-ready" contenteditable="true" style="text-align:center;max-width:85%;font-size:15px;line-height:1.6;">'+esc(d.intro)+'</p>'
+    +'<hr class="rule-hair" style="width:50px;margin:16px 0 10px;">'
+    +'<div class="editable" contenteditable="true" style="font-weight:700;font-size:18px;">'+esc(d.date)+'</div>'
+    +'<div class="editable" contenteditable="true" style="font-size:15px;">'+esc(d.venue)+'</div>'
+    +'</div>';
 }
-function B_mhHelyszinReszletek(d){
-  if(!d.helyszinLeiras)return '';
-  return '<div class="blk"><div class="kicker">'+ico('i-table')+' '+L('Helyszín részletei','Venue details')+'</div><hr class="rule-hair">'
-    +'<p class="bp editable" contenteditable="true">'+esc(d.helyszinLeiras)+'</p></div>';
-}
-function B_mhTerkep(d){
-  if(!d.terkepLink)return '';
-  return '<div class="blk"><div class="kicker">'+ico('i-rings')+' '+L('Útvonal','Directions')+'</div><hr class="rule-hair">'
-    +'<p class="bp editable" contenteditable="true" style="text-align:center;">'+esc(d.terkepLink)+'</p></div>';
+function B_mhMenetrend(d){
+  var steps='';
+  readRows('rep_mh_menetrend').forEach(function(r){
+    var ev=(r.event||'').trim(); if(!ev)return;
+    var tp=r.time?'<b class="t-time">'+esc(r.time)+'</b> ':'';
+    steps+='<div class="step"><span>'+tp+'<b>'+esc(ev)+'</b></span></div>';
+  });
+  if(!steps)return '';
+  return '<div class="blk" style="display:flex;flex-direction:column;flex:1;justify-content:center;"><div class="col-head" style="text-align:center;">'+ico('i-clock')+' '+L('Menetrend','Schedule')+'</div><div class="flow">'+steps+'</div></div>';
 }
 function B_mhDresscode(d){
-  if(!d.dresscode)return '';
+  if(d.noDresscode){
+    return '<div class="blk"><div class="kicker">'+ico('i-person')+' '+L('Dresscode','Dress code')+'</div><hr class="rule-hair">'
+      +'<p class="bp editable" contenteditable="true" style="text-align:center;">'+L('Nincs kötött dresscode — gyertek úgy, ahogy a legjobban érzitek magatokat!','No strict dress code — come as you feel most comfortable!')+'</p></div>';
+  }
+  if(!d.dresscodeColors || !d.dresscodeColors.length)return '';
+  var dots=d.dresscodeColors.map(function(c){return '<span class="dress-dot" style="background:'+esc(c)+';"></span>';}).join('');
   return '<div class="blk"><div class="kicker">'+ico('i-person')+' '+L('Dresscode','Dress code')+'</div><hr class="rule-hair">'
-    +'<p class="bp editable" contenteditable="true" style="text-align:center;">'+esc(d.dresscode)+'</p></div>';
-}
-function B_mhSzallas(d){
-  if(!d.szallas)return '';
-  var rows=d.szallas.split('\n').filter(function(l){return l.trim();}).map(function(l){return '<div class="bp editable" contenteditable="true">'+esc(l)+'</div>';}).join('');
-  return '<div class="blk"><div class="kicker">'+ico('i-table')+' '+L('Szállás-ajánlás','Accommodation recommendation')+'</div><hr class="rule-hair">'+rows+'</div>';
+    +'<div class="dress-dots">'+dots+'</div>'
+    +'<p class="bp" style="text-align:center;font-style:italic;">'+L('Ajánlott színek','Suggested colors')+'</p></div>';
 }
 function B_mhAjandek(d){
   if(!d.ajandek)return '';
-  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' '+L('Ajándéklista','Gift list')+'</div><hr class="rule-hair">'
+  return '<div class="blk"><div class="kicker">'+ico('i-heart')+' '+L('Ajándék','Gift')+'</div><hr class="rule-hair">'
     +'<p class="bp editable" contenteditable="true">'+esc(d.ajandek)+'</p></div>';
 }
 function B_mhGyerekek(d){
@@ -3999,16 +4073,10 @@ function B_mhGyerekek(d){
   return '<div class="blk"><div class="kicker">'+ico('i-person')+' '+L('Gyerekek / kísérők','Children / plus-ones')+'</div><hr class="rule-hair">'
     +'<p class="bp editable" contenteditable="true">'+esc(d.gyerekek)+'</p></div>';
 }
-function B_mhFoto(d){
-  return '<div class="blk"><div class="kicker">'+ico('i-camera')+' '+L('A pár fotója',"The couple's photo")+'</div>'
-    +'<div class="imgbox photo" data-label="'+L('Pár fotója','Photo of the couple')+'"></div></div>';
-}
-function B_mhTanuk(d){
-  if(!d.tanuFerj && !d.tanuFeleseg)return '';
-  var parts='';
-  if(d.tanuFerj)parts+='<div class="thanks-col"><h3 class="thanks-name editable" contenteditable="true">'+L('Férj tanúja',"Groom's witness")+'</h3><p class="bp editable" contenteditable="true">'+esc(d.tanuFerj)+'</p></div>';
-  if(d.tanuFeleseg)parts+='<div class="thanks-col"><h3 class="thanks-name editable" contenteditable="true">'+L('Feleség tanúja',"Bride's witness")+'</h3><p class="bp editable" contenteditable="true">'+esc(d.tanuFeleseg)+'</p></div>';
-  return '<div class="blk"><div class="kicker">'+ico('i-person')+' '+L('Tanúk','Witnesses')+'</div><hr class="rule-hair"><div class="thanks-wrap">'+parts+'</div></div>';
+function B_mhQr(d){
+  if(!d.qrCap)return '';
+  return '<div class="blk"><div class="qr-band"><div class="qr-band-h">'+ico('i-camera')+'<span>'+esc(d.qrHead||L('Bővebb infó','More info'))+'</span></div>'
+    +'<div class="qr-row qr-row-1"><div class="qr-cell">'+imgbox(L('QR-kód','QR code'),'qrbox')+'<div class="qr-cap">'+esc(d.qrCap)+'</div></div></div></div></div>';
 }
 function B_mhRsvp(d){
   if(!d.rsvpDate && !d.rsvpContact)return '';
@@ -4022,19 +4090,22 @@ function B_mhZaro(d){
   return '<div class="blk"><div class="closer">'+ico('i-rings')+'<span class="editable" contenteditable="true">'+esc(d.zaro)+'</span>'+ico('i-rings')+'</div></div>';
 }
 function buildFlowMeghivo(d){
+  /* Fix, 4 oldalas szerkezet: 1. borító (B_cover, mindig külön lap), 2. meghívó szöveg
+     (mh_intro — FIXED_SIZE_PREF 'full', így mindig saját lapra kerül), 3. menetrend
+     (mh_menetrend — szintén 'full'), 4. gyakorlati infó csoport (TAIL_IDS_MEGHIVO —
+     dresscode/ajándék/gyerekek/qr/rsvp/záró, mindig együtt az utolsó lapon). Nincs
+     rugalmas, automatikusan újraelrendező tartalom, mint az Újságnál — a 4 oldal
+     szerepe fix. */
   var B={};
-  B.mh_idopont=on('chk_mh_idopont')?B_mhIdopont(d):'';
-  B.mh_helyszinReszletek=on('chk_mh_helyszinReszletek')?B_mhHelyszinReszletek(d):'';
-  B.mh_terkep=on('chk_mh_terkep')?B_mhTerkep(d):'';
-  B.mh_dresscode=on('chk_mh_dresscode')?B_mhDresscode(d):'';
-  B.mh_foto=on('chk_mh_foto')?B_mhFoto(d):'';
-  B.mh_tanuk=on('chk_mh_tanuk')?B_mhTanuk(d):'';
-  B.mh_szallas=on('chk_mh_szallas')?B_mhSzallas(d):'';
-  B.mh_ajandek=on('chk_mh_ajandek')?B_mhAjandek(d):'';
+  B.mh_intro=B_mhIntro(d);
+  B.mh_menetrend=B_mhMenetrend(d);
+  B.mh_dresscode=B_mhDresscode(d);
+  B.mh_ajandek=B_mhAjandek(d);
   B.mh_gyerekek=on('chk_mh_gyerekek')?B_mhGyerekek(d):'';
+  B.mh_qr=on('chk_mh_qr')?B_mhQr(d):'';
   B.mh_rsvp=B_mhRsvp(d);
   B.mh_zaro=B_mhZaro(d);
-  var ORDER=['mh_idopont','mh_helyszinReszletek','mh_terkep','mh_dresscode','mh_foto','mh_tanuk','mh_szallas','mh_ajandek','mh_gyerekek','mh_rsvp','mh_zaro'];
+  var ORDER=['mh_intro','mh_menetrend','mh_dresscode','mh_ajandek','mh_gyerekek','mh_qr','mh_rsvp','mh_zaro'];
   var flow=[];
   ORDER.forEach(function(id){ if(B[id])flow.push({id:id,html:B[id],sizePref:getSizePref(id)}); });
   return flow;
@@ -4111,7 +4182,7 @@ var TAIL_IDS_UJSAG=['menetrend','etlap','itallap','italok','qr','fotovadasz','ro
    csoportja — ld. buildFlowMeghivo()/buildFlowSTD(). Egyiknél sincs egymás-melletti
    (duo-row) páros rovat, ezért a HALFP_IDS változatuk üres. */
 var HALFP_IDS_MEGHIVO=[];
-var TAIL_IDS_MEGHIVO=['mh_rsvp','mh_zaro'];
+var TAIL_IDS_MEGHIVO=['mh_dresscode','mh_ajandek','mh_gyerekek','mh_qr','mh_rsvp','mh_zaro'];
 var HALFP_IDS_STD=[];
 var TAIL_IDS_STD=['std_link','std_naptar','std_zaro'];
 var HALFP_IDS=HALFP_IDS_UJSAG, TAIL_IDS=TAIL_IDS_UJSAG;
@@ -4400,7 +4471,7 @@ function generate(){
   trackEvent('generate_clicked',{product_type:CFG.product,size:CFG.size,pages:CFG.pages});
   var miss=validateRequired();
   var eb=document.getElementById(activeErrboxId());
-  if(miss.length){eb.textContent='Tölts ki minden kötelező mezőt (a piros csillagosokat) a generálás előtt.';eb.style.display='block';miss[0].scrollIntoView({behavior:'smooth',block:'center'});trackEvent('generate_failed',{product_type:CFG.product,reason:'missing_required'});return;}
+  if(miss.length){eb.textContent=L('Tölts ki minden kötelező mezőt (a piros csillagosokat) a generálás előtt.','Fill in every required field (marked with a red star) before generating.');eb.style.display='block';miss[0].scrollIntoView({behavior:'smooth',block:'center'});trackEvent('generate_failed',{product_type:CFG.product,reason:'missing_required'});return;}
   eb.style.display='none';
   _undoStack=[]; var _ub=document.getElementById('undoBtn'); if(_ub)_ub.disabled=true;
 
@@ -4429,10 +4500,15 @@ function generate(){
   var tailPlan=buildTailPagePlan(split.tail,usable,GAP);
   var neededPages=mainPlan.pagesUsed+tailPlan.pagesUsed;
   if(neededPages>contentPages){
-    var sugg = (N===4 && neededPages<=7) ? 8 : null;
-    eb.textContent = sugg
-      ? '✕ A megadott tartalom nem fér el szépen 4 oldalra (kb. '+(neededPages+1)+' oldalnyi tartalom). Válts 8 oldalas formátumra fent, és próbáld újra.'
-      : '✕ A megadott tartalom 8 oldalra sem fér el szépen (kb. '+(neededPages+1)+' oldalnyi tartalom). Kapcsolj ki egy-két rovatot, majd próbáld újra.';
+    var sugg = (N===4 && neededPages<=7 && CFG.product!=='meghivo') ? 8 : null;
+    var neededTxt=String(neededPages+1);
+    if(sugg){
+      eb.textContent='✕ '+L('A megadott tartalom nem fér el szépen 4 oldalra (kb. '+neededTxt+' oldalnyi tartalom). Válts 8 oldalas formátumra fent, és próbáld újra.','This much content doesn\'t fit neatly on 4 pages (about '+neededTxt+' pages\' worth). Switch to the 8-page format above and try again.');
+    } else if(CFG.product==='meghivo'){
+      eb.textContent='✕ '+L('A megadott tartalom nem fér el szépen a 4 oldalon (kb. '+neededTxt+' oldalnyi tartalom). Rövidítsd a szövegeket, vagy kapcsolj ki egy rovatot (pl. QR-kód), majd próbáld újra.','This much content doesn\'t fit neatly on the 4 pages (about '+neededTxt+' pages\' worth). Shorten the texts, or turn off a section (e.g. the QR code), then try again.');
+    } else {
+      eb.textContent='✕ '+L('A megadott tartalom 8 oldalra sem fér el szépen (kb. '+neededTxt+' oldalnyi tartalom). Kapcsolj ki egy-két rovatot, majd próbáld újra.','This much content doesn\'t fit neatly even on 8 pages (about '+neededTxt+' pages\' worth). Turn off a section or two, then try again.');
+    }
     eb.style.display='block'; eb.scrollIntoView({behavior:'smooth',block:'center'});
     trackEvent('generate_failed',{product_type:CFG.product,reason:'content_too_large',needed_pages:neededPages+1});
     return;
@@ -5052,15 +5128,8 @@ var ADDABLE_SECTIONS_UJSAG=[
   {chk:'naszut',blk:'naszut',fn:function(d){return B_naszut(d);}}
 ];
 var ADDABLE_SECTIONS_MEGHIVO=[
-  {chk:'mh_idopont',blk:'mh_idopont',fn:function(d){return B_mhIdopont(d);}},
-  {chk:'mh_helyszinReszletek',blk:'mh_helyszinReszletek',fn:function(d){return B_mhHelyszinReszletek(d);}},
-  {chk:'mh_terkep',blk:'mh_terkep',fn:function(d){return B_mhTerkep(d);}},
-  {chk:'mh_dresscode',blk:'mh_dresscode',fn:function(d){return B_mhDresscode(d);}},
-  {chk:'mh_foto',blk:'mh_foto',fn:function(d){return B_mhFoto(d);}},
-  {chk:'mh_tanuk',blk:'mh_tanuk',fn:function(d){return B_mhTanuk(d);}},
-  {chk:'mh_szallas',blk:'mh_szallas',fn:function(d){return B_mhSzallas(d);}},
-  {chk:'mh_ajandek',blk:'mh_ajandek',fn:function(d){return B_mhAjandek(d);}},
-  {chk:'mh_gyerekek',blk:'mh_gyerekek',fn:function(d){return B_mhGyerekek(d);}}
+  {chk:'mh_gyerekek',blk:'mh_gyerekek',fn:function(d){return B_mhGyerekek(d);}},
+  {chk:'mh_qr',blk:'mh_qr',fn:function(d){return B_mhQr(d);}}
 ];
 var ADDABLE_SECTIONS_STD=[
   {chk:'std_helyszin',blk:'std_helyszin',fn:function(d){return B_stdHelyszin(d);}},
@@ -6176,21 +6245,58 @@ var TIPS={
     'Köszönjük, hogy megtanítottátok, milyen az igazi szeretet — most már mi is ezt adjuk tovább egymásnak.'],
   f_thanksGroomMsg:['Köszönjük a szeretetet és támogatást, amit egész életünkben kaptunk tőletek.',
     'Hálásak vagyunk minden pillanatért, amit mellettünk töltöttetek — ma ti is ott álltok velünk ezen a napon.',
-    'Köszönjük, hogy mindig hittetek bennünk, és hogy otthont adtatok, ahova mindig visszatérhettünk.']
+    'Köszönjük, hogy mindig hittetek bennünk, és hogy otthont adtatok, ahova mindig visszatérhettünk.'],
+  mh_phrase:['összeházasodnak','összekötik életüket','egymáséi lesznek','kimondják a boldogító igent','örök hűséget fogadnak egymásnak'],
+  mh_ajandek:[] /* pénzkérő-vers javaslatok később érkeznek — a Tipp gomb egyelőre no-op */
+};
+/* a régi (csak magyar) TIPS mellett angol változat is — ha egy kulcsra nincs angol lista, a
+   fillTip() visszaesik a magyar TIPS-re (ez a régi, Újság-specifikus tippekre igaz, azokat
+   nem fordítottuk le, mert ott a felhasználó úgyis szabadon átírja a beszúrt szöveget) */
+var TIPS_EN={
+  mh_phrase:['are getting married','are tying the knot','are saying "I do"','become one','pledge eternal love to each other']
 };
 function fillTip(id){
   var el=document.getElementById(id); if(!el)return;
-  var list=TIPS[id]; if(!list||!list.length)return;
+  var list=(id==='mh_quote'&&typeof QUOTES==='function')?QUOTES():((LANG==='en'&&TIPS_EN[id])?TIPS_EN[id]:TIPS[id]);
+  if(!list||!list.length)return;
   var cur=el.value, pick=cur;
   for(var i=0;i<8 && pick===cur;i++){ pick=list[Math.floor(Math.random()*list.length)]; }
   /* néhány tipp {NAMES} tokent tartalmaz — a ténylegesen megadott pár-névvel helyettesítjük,
      hogy "Dorina & Patrik összeházasodtak!"-szerű, a kitöltőre szabott javaslat jöjjön ki,
-     nem egy generikus placeholder szöveg */
+     nem egy generikus placeholder szöveg — a névmező id-je termékenként eltér */
   if(pick.indexOf('{NAMES}')!==-1){
-    var namesEl=document.getElementById('f_names');
-    var names=(namesEl&&namesEl.value.trim())||'Ti ketten';
+    var namesFieldId=CFG.product==='meghivo'?'mh_names':CFG.product==='savethedate'?'std_names':'f_names';
+    var namesEl=document.getElementById(namesFieldId);
+    var names=(namesEl&&namesEl.value.trim())||L('Ti ketten','The two of you');
     pick=pick.split('{NAMES}').join(names);
   }
+  el.value=pick;
+  el.focus();
+  if(typeof scheduleFit==='function')scheduleFit();
+}
+/* ===== Meghívó szöveg (2. oldal) — adatvezérelt Tipp: a ténylegesen megadott dátumot/
+   helyszínt fűzi bele egy körbeforgatott sablon-mondatba, nem csak statikus tippszöveget ír be */
+var MH_INTRO_TEMPLATES_HU=[
+  'Szeretettel meghívunk benneteket életünk egyik legszebb napjára, amikor {DATE} napján, {VENUE} helyszínen egymásnak mondjuk ki a boldogító igent.',
+  'Örömmel hívunk és várunk Titeket esküvőnkre — {DATE}, {VENUE} ad otthont ennek a különleges napnak.',
+  'Nagy szeretettel meghívunk, hogy velünk ünnepeld életünk legboldogabb napját: {DATE}, {VENUE}.',
+  'Szeretnénk, ha velünk lennétek, amikor {DATE} napján, {VENUE} falai között egymáséi leszünk.'
+];
+var MH_INTRO_TEMPLATES_EN=[
+  'We warmly invite you to one of the most beautiful days of our lives, when on {DATE}, at {VENUE}, we say a joyful yes to each other.',
+  'We are delighted to invite you to our wedding — {VENUE} will be the setting for this special day, on {DATE}.',
+  'With great love, we invite you to celebrate the happiest day of our lives with us: {DATE}, {VENUE}.',
+  "We'd love for you to be there when, on {DATE}, within the walls of {VENUE}, we become one."
+];
+function fillMhIntroTip(){
+  var el=document.getElementById('mh_intro'); if(!el)return;
+  var list=LANG==='en'?MH_INTRO_TEMPLATES_EN:MH_INTRO_TEMPLATES_HU;
+  var cur=el.value, pick=cur;
+  for(var i=0;i<8 && pick===cur;i++){ pick=list[Math.floor(Math.random()*list.length)]; }
+  var dateEl=document.getElementById('mh_date'), venueEl=document.getElementById('mh_venue');
+  var dateVal=(dateEl&&dateEl.value.trim())||L('esküvőnk napján','our wedding day');
+  var venueVal=(venueEl&&venueEl.value.trim())||L('a helyszínünkön','our venue');
+  pick=pick.split('{DATE}').join(dateVal).split('{VENUE}').join(venueVal);
   el.value=pick;
   el.focus();
   if(typeof scheduleFit==='function')scheduleFit();
@@ -6221,7 +6327,8 @@ var FIXED_SIZE_PREF={
   horoszkop:'full',  /* Horoszkóp — ma éjjelre */
   gyik:'full',       /* Gyakran Ismételt Kérdések */
   interju:'full',    /* Exkluzív interjú */
-  mh_foto:'half',    /* Megívó: a pár fotója */
+  mh_intro:'full',      /* Meghívó: meghívó szöveg (2. oldal) */
+  mh_menetrend:'full',  /* Meghívó: menetrend (3. oldal) */
   std_foto:'full'    /* Save the date: nagy fotó */
 };
 /* az étlap/itallap kötelezően egymás mellett, fele-fele szélességben jelenik meg (ld.
