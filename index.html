@@ -915,6 +915,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .review-nav:hover{background:var(--wiz-blush);}
 .review-counter{text-align:center;font-family:'Libre Franklin',sans-serif;font-size:11.5px;color:#8a7480;margin:10px 0 4px;}
 @media(max-width:520px){.reviews-wrap{max-width:300px;}.review-card{padding:16px 14px;min-height:170px;}}
+.faq-h{font-family:'Old Standard TT',serif;font-size:20px;text-align:center;margin:34px 0 16px;color:#2a1a20;}
+.faq-list{max-width:480px;margin:0 auto 30px;text-align:left;}
+.faq-item{background:#fff;border:1.4px solid var(--wiz-rose-pale);border-radius:14px;padding:14px 18px;margin-bottom:10px;box-shadow:0 6px 18px rgba(60,20,35,.08);}
+.faq-q{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:13.5px;color:var(--wiz-rose-dark);margin:0 0 6px;}
+.faq-a{font-family:'PT Serif',serif;font-size:13.5px;line-height:1.55;color:#3a2630;margin:0;}
 .cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:9000;background:#2a1a20;color:#f6e9ee;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:14px 18px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;box-shadow:0 -4px 20px rgba(0,0,0,.25);}
 .cookie-banner p{margin:0;max-width:640px;line-height:1.5;}
 .cookie-banner .cookie-btns{display:flex;gap:8px;flex-shrink:0;}
@@ -1019,6 +1024,19 @@ hu:{
   intro_sub:"Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:",
   intro_zoom_btn:"🔍 Nagyítás",
   reviews_h:"Eddigi vélemények",
+  faq_h:"Gyakori kérdések",
+  faq_q1:"Tényleg ingyenes a szerkesztő?",
+  faq_a1:"Igen — a teljes varázsló és szerkesztő ingyenes, vízjeles előnézettel. Csak a vízjel nélküli digitális letöltés vagy a nyomtatott, kiszállított példány fizetős.",
+  faq_q2:"Mikor kell fizetnem?",
+  faq_a2:"Csak akkor, ha már látod és jóváhagytad a kész eredményt — a szerkesztésnek, próbálgatásnak nincs fizetési korlátja.",
+  faq_q3:"Fel tudom tölteni a saját fotóimat?",
+  faq_a3:"Igen — a generálás után, a szerkesztőben bármelyik „+” jelű mezőre kattintva tölthetsz fel és pozícionálhatsz fotókat, amennyit csak szeretnél.",
+  faq_q4:"Mi van, ha nem vagyok jó szövegíró?",
+  faq_a4:"A legtöbb mezőnél van egy 💡 Tipp gomb, ami kész szövegjavaslatot ír be helyetted — ezt utána szabadon átírhatod, vagy hagyhatod úgy.",
+  faq_q5:"Angolul is elkészíthetjük?",
+  faq_a5:"Igen — a kezdőlap tetején váltható magyar/angol nyelv, és minden (a varázsló, a szerkesztő, a generált tartalom) mindkét nyelven elérhető.",
+  faq_q6:"Mennyi idő alatt kapom meg a nyomtatott példányt?",
+  faq_a6:"A digitális verzió azonnal elkészül; nyomtatott rendelésnél a rendelés rögzítésekor (24 órán belül) pontos, a te esküvőd dátumához igazított határidőt kapsz e-mailben.",
   intro_start_btn:"Elkészítem a sajátomat! →",
   intro_skip_btn:"Kihagyom, ugrás a kitöltésre",
   aria_prev_page:"Előző oldal",
@@ -1609,6 +1627,19 @@ en:{
   intro_sub:"You fill in your details, upload your photos, and in minutes you get a printable, entertaining gazette for your guests. Take a look at what yours could look like:",
   intro_zoom_btn:"🔍 Zoom",
   reviews_h:"What people are saying",
+  faq_h:"Frequently asked questions",
+  faq_q1:"Is the editor really free?",
+  faq_a1:"Yes — the full wizard and editor are free, with a watermarked preview. Only the watermark-free digital download or the printed, shipped copy cost money.",
+  faq_q2:"When do I have to pay?",
+  faq_a2:"Only once you've seen and approved the finished result — there's no payment limit on editing or trying things out.",
+  faq_q3:"Can I upload my own photos?",
+  faq_a3:"Yes — after generating, click any “+” field in the editor to upload and position as many photos as you like.",
+  faq_q4:"What if I'm not good at writing?",
+  faq_a4:"Most fields have a 💡 Tip button that fills in a ready-made text suggestion for you — you can freely rewrite it afterward, or just keep it as is.",
+  faq_q5:"Can we make it in English too?",
+  faq_a5:"Yes — you can switch between Hungarian/English at the top of the homepage, and everything (the wizard, the editor, the generated content) is available in both languages.",
+  faq_q6:"How long until I get the printed copy?",
+  faq_a6:"The digital version is ready instantly; for a printed order you'll receive an exact deadline by email, tailored to your wedding date, once the order is placed (within 24 hours).",
   intro_start_btn:"Create my own! →",
   intro_skip_btn:"Skip, go straight to the form",
   aria_prev_page:"Previous page",
@@ -2338,6 +2369,16 @@ function backToTypeSelect(){
   </div>
   <div class="review-counter" id="reviewCounter"></div>
 
+  <h2 class="faq-h" data-i18n="faq_h">Gyakori kérdések</h2>
+  <div class="faq-list">
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q1">Tényleg ingyenes a szerkesztő?</p><p class="faq-a" data-i18n="faq_a1">Igen — a teljes varázsló és szerkesztő ingyenes, vízjeles előnézettel. Csak a vízjel nélküli digitális letöltés vagy a nyomtatott, kiszállított példány fizetős.</p></div>
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q2">Mikor kell fizetnem?</p><p class="faq-a" data-i18n="faq_a2">Csak akkor, ha már látod és jóváhagytad a kész eredményt — a szerkesztésnek, próbálgatásnak nincs fizetési korlátja.</p></div>
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q3">Fel tudom tölteni a saját fotóimat?</p><p class="faq-a" data-i18n="faq_a3">Igen — a generálás után, a szerkesztőben bármelyik „+" jelű mezőre kattintva tölthetsz fel és pozícionálhatsz fotókat, amennyit csak szeretnél.</p></div>
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q4">Mi van, ha nem vagyok jó szövegíró?</p><p class="faq-a" data-i18n="faq_a4">A legtöbb mezőnél van egy 💡 Tipp gomb, ami kész szövegjavaslatot ír be helyetted — ezt utána szabadon átírhatod, vagy hagyhatod úgy.</p></div>
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q5">Angolul is elkészíthetjük?</p><p class="faq-a" data-i18n="faq_a5">Igen — a kezdőlap tetején váltható magyar/angol nyelv, és minden (a varázsló, a szerkesztő, a generált tartalom) mindkét nyelven elérhető.</p></div>
+    <div class="faq-item"><p class="faq-q" data-i18n="faq_q6">Mennyi idő alatt kapom meg a nyomtatott példányt?</p><p class="faq-a" data-i18n="faq_a6">A digitális verzió azonnal elkészül; nyomtatott rendelésnél a rendelés rögzítésekor (24 órán belül) pontos, a te esküvőd dátumához igazított határidőt kapsz e-mailben.</p></div>
+  </div>
+
   <div class="intro-cta">
     <button type="button" class="intro-start" id="introStartBtn" data-i18n="intro_start_btn">Elkészítem a sajátomat! →</button>
     <button type="button" class="intro-skip" id="introSkipBtn" data-i18n="intro_skip_btn">Kihagyom, ugrás a kitöltésre</button>
@@ -2597,7 +2638,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.2';
+  var APP_VERSION='6.3';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
