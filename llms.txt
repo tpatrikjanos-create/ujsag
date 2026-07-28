@@ -1,0 +1,24 @@
+# Esküvői Újság
+
+> Önkiszolgáló webalkalmazás, amivel egy pár percek alatt elkészítheti a saját esküvői
+> kiadványát — programfüzet, meghívó vagy Save the Date formában —, egy élő, azonnal
+> szerkeszthető felületen, mielőtt bármit fizetne.
+
+## Mit csinál
+A felhasználó kitölti az adatait (nevek, dátum, helyszín), be- és kikapcsol tetszőleges
+tartalmi rovatokat (menetrend, sztori, játékok, horoszkóp stb.), majd egy gombnyomásra
+kész, nyomtatható kiadvány generálódik. A vízjeles előnézet ingyenes és a fizetés előtt
+teljes egészében megtekinthető és szerkeszthető — ez a legfontosabb különbség a legtöbb
+hasonló szolgáltatáshoz képest, ahol a vevő e-mailben kapja meg a kész terméket, előzetes
+élő betekintés nélkül.
+
+## Három terméktípus
+- **Esküvői Újság** — vicces, személyes programfüzet a lagzi napjára.
+- **Esküvői Meghívó** — klasszikus, elegáns meghívókártya elő- és hátlappal.
+- **Save the Date** — egyetlen, fotós értesítő kártya a dátum előzetes bejelentésére.
+
+## Árazás
+Lásd: /pricing.md
+
+## Nyelv
+Magyar (hu) — a célközönség Magyarországon jegyesek/friss házasok.
