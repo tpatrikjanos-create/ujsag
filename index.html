@@ -930,11 +930,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .back-to-types:hover{text-decoration:underline;}
 /* ===== Bemutató (intro) képernyő: lapozható minta-újság a varázsló előtt ===== */
 #introShowcase{display:none;}
-.intro-showcase{max-width:640px;margin:0 auto;padding:36px 18px 30px;text-align:center;}
+.intro-showcase{max-width:900px;margin:0 auto;padding:36px 18px 30px;text-align:center;}
 .intro-eyebrow{font-family:'Libre Franklin',sans-serif;font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--wiz-rose-dark);margin-bottom:8px;}
 .intro-h{font-family:'Old Standard TT',serif;font-size:26px;line-height:1.25;margin:0 0 10px;color:#2a1a20;}
 .intro-sub{font-family:'Libre Franklin',sans-serif;font-size:14px;color:#5a4a50;max-width:480px;margin:0 auto 26px;line-height:1.55;}
-.tut-book{position:relative;max-width:360px;margin:0 auto;display:flex;align-items:center;gap:8px;}
+.tut-book{position:relative;max-width:720px;margin:0 auto;display:flex;align-items:center;gap:8px;}
 .book-frame{position:relative;flex:1;aspect-ratio:720/1071;background:var(--wiz-cream);border:1.6px solid var(--ink);border-radius:6px;box-shadow:0 18px 46px rgba(60,20,35,.28);overflow:hidden;perspective:1200px;}
 .book-page{position:absolute;inset:0;overflow:hidden;background:var(--wiz-cream);opacity:0;transform:rotateY(-14deg);transform-origin:left center;transition:opacity .4s ease,transform .4s ease;pointer-events:none;}
 .book-page-img{display:block;width:100%;height:100%;object-fit:contain;}
@@ -951,7 +951,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .intro-start{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:15px;background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;border:none;border-radius:24px;padding:13px 26px;cursor:pointer;box-shadow:0 8px 22px rgba(156,51,97,.32);}
 .intro-start:hover{filter:brightness(1.06);}
 .intro-skip{font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#8a7480;background:none;border:none;cursor:pointer;text-decoration:underline;}
-@media(max-width:520px){.intro-h{font-size:21px;}.tut-book{max-width:240px;}}
+@media(max-width:520px){.intro-h{font-size:21px;}.tut-book{max-width:100%;}}
 #bookFrame{cursor:zoom-in;}
 .book-zoom-btn{display:block;margin:0 auto 20px;background:#fff;border:1.4px solid var(--wiz-rose-pale);color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;border-radius:18px;padding:7px 16px;cursor:pointer;}
 .book-zoom-btn:hover{background:var(--wiz-blush);}
@@ -959,14 +959,20 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .book-zoom-overlay.open{display:flex;}
 .book-zoom-close{position:fixed;top:16px;right:18px;width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.15);color:#fff;font-size:18px;cursor:pointer;z-index:1;}
 .book-zoom-close:hover{background:rgba(255,255,255,.28);}
-.book-zoom-book{width:min(92vw,760px);max-width:min(92vw,760px);}
-.book-zoom-book .book-frame{max-height:min(80vh,700px);touch-action:none;}
+.book-zoom-book{width:min(97vw,960px);max-width:min(97vw,960px);}
+.book-zoom-book .book-frame{max-height:min(94vh,900px);touch-action:none;}
 .book-zoom-overlay .book-dots .book-dot{background:rgba(255,255,255,.35);}
 .book-zoom-overlay .book-dots .book-dot.on{background:#fff;}
 .book-zoom-tools{display:flex;gap:10px;justify-content:center;}
 .book-zoom-tool{width:34px;height:34px;border-radius:50%;border:1.4px solid rgba(255,255,255,.35);background:rgba(255,255,255,.12);color:#fff;font-size:16px;cursor:pointer;line-height:1;flex-shrink:0;}
 .book-zoom-tool:hover{background:rgba(255,255,255,.24);}
 #zoomFrame .book-page.active .book-page-img{cursor:grab;}
+.sections-h{font-family:'Old Standard TT',serif;font-size:20px;text-align:center;margin:34px 0 16px;color:#2a1a20;}
+.sections-wrap{position:relative;max-width:360px;margin:0 auto;display:flex;align-items:center;gap:8px;}
+.sections-card{flex:1;}
+.sections-zoom-wrap{width:min(96vw,620px);max-width:min(96vw,620px);}
+.sections-zoom-wrap .swipe-card-photo{aspect-ratio:4/3;}
+@media(max-width:520px){.sections-wrap{max-width:280px;}}
 .reviews-h{font-family:'Old Standard TT',serif;font-size:20px;text-align:center;margin:34px 0 16px;color:#2a1a20;}
 .reviews-wrap{display:flex;align-items:center;gap:10px;max-width:480px;margin:0 auto;}
 .review-card{flex:1;background:#fff;border:1.4px solid var(--wiz-rose-pale);border-radius:16px;padding:20px 22px;box-shadow:0 10px 30px rgba(60,20,35,.12);text-align:center;min-height:150px;display:flex;flex-direction:column;justify-content:center;opacity:1;transition:opacity .25s ease;}
@@ -1087,6 +1093,7 @@ hu:{
   intro_h:"Egy vicces, személyes újság — percek alatt kész, a nagy napotokra",
   intro_sub:"Kitöltöd az adatokat, feltöltöd a fotókat, és percek alatt kész egy nyomtatható, vendégeidet szórakoztató híradó. Lapozz bele, milyen lehet a tiétek:",
   intro_zoom_btn:"🔍 Nagyítás",
+  sections_h:"Milyen rovatok közül válogathatsz?",
   reviews_h:"Eddigi vélemények",
   faq_h:"Gyakori kérdések",
   faq_q1:"Tényleg ingyenes a szerkesztő?",
@@ -1705,6 +1712,7 @@ en:{
   intro_h:"A fun, personal newspaper — ready in minutes, for your big day",
   intro_sub:"You fill in your details, upload your photos, and in minutes you get a printable, entertaining gazette for your guests. Take a look at what yours could look like:",
   intro_zoom_btn:"🔍 Zoom",
+  sections_h:"Which sections can you choose from?",
   reviews_h:"What people are saying",
   faq_h:"Frequently asked questions",
   faq_q1:"Is the editor really free?",
@@ -2455,6 +2463,15 @@ function backToTypeSelect(){
   <div class="book-dots" id="bookDots"></div>
   <button type="button" class="book-zoom-btn" id="bookZoomBtn" data-i18n="intro_zoom_btn">🔍 Nagyítás</button>
 
+  <h2 class="sections-h" data-i18n="sections_h">Milyen rovatok közül válogathatsz?</h2>
+  <div class="sections-wrap" id="sectionsWrap">
+    <button type="button" class="sections-nav sections-prev" data-i18n-aria="aria_prev_page" aria-label="Előző">‹</button>
+    <div class="sections-card" id="sectionsCard"></div>
+    <button type="button" class="sections-nav sections-next" data-i18n-aria="aria_next_page" aria-label="Következő">›</button>
+  </div>
+  <div class="book-dots" id="sectionsDots"></div>
+  <button type="button" class="book-zoom-btn" id="sectionsZoomBtn" data-i18n="intro_zoom_btn">🔍 Nagyítás</button>
+
   <h2 class="reviews-h" data-i18n="reviews_h">Eddigi vélemények</h2>
   <div class="reviews-wrap">
     <button type="button" class="review-nav review-prev" data-i18n-aria="aria_prev_review" aria-label="Előző vélemény">‹</button>
@@ -2491,6 +2508,15 @@ function backToTypeSelect(){
     <button type="button" class="book-zoom-tool" id="zoomResetBtn" data-i18n-aria="aria_zoom_reset" aria-label="Alaphelyzet">⤢</button>
     <button type="button" class="book-zoom-tool" id="zoomInBtn" data-i18n-aria="aria_zoom_in" aria-label="Nagyítás">+</button>
   </div>
+</div>
+<div class="book-zoom-overlay" id="sectionsZoomOverlay">
+  <button type="button" class="book-zoom-close" id="sectionsZoomClose" data-i18n-aria="aria_close" aria-label="Bezárás">✕</button>
+  <div class="sections-wrap sections-zoom-wrap" id="sectionsZoomWrap">
+    <button type="button" class="sections-nav sections-prev" data-i18n-aria="aria_prev_page" aria-label="Előző">‹</button>
+    <div class="sections-card sections-zoom-card" id="sectionsZoomCard"></div>
+    <button type="button" class="sections-nav sections-next" data-i18n-aria="aria_next_page" aria-label="Következő">›</button>
+  </div>
+  <div class="book-dots" id="sectionsZoomDots"></div>
 </div>
 <script>
 (function(){
@@ -2732,7 +2758,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.8';
+  var APP_VERSION='6.9';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2757,12 +2783,6 @@ function backToTypeSelect(){
   </div>
 
   <div class="journey-h" data-i18n="w_journey_h">Így indulhatsz — válaszd ki, melyik illik hozzád:</div>
-
-  <div class="journey-path">
-    <div class="journey-path-h"><span class="journey-emoji">⚡</span><span data-i18n="w_journey_fast_h">Gyors indulás</span></div>
-    <div class="journey-path-desc" data-i18n="w_journey_fast_desc">Minden elérhető rovat bekerül — a szerkesztőben törölheted, ami nem kell.</div>
-    <button class="gen-btn gen-btn-ujsag-start" onclick="startUjsagEditor()" data-i18n="w_gen_btn_start">✦ Tovább a szerkesztőbe ✦</button>
-  </div>
 
   <div class="journey-path">
     <div class="journey-path-h"><span class="journey-emoji">📐</span><span data-i18n="w_journey_preset_h">Kész sablon</span></div>
@@ -3605,17 +3625,6 @@ function startUjsagEditorPreset(targetPages){
   if(!validateUjsagNames())return;
   applyUjsagPreset(targetPages);
   trackEvent('ujsag_preset_clicked',{pages:targetPages});
-  generate();
-}
-function startUjsagEditor(){
-  if(!validateUjsagNames())return;
-  UJSAG_FORCE_ALL_CHKS.forEach(function(id){
-    var cb=document.getElementById('chk_'+id);
-    if(cb)cb.checked=true;
-  });
-  seedUjsagDefaults();
-  trackEvent('ujsag_quickstart_clicked',{});
-  autoFitPages();
   generate();
 }
 /* ===== Tinder-féle rovat-válogató ===== */
@@ -7881,6 +7890,69 @@ function adminExportAll(){
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(function(){ URL.revokeObjectURL(a.href); },2000);
 }
+
+/* ===== Landing oldal: "milyen rovatok közül válogathatsz" bemutató-carousel =====
+   Ugyanazt a SWIPE_DECK_IDS/currentSwipeMeta adatforrást használja, mint a varázsló
+   rovat-válogatója — az admin panelben feltöltött kép/leírás egyszerre frissül mindkét
+   helyen, nincs külön karbantartandó adatforrás. */
+function renderSectionsCardInto(container,ix){
+  var id=SWIPE_DECK_IDS[ix];
+  var meta=currentSwipeMeta(id);
+  container.className='sections-card swipe-card';
+  container.innerHTML='<div class="swipe-card-photo">'
+    +'<img src="'+meta.img+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+    +'<div class="swipe-card-fallback">'+ico('i-camera')+'</div>'
+    +'</div>'
+    +'<div class="swipe-card-body"><h3>'+esc(meta.label)+'</h3><p>'+esc(meta.desc)+'</p></div>';
+}
+function mountSectionsCarousel(cardEl,dotsEl,prevBtn,nextBtn){
+  var idx=0;
+  dotsEl.innerHTML='';
+  SWIPE_DECK_IDS.forEach(function(id,i){
+    var dot=document.createElement('span'); dot.className='book-dot'+(i===0?' on':'');
+    dot.onclick=function(){ go(i); };
+    dotsEl.appendChild(dot);
+  });
+  function go(n){
+    idx=(n+SWIPE_DECK_IDS.length)%SWIPE_DECK_IDS.length;
+    renderSectionsCardInto(cardEl,idx);
+    Array.from(dotsEl.children).forEach(function(d,i2){d.classList.toggle('on',i2===idx);});
+  }
+  prevBtn.onclick=function(){go(idx-1);};
+  nextBtn.onclick=function(){go(idx+1);};
+  go(0);
+  return {go:go,getIndex:function(){return idx;}};
+}
+(function(){
+  var cardEl=document.getElementById('sectionsCard');
+  if(!cardEl)return; /* csak akkor fut, ha az introShowcase valóban a lapon van (Ujsag termék) */
+  var sectionsInline=mountSectionsCarousel(
+    cardEl,document.getElementById('sectionsDots'),
+    document.querySelector('#sectionsWrap .sections-prev'),document.querySelector('#sectionsWrap .sections-next')
+  );
+  var sectionsAuto=setInterval(function(){sectionsInline.go(sectionsInline.getIndex()+1);},4500);
+  document.getElementById('sectionsWrap').addEventListener('pointerdown',function(){clearInterval(sectionsAuto);});
+
+  var sectionsZoom=null;
+  function openSectionsZoom(){
+    clearInterval(sectionsAuto);
+    var overlay=document.getElementById('sectionsZoomOverlay');
+    overlay.classList.add('open');
+    if(!sectionsZoom){
+      sectionsZoom=mountSectionsCarousel(
+        document.getElementById('sectionsZoomCard'),document.getElementById('sectionsZoomDots'),
+        document.querySelector('#sectionsZoomWrap .sections-prev'),document.querySelector('#sectionsZoomWrap .sections-next')
+      );
+    }
+    sectionsZoom.go(sectionsInline.getIndex());
+  }
+  function closeSectionsZoom(){ document.getElementById('sectionsZoomOverlay').classList.remove('open'); }
+  document.getElementById('sectionsZoomBtn').addEventListener('click',openSectionsZoom);
+  cardEl.addEventListener('click',openSectionsZoom);
+  document.getElementById('sectionsZoomClose').addEventListener('click',closeSectionsZoom);
+  document.getElementById('sectionsZoomOverlay').addEventListener('click',function(e){ if(e.target.id==='sectionsZoomOverlay')closeSectionsZoom(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape')closeSectionsZoom(); });
+})();
 </script>
 </body>
 </html>
