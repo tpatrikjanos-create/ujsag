@@ -2762,7 +2762,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.10';
+  var APP_VERSION='6.11';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3612,6 +3612,12 @@ function applyUjsagPreset(targetPages){
   UJSAG_FORCE_ALL_CHKS.forEach(function(id){
     var cb=document.getElementById('chk_'+id); if(!cb)return;
     cb.checked=(keep.indexOf(id)>=0);
+    /* egy korábbi Válogatás (swipe) menetből maradt "ideiglenes" kártya-elrejtést itt
+       visszaállítjuk — a sablon a normál (kártya látszik, csak a kapcsoló van ki/be)
+       viselkedést használja, nem a swipe agresszívabb, teljes kártyát elrejtő módját */
+    var card=cb.closest('.card.opt');
+    if(card)card.style.display='';
+    if(typeof optToggle==='function')optToggle(cb);
   });
   CFG.pages=targetPages;
 }
@@ -3721,21 +3727,29 @@ function renderSwipeDone(ov){
   ov.innerHTML='<div class="swipe-box swipe-done">'
     +'<div class="swipe-done-emoji">🎉</div>'
     +'<h3>'+L('Kész!','All done!')+'</h3>'
-    +'<p>'+L(count+' rovatot választottál — irány a szerkesztő!',"You picked "+count+' sections — on to the editor!')+'</p>'
-    +'<button type="button" class="gen-btn" onclick="finishSwipePicker()">✦ '+L('Szerkesztő megnyitása','Open the editor')+' ✦</button>'
+    +'<p>'+L(count+' rovatot választottál — ezek most megjelennek lent, a többi egyelőre elrejtve marad.',"You picked "+count+' sections — they\'ll show up below now, the rest stay hidden for the moment.')+'</p>'
+    +'<button type="button" class="gen-btn" onclick="finishSwipePicker()">✦ '+L('Tovább a kitöltéshez','Continue to filling it in')+' ✦</button>'
     +'</div>';
 }
 function finishSwipePicker(){
   var decisions=_swipeState.decisions;
+  /* a swipe eredménye a lenti (részletes, kézzel kitölthető) varázslót szűri: a "nem"
+     válaszokat kapott rovatok kártyáját IDEIGLENESEN elrejtjük (nem töröljük) — a
+     szerkesztőben, a "🧩 Rovatok kezelése" gombbal bármikor visszahozhatók, mert a
+     checkbox/mező maga változatlanul megvan, csak a kártya nincs megjelenítve. */
   SWIPE_DECK_IDS.forEach(function(id){
     var cb=document.getElementById('chk_'+id); if(!cb)return;
-    cb.checked=!!decisions[id];
+    var keep=!!decisions[id];
+    cb.checked=keep;
+    if(typeof optToggle==='function')optToggle(cb);
+    var card=cb.closest('.card.opt');
+    if(card)card.style.display=keep?'':'none';
   });
   ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
   closeSwipePicker();
-  trackEvent('ujsag_swipe_finished',{});
-  autoFitPages();
-  generate();
+  trackEvent('ujsag_swipe_finished',{count:Object.keys(decisions).filter(function(k){return decisions[k];}).length});
+  var legacy=document.getElementById('wizLegacyFields');
+  if(legacy)legacy.scrollIntoView({behavior:'smooth',block:'start'});
 }
 /* olyan mezők/sorok alapértelmezett kitöltése, amiknek a varázslóban eddig csak PLACEHOLDER
    szövege volt (nem valódi érték) — mivel a gyorsindításnál a felhasználó sosem látja/tölti ki
@@ -5792,7 +5806,13 @@ function applyOptSectionEdit(chkId){
   var html=entry.fn(gatherData());
   var blk=upsertBlock(entry.blk,html);
   var cb=document.getElementById('chk_'+chkId);
-  if(cb){ cb.checked=!!html; if(typeof optToggle==='function')optToggle(cb); }
+  if(cb){
+    cb.checked=!!html;
+    /* ha ez a rovat egy korábbi Válogatás (swipe) körben "ideiglenesen" el lett rejtve a
+       varázslóban, a bekapcsolással most újra láthatóvá tesszük a kártyáját is */
+    if(html){ var card=cb.closest('.card.opt'); if(card)card.style.display=''; }
+    if(typeof optToggle==='function')optToggle(cb);
+  }
   afterBlockChange();
   closeAddSectionOverlay(); /* ha a mezők ide voltak "kölcsönözve" kitöltésre, előbb visszatesszük a varázslóba, mielőtt a modal eltűnik */
   if(blk)blk.scrollIntoView({behavior:'smooth',block:'center'});
