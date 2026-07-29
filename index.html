@@ -1149,7 +1149,7 @@ hu:{
   w_h3_chk_robbantsd:"Robbantsd fel a telefonunkat!",
   w_h3_chk_message:"Hagyj nekünk üzenetet!",
   w_h3num_form_tum_amp_oldalsz_m:"Formátum & oldalszám",
-  w_h3num_k_telez_adatok:"Kötelező adatok",
+  w_h3num_k_telez_adatok:"Címlap adatok",
   w_h3num_nem_k_telez_fejl_c_elemek:"Nem kötelező fejléc-elemek",
   w_h3num_k_sz_nt_gerinc_rovat:"Köszöntő (gerinc-rovat)",
   w_h3num_z_r_felirat:"Záró felirat",
@@ -1312,6 +1312,8 @@ hu:{
   w_journey_swipe_h:"Válogatás",
   w_journey_swipe_desc:"Végignézed egyenként az összes lehetséges rovatot egy példával együtt, és — mint egy társkereső appban — te döntöd el jobbra/balra húzva, melyik kerüljön az újságba.",
   w_journey_swipe_btn:"🔀 Inkább válogatnék",
+  w_journey_manual_h:"Saját kezűleg, részletesen",
+  w_journey_manual_desc:"Ha inkább te magad választanál formátumot, oldalszámot és rovatokat, és rögtön ki is töltenéd a szövegeket — itt lent minden mezőt megtalálsz.",
   w_tut_replay:"❓ Rövid bemutató — hogyan működik?",
   w_opt_intro_text:"Az alábbi rovatok <b>opcionálisak</b> — minél többet kapcsolsz be, annál tartalmasabb lesz az újság. Kattints bárhova a kártya fejlécén a be- vagy kikapcsoláshoz.",
   w_fitbar_ok_text:"A tartalom elfér a kiválasztott formátumban.",
@@ -1768,7 +1770,7 @@ en:{
   w_h3_chk_robbantsd:"Blow up our phone!",
   w_h3_chk_message:"Leave us a message!",
   w_h3num_form_tum_amp_oldalsz_m:"Format & page count",
-  w_h3num_k_telez_adatok:"Required details",
+  w_h3num_k_telez_adatok:"Cover details",
   w_h3num_nem_k_telez_fejl_c_elemek:"Optional header elements",
   w_h3num_k_sz_nt_gerinc_rovat:"Welcome message (core section)",
   w_h3num_z_r_felirat:"Closing note",
@@ -1931,6 +1933,8 @@ en:{
   w_journey_swipe_h:"Curate it yourself",
   w_journey_swipe_desc:"You go through every possible section one by one, each with an example — like a dating app, you swipe left/right to decide what goes into the gazette.",
   w_journey_swipe_btn:"🔀 I'd rather curate it myself",
+  w_journey_manual_h:"By hand, in detail",
+  w_journey_manual_desc:"If you'd rather pick the format, page count and sections yourself, and fill in the texts right away — you'll find every field below.",
   w_tut_replay:"❓ Quick walkthrough — how does it work?",
   w_opt_intro_text:"The sections below are <b>optional</b> — the more you switch on, the richer the gazette becomes. Click anywhere on a card's header to turn it on or off.",
   w_fitbar_ok_text:"The content fits in the selected format.",
@@ -2758,7 +2762,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.9';
+  var APP_VERSION='6.10';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2801,9 +2805,12 @@ function backToTypeSelect(){
     <button type="button" class="swipe-entry-btn" onclick="openSwipePicker()" data-i18n="w_journey_swipe_btn">🔀 Inkább válogatnék</button>
   </div>
 
-  <div id="wizLegacyFields" style="display:none;">
+  <div class="journey-path-h" style="justify-content:center;margin-top:26px;"><span class="journey-emoji">📝</span><span data-i18n="w_journey_manual_h">Saját kezűleg, részletesen</span></div>
+  <div class="journey-path-desc" style="text-align:center;margin-bottom:14px;" data-i18n="w_journey_manual_desc">Ha inkább te magad választanál formátumot, oldalszámot és rovatokat, és rögtön ki is töltenéd a szövegeket — itt lent minden mezőt megtalálsz.</div>
+
+  <div id="wizLegacyFields">
   <div class="card">
-    <h3><span class="num">1</span><span data-i18n="w_h3num_form_tum_amp_oldalsz_m">Formátum &amp; oldalszám</span></h3>
+    <h3><span class="num">2</span><span data-i18n="w_h3num_form_tum_amp_oldalsz_m">Formátum &amp; oldalszám</span></h3>
     <div class="fmt-grid">
       <div class="fmt sel" data-size="A5" data-pages="4" onclick="pickFmt(this)"><div class="ttl" data-i18n="w_fmt_a5_4_ttl">A5 · 4 oldal</div><span class="tag dig" data-i18n="w_fmt_a5_4_tag">Digitális</span><div class="desc" data-i18n="w_fmt_a5_4_desc">1 db A4 félbehajtva. Otthon nyomtatható.</div></div>
       <div class="fmt" data-size="A5" data-pages="8" onclick="pickFmt(this)"><div class="ttl" data-i18n="w_fmt_a5_8_ttl">A5 · 8 oldal</div><span class="tag dig" data-i18n="w_fmt_a5_8_tag">Digitális</span><div class="desc" data-i18n="w_fmt_a5_8_desc">2 db A4 egymásba hajtva. Otthon nyomtatható.</div></div>
@@ -2813,7 +2820,7 @@ function backToTypeSelect(){
   </div>
 
   <div class="card">
-    <h3><span class="num">2</span><span data-i18n="w_h3num_k_telez_adatok">Kötelező adatok</span></h3>
+    <h3><span class="num">3</span><span data-i18n="w_h3num_k_telez_adatok">Kötelező adatok</span></h3>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span></label><div class="fld-row"><input id="f_masthead" value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     </div>
@@ -2825,14 +2832,14 @@ function backToTypeSelect(){
   </div>
 
   <div class="card">
-    <h3><span class="num">3</span><span data-i18n="w_h3num_nem_k_telez_fejl_c_elemek">Nem kötelező fejléc-elemek</span></h3>
+    <h3><span class="num">4</span><span data-i18n="w_h3num_nem_k_telez_fejl_c_elemek">Nem kötelező fejléc-elemek</span></h3>
     <div class="tinyhint" data-i18n-html="w_hint_1">Üresen hagyva nem jelennek meg.</div>
     <div class="fld"><label><span data-i18n="w_lbl_f_slogan">Szlogen</span></label><div class="fld-row"><input id="f_slogan" value="" data-i18n-ph="w_ph_f_slogan" placeholder="pl. Minden hír, ami a nagy napról szól"><button type="button" class="tipbtn" onclick="fillTip('f_slogan')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="fld"><label><span data-i18n="w_lbl_f_covercap">Címlap-képaláírás</span></label><div class="fld-row"><input id="f_coverCap" value="" data-i18n-ph="w_ph_f_covercap" placeholder="pl. A helyszín neve · a dátum"><button type="button" class="tipbtn" onclick="fillTip('f_coverCap')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
   </div>
 
   <div class="card" data-editgroup="welcome">
-    <h3><span class="num">4</span><span data-i18n="w_h3num_k_sz_nt_gerinc_rovat">Köszöntő (gerinc-rovat)</span></h3>
+    <h3><span class="num">5</span><span data-i18n="w_h3num_k_sz_nt_gerinc_rovat">Köszöntő (gerinc-rovat)</span></h3>
     <div class="fld"><label><span data-i18n="w_lbl_f_welcome">Köszöntő szöveg</span></label><div class="fld-row"><textarea id="f_welcome" data-i18n-ph="w_ph_f_welcome" placeholder="Kedves Vendégünk! Ez a nap a tiétek is. Köszönjük, hogy itt vagytok velünk, és hogy a szeretetetekkel teszitek felejthetetlenné életünk legszebb napját. Egyetek, igyatok, táncoljatok és nevessetek velünk!"></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_welcome')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="fld"><label><span data-i18n="w_lbl_f_welcomesign">Aláírás</span></label><input id="f_welcomeSign" value=""></div>
   </div>
