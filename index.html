@@ -131,6 +131,13 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .gen-btn{display:block;width:100%;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:16.5px;background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose) 55%,var(--wiz-gold) 120%);color:#fff;border:none;border-radius:14px;padding:17px;cursor:pointer;margin-top:6px;letter-spacing:.03em;box-shadow:0 6px 18px rgba(194,72,122,.3);transition:transform .12s,box-shadow .12s;}
 .gen-btn:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(194,72,122,.4);}
 .gen-btn:active{transform:translateY(0);}
+.preset-picker{margin:14px 0 6px;text-align:center;}
+.preset-picker-h{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;color:#8a7480;margin-bottom:8px;}
+.preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.preset-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:#fff;border:1.6px solid var(--wiz-rose-pale);border-radius:12px;padding:10px 4px;cursor:pointer;font-family:'Libre Franklin',sans-serif;color:var(--wiz-rose-dark);transition:border-color .12s,transform .12s;}
+.preset-btn:hover{border-color:var(--wiz-rose-dark);transform:translateY(-1px);}
+.preset-btn .preset-n{font-size:19px;font-weight:800;line-height:1.1;}
+.preset-btn span:last-child{font-size:10.5px;font-weight:600;}
 .errbox{background:#fdecea;border:1px solid #e7a39a;color:#9a3327;border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:12px;display:none;font-family:'Libre Franklin',sans-serif;}
 .early-email-box{background:var(--wiz-blush);border:1.4px solid var(--wiz-rose-pale);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-family:'Libre Franklin',sans-serif;}
 .early-email-box label{display:block;font-size:13px;font-weight:700;color:#6e2233;margin-bottom:6px;}
@@ -1227,7 +1234,13 @@ hu:{
   w_back_to_types:"← Másik terméktípust választanék",
   w_wiz_sub:"Esküvői újság",
   w_wiz_h:"Esküvői Újság",
-  w_wiz_note:"Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> a bekapcsolt rovatokat a választott oldalakra rendezi, és igyekszik kitölteni a helyet. <b>Az adatok megadása után nyílik meg a szerkesztői nézet a kész lapokkal — ott tudod feltölteni a fényképeket</b>, mozgatni és méretezni a rovatokat. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.",
+  w_wiz_note:"Csak a pár nevét kérjük — utána egyből a <b>szerkesztőben</b> vagy, kész, mindennel feltöltött lapokkal. Ott tudod a rovatokat ki/bekapcsolni, a szövegeket a <b>💡 Tipp</b> gombbal (vagy sajátoddal) cserélni, és a fényképeket feltölteni. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.",
+  w_h3num_a_par_neve:"A pár neve",
+  w_hint_names_only:"Minden más — a lap címe, a dátum, a helyszín, a rovatok — a szerkesztőben, közvetlenül a lapokon szerkeszthető. Semmit nem kell előre eldöntened.",
+  w_gen_btn_start:"✦ Tovább a szerkesztőbe ✦",
+  w_preset_h:"Vagy válassz kész oldalszám-sablont:",
+  w_preset_oldal:"oldal",
+  w_preset_hint:"A kisebb sablonok a legfontosabbnak ítélt rovatokat tartalmazzák; a 16 oldalas az összeset.",
   w_tut_replay:"❓ Rövid bemutató — hogyan működik?",
   w_opt_intro_text:"Az alábbi rovatok <b>opcionálisak</b> — minél többet kapcsolsz be, annál tartalmasabb lesz az újság. Kattints bárhova a kártya fejlécén a be- vagy kikapcsoláshoz.",
   w_fitbar_ok_text:"A tartalom elfér a kiválasztott formátumban.",
@@ -1830,7 +1843,13 @@ en:{
   w_back_to_types:"← I'd like to choose a different product type",
   w_wiz_sub:"Wedding Gazette",
   w_wiz_h:"Wedding Gazette",
-  w_wiz_note:"Choose the format, fill in the <b>required</b> fields, and switch on the <b>sections</b> you want. <b>Generate</b> arranges the enabled sections onto the chosen pages, and tries to fill the space. <b>Once you've entered the details, the editor view opens with the finished pages — that's where you can upload photos</b>, move things around and resize the sections. The editor is free, but the preview is watermarked throughout.",
+  w_wiz_note:"We only ask for the couple's name — then you go straight to the <b>editor</b>, already full of finished pages. From there you can switch sections on/off, swap in text with the <b>💡 Tip</b> button (or write your own), and upload photos. The editor is free, but the preview is watermarked throughout.",
+  w_h3num_a_par_neve:"The couple's name",
+  w_hint_names_only:"Everything else — the gazette's title, the date, the venue, the sections — can be edited in the editor, right on the pages. There's nothing you need to decide in advance.",
+  w_gen_btn_start:"✦ Continue to the editor ✦",
+  w_preset_h:"Or pick a ready-made page-count template:",
+  w_preset_oldal:"pages",
+  w_preset_hint:"The smaller templates include the sections judged most essential; the 16-page one includes all of them.",
   w_tut_replay:"❓ Quick walkthrough — how does it work?",
   w_opt_intro_text:"The sections below are <b>optional</b> — the more you switch on, the richer the gazette becomes. Click anywhere on a card's header to turn it on or off.",
   w_fitbar_ok_text:"The content fits in the selected format.",
@@ -2638,13 +2657,13 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.3';
+  var APP_VERSION='6.5';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
   <div class="wiz-sub" data-i18n="w_wiz_sub">Esküvői újság</div>
   <h2 class="wiz-h" data-i18n="w_wiz_h">Esküvői Újság</h2>
-  <p class="wiz-note" data-i18n-html="w_wiz_note">Válaszd ki a formátumot, töltsd ki a <b>kötelező</b> mezőket, és kapcsold be a kívánt <b>rovatokat</b>. A <b>Generálás</b> a bekapcsolt rovatokat a választott oldalakra rendezi, és igyekszik kitölteni a helyet. <b>Az adatok megadása után nyílik meg a szerkesztői nézet a kész lapokkal — ott tudod feltölteni a fényképeket</b>, mozgatni és méretezni a rovatokat. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.</p>
+  <p class="wiz-note" data-i18n-html="w_wiz_note">Csak a pár nevét kérjük — utána egyből a <b>szerkesztőben</b> vagy, kész, mindennel feltöltött lapokkal. Ott tudod a rovatokat ki/bekapcsolni, a szövegeket a <b>💡 Tipp</b> gombbal (vagy sajátoddal) cserélni, és a fényképeket feltölteni. A szerkesztő ingyenes, de az előnézet végig <b>vízjeles</b>.</p>
   <button type="button" class="tut-replay" onclick="startWizardTutorial(true)" data-i18n="w_tut_replay">❓ Rövid bemutató — hogyan működik?</button>
 
   <div class="early-email-box" id="earlyEmailBox">
@@ -2656,6 +2675,26 @@ function backToTypeSelect(){
 
   <div class="errbox" id="errbox"></div>
 
+  <div class="card">
+    <h3><span class="num">1</span><span data-i18n="w_h3num_a_par_neve">A pár neve</span></h3>
+    <div class="fld"><label><span data-i18n="w_lbl_f_names">A pár neve</span> <span class="req">*</span></label><input id="f_names" data-req value=""></div>
+    <div class="tinyhint" data-i18n="w_hint_names_only">Minden más — a lap címe, a dátum, a helyszín, a rovatok — a szerkesztőben, közvetlenül a lapokon szerkeszthető. Semmit nem kell előre eldöntened.</div>
+  </div>
+
+  <button class="gen-btn gen-btn-ujsag-start" onclick="startUjsagEditor()" data-i18n="w_gen_btn_start">✦ Tovább a szerkesztőbe ✦</button>
+
+  <div class="preset-picker">
+    <div class="preset-picker-h" data-i18n="w_preset_h">Vagy válassz kész oldalszám-sablont:</div>
+    <div class="preset-grid">
+      <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(4)"><span class="preset-n">4</span><span data-i18n="w_preset_oldal">oldal</span></button>
+      <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(8)"><span class="preset-n">8</span><span data-i18n="w_preset_oldal">oldal</span></button>
+      <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(12)"><span class="preset-n">12</span><span data-i18n="w_preset_oldal">oldal</span></button>
+      <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(16)"><span class="preset-n">16</span><span data-i18n="w_preset_oldal">oldal</span></button>
+    </div>
+    <div class="tinyhint" data-i18n="w_preset_hint">A kisebb sablonok a legfontosabbnak ítélt rovatokat tartalmazzák; a 16 oldalas az összeset.</div>
+  </div>
+
+  <div id="wizLegacyFields" style="display:none;">
   <div class="card">
     <h3><span class="num">1</span><span data-i18n="w_h3num_form_tum_amp_oldalsz_m">Formátum &amp; oldalszám</span></h3>
     <div class="fmt-grid">
@@ -2669,13 +2708,12 @@ function backToTypeSelect(){
   <div class="card">
     <h3><span class="num">2</span><span data-i18n="w_h3num_k_telez_adatok">Kötelező adatok</span></h3>
     <div class="grid2">
-      <div class="fld"><label><span data-i18n="w_lbl_f_names">A pár neve</span> <span class="req">*</span></label><input id="f_names" data-req value=""></div>
-      <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span> <span class="req">*</span></label><div class="fld-row"><input id="f_masthead" data-req value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span></label><div class="fld-row"><input id="f_masthead" value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     </div>
     <div class="fld"><label><span data-i18n="w_lbl_f_subname">Alcím</span></label><div class="fld-row"><input id="f_subname" value="" data-i18n-ph="w_ph_f_subname" placeholder="pl. Dorina & Patrik ünnepi lapja"><button type="button" class="tipbtn" onclick="fillTip('f_subname')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="grid2">
-      <div class="fld"><label><span data-i18n="w_lbl_f_date">Dátum</span> <span class="req">*</span></label><input id="f_date" data-req value=""></div>
-      <div class="fld"><label><span data-i18n="w_lbl_f_venue">Helyszín</span> <span class="req">*</span></label><input id="f_venue" data-req value=""></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_date">Dátum</span></label><input id="f_date" value=""></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_venue">Helyszín</span></label><input id="f_venue" value=""></div>
     </div>
   </div>
 
@@ -3083,6 +3121,7 @@ A kedvenc díszítésed
 
   <div class="fitbar ok" id="fitStatus" data-i18n="w_fitbar_ok_text">A tartalom elfér a kiválasztott formátumban.</div>
   <button class="gen-btn" onclick="generate()" data-i18n="w_gen_btn">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
+  </div><!-- /wizLegacyFields -->
 
   <button type="button" class="lp-fab" id="lpFab" data-i18n="w_lp_fab">👀 Előnézet</button>
   <div class="lp-backdrop" id="lpBackdrop"></div>
@@ -3395,6 +3434,162 @@ function pickFmt(el){
   el.classList.add('sel'); CFG.size=el.dataset.size; CFG.pages=parseInt(el.dataset.pages,10);
   updateFit();
 }
+/* ===== Újság gyors indítás: csak a nevek, utána egyenesen a szerkesztő ===== */
+/* minden elérhető rovat aktív lesz első nekifutásra — a felhasználó a szerkesztőben dönti el,
+   melyiket tartja meg, és hány oldalas legyen a végeredmény (ld. autoFitPages lejjebb) */
+var MAX_UJSAG_PAGES=16;
+var UJSAG_FORCE_ALL_CHKS=['szuloknek','stats','sztori','childhood','ismerkedes','legelsokep','years','lanykeres',
+  'jegyesfoto','utazas','bakancslista','csapat','memorial','negylabu','szulok','szinglik','dijak','igazhamis',
+  'jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','qr','robbantsd','fotovadasz','message',
+  'naszut','times','drinks'];
+/* ha a fenti MIND aktív rovat még ennyi oldalra sem fér el, ebben a sorrendben kapcsolunk ki
+   rovatokat (a leginkább "csak játék/kiegészítő" jellegűektől a legszemélyesebbek felé haladva),
+   amíg el nem fér — a felhasználó ezeket a szerkesztőben bármikor visszakapcsolhatja. Ugyanezt a
+   sorrendet (megfordítva, a legfontosabbtól indulva) használjuk a 4/8/12/16 oldalas kész
+   sablonok összeállításához is (ld. applyUjsagPreset). */
+var UJSAG_TRIM_ORDER=['horoszkop','jatekok','lagziszab','masnapos','szinezo','dijak','szinglik','igazhamis',
+  'robbantsd','fotovadasz','message','naszut','utazas','bakancslista','interju','csapat','memorial','negylabu','szulok',
+  'drinks','times','jegyesfoto','ismerkedes','lanykeres','legelsokep','sztori','years','childhood',
+  'stats','szuloknek','qr'];
+function ujsagPagesNeeded(){
+  applyProductTailConfig();
+  var GAP=8, usable=usableHeight();
+  var d=gatherData();
+  var flow=buildFlow(d);
+  flow.forEach(function(b){b.h=measure(b.html);});
+  var split=splitTailFlow(flow);
+  var mainPlan=buildPagePlan(split.main,usable,GAP);
+  var tailPlan=buildTailPagePlan(split.tail,usable,GAP);
+  return mainPlan.pagesUsed+tailPlan.pagesUsed;
+}
+function autoFitPages(){
+  applyProductTailConfig();
+  for(var guard=0;guard<40;guard++){
+    var neededPages=ujsagPagesNeeded();
+    var N=Math.min(MAX_UJSAG_PAGES,Math.max(4,neededPages+1));
+    if(neededPages<=N-1){ CFG.pages=N; return; }
+    var cutId=null;
+    for(var i=0;i<UJSAG_TRIM_ORDER.length;i++){
+      var cb=document.getElementById('chk_'+UJSAG_TRIM_ORDER[i]);
+      if(cb&&cb.checked){ cutId=UJSAG_TRIM_ORDER[i]; break; }
+    }
+    if(!cutId){ CFG.pages=MAX_UJSAG_PAGES; return; }
+    document.getElementById('chk_'+cutId).checked=false;
+  }
+  CFG.pages=MAX_UJSAG_PAGES;
+}
+/* ===== előre összeállított oldalszám-sablonok (4/8/12/16), kattintva váltogathatóak ===== */
+/* 16 oldalnál egyszerűen minden bekapcsol (ez a "minden rovat" sablon, ld. UJSAG_FORCE_ALL_CHKS),
+   a kisebb sablonoknál a UJSAG_TRIM_ORDER megfordított (legfontosabbtól induló) sorrendjében
+   kapcsolunk be rovatokat, amíg még belefér a célzott oldalszámba — így a kisebb sablonok mindig
+   a legfontosabbnak ítélt rovatokat tartalmazzák, nem egy véletlenszerű részhalmazt. */
+function applyUjsagPreset(targetPages){
+  seedUjsagDefaults();
+  applyProductTailConfig();
+  var all=UJSAG_FORCE_ALL_CHKS;
+  if(targetPages>=MAX_UJSAG_PAGES){
+    all.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
+    autoFitPages();
+    return;
+  }
+  all.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=false; });
+  var priority=UJSAG_TRIM_ORDER.slice().reverse();
+  priority.forEach(function(id){
+    var cb=document.getElementById('chk_'+id); if(!cb)return;
+    cb.checked=true;
+    if(ujsagPagesNeeded()>targetPages-1)cb.checked=false;
+  });
+  CFG.pages=targetPages;
+}
+function startUjsagEditorPreset(targetPages){
+  var eb=document.getElementById('errbox');
+  var namesEl=document.getElementById('f_names');
+  if(!namesEl.value.trim()){
+    namesEl.classList.add('err');
+    eb.textContent=L('Add meg a pár nevét a folytatáshoz.',"Enter the couple's name to continue.");
+    eb.style.display='block'; namesEl.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  namesEl.classList.remove('err'); eb.style.display='none';
+  CFG.size='A5';
+  applyUjsagPreset(targetPages);
+  trackEvent('ujsag_preset_clicked',{pages:targetPages});
+  generate();
+}
+function startUjsagEditor(){
+  var eb=document.getElementById('errbox');
+  var namesEl=document.getElementById('f_names');
+  if(!namesEl.value.trim()){
+    namesEl.classList.add('err');
+    eb.textContent=L('Add meg a pár nevét a folytatáshoz.',"Enter the couple's name to continue.");
+    eb.style.display='block'; namesEl.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  namesEl.classList.remove('err'); eb.style.display='none';
+  CFG.size='A5';
+  UJSAG_FORCE_ALL_CHKS.forEach(function(id){
+    var cb=document.getElementById('chk_'+id);
+    if(cb)cb.checked=true;
+  });
+  seedUjsagDefaults();
+  trackEvent('ujsag_quickstart_clicked',{});
+  autoFitPages();
+  generate();
+}
+/* olyan mezők/sorok alapértelmezett kitöltése, amiknek a varázslóban eddig csak PLACEHOLDER
+   szövege volt (nem valódi érték) — mivel a gyorsindításnál a felhasználó sosem látja/tölti ki
+   ezeket a rejtett mezőket, valódi (szerkesztőben utólag szabadon felülírható) tartalmat kell
+   beléjük tenni, különben az adott rovat üresen maradna a checkbox bekapcsolása ellenére. Csak
+   olyan mezőket töltünk ki, amiknél a "kitalált" szöveg egyértelműen kattintható placeholder-
+   jellegű marad (« » zárójelek) vagy semleges, bárkire igaz szöveg — sosem konkrét, valakinek
+   tulajdonítható tényt (pl. étlap fogásait, itóka nevét) nem találunk ki. */
+function seedUjsagDefaults(){
+  function seedVal(id,text){
+    var el=document.getElementById(id);
+    if(el && !el.value.trim())el.value=text;
+  }
+  function seedRepeater(id,keys,rows){
+    var c=document.getElementById(id); if(!c)return;
+    var existing=c.querySelectorAll('.rep-row');
+    rows.forEach(function(vals,ix){
+      var row=existing[ix]; if(!row)return;
+      keys.forEach(function(k,ki){
+        var inp=row.querySelector('input[data-k="'+k+'"]');
+        if(inp && !inp.value.trim())inp.value=vals[ki];
+      });
+    });
+  }
+  seedVal('f_thanksBrideMsg',L('Köszönjük, hogy mindig mellettünk álltatok, és hogy azzá formáltatok, akik ma lehetünk. Szeretünk!','Thank you for always standing by us, and for shaping us into who we are today. We love you!'));
+  seedVal('f_thanksGroomMsg',L('Köszönjük a szeretetet és a támogatást, amit egész életünkben kaptunk tőletek.','Thank you for the love and support you\'ve given us our whole lives.'));
+  seedVal('f_ismerkedes',L('Egy közös barát mutatott be minket egymásnak — és onnantól nem volt visszaút…','A mutual friend introduced us — and there was no turning back from there…'));
+  seedVal('f_lanykeres',L('A naplementében térdre ereszkedett, és feltette élete legfontosabb kérdését…','He got down on one knee at sunset and asked the most important question of his life…'));
+  seedVal('f_legelsokep',L('Ezen a képen még nem is sejtettük, mi lesz ebből…','In this photo, we had no idea what this would become…'));
+  seedVal('f_s1',L('« ide jön a dátum, hely »','« date, place goes here »'));
+  seedVal('f_s2',L('« ide jön a dátum, hely »','« date, place goes here »'));
+  seedVal('f_s3',L('« ide jön a dátum, hely »','« date, place goes here »'));
+  seedVal('f_s4',L('« ide jön a dátum, hely »','« date, place goes here »'));
+  seedVal('f_naszut',L('« Ide írhatjátok, hova mentek nászútra »','« Write here where you\'re going on your honeymoon »'));
+  seedVal('f_par1',L('« Egyik pár neve »','« One couple\'s name »'));
+  seedVal('f_par2',L('« Másik pár neve »','« The other couple\'s name »'));
+  seedVal('f_husband',L('« itala »','« drink »'));
+  seedVal('f_wife',L('« itala »','« drink »'));
+  seedRepeater('rep_prog',['time','event'],[
+    ['15:00',L('Érkezés, köszöntő ital','Arrival, welcome drink')],
+    ['16:00',L('Szertartás','Ceremony')],
+    ['16:45',L('Gratuláció, koccintás','Congratulations, toast')],
+    ['17:30',L('Csoportképek','Group photos')],
+    ['19:00',L('Vacsora','Dinner')],
+    ['21:00',L('Nyitótánc, tortavágás','First dance, cake cutting')]
+  ]);
+  seedRepeater('rep_utazas',['place','desc'],[
+    [L('« úti cél »','« destination »'),''],
+    [L('« úti cél »','« destination »'),'']
+  ]);
+  seedRepeater('rep_bakancslista',['item'],[
+    [L('« közös terv »','« shared plan »')],
+    [L('« közös terv »','« shared plan »')]
+  ]);
+}
 function optToggle(cb){
   var b=document.querySelector('.opt-body[data-for="'+cb.id+'"]');
   if(b) b.classList.toggle('off',!cb.checked);
@@ -3475,11 +3670,14 @@ function B_cover(d){
 }
 function B_coverUjsag(d){
   var ears=(d.slogan?'<div class="ears" style="justify-content:center;"><div class="slogan">'+esc(d.slogan)+'</div></div>':'');
+  var masthead=d.masthead||(d.names?d.names+' '+L('Esküvői Újságja','Wedding Gazette'):L('Esküvői Újság','Wedding Gazette'));
+  var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
+  var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
-    +'<h1 class="nameplate editable" contenteditable="true">'+esc(d.masthead)+'</h1>'
+    +'<h1 class="nameplate editable" contenteditable="true">'+esc(masthead)+'</h1>'
     +'<div class="subname editable" contenteditable="true">'+esc(d.subname)+'</div>'
-    +'<hr class="rule-ox"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(d.date)+'</span><span class="editable" contenteditable="true">'+esc(d.venue)+'</span></div><hr class="rule-thin">'
+    +'<hr class="rule-ox"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
     +'<h2 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'70px':'48px')+';margin-top:5px;">'+esc(d.names)+'</h2>'
     +'<div class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'32px':'22px')+';font-weight:700;margin:0 0 3px;">'+esc(d.married)+'</div>'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
@@ -3505,9 +3703,10 @@ function B_coverSTD(d){
     +'</div>';
 }
 function B_welcome(d){
+  var welcomeTxt=d.welcome||L('Kedves Vendégünk! Ez a nap a tiétek is. Köszönjük, hogy itt vagytok velünk, és hogy a szeretetetekkel teszitek felejthetetlenné életünk legszebb napját. Egyetek, igyatok, táncoljatok és nevessetek velünk!','Dear Guest! This day belongs to you too. Thank you for being here with us, and for making the most beautiful day of our lives unforgettable with your love. Eat, drink, dance and laugh with us!');
   return '<div class="blk"><div class="kicker">'+L('Köszöntő','Welcome')+'</div>'
     +'<h2 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'32px':'24px')+';">'+L('Köszönjük, hogy velünk ünnepelsz','Thank you for celebrating with us')+'</h2><hr class="rule-hair">'
-    +'<p class="bp editable dropcap-ready" contenteditable="true" style="text-align:center;">'+esc(d.welcome)+'</p>'
+    +'<p class="bp editable dropcap-ready" contenteditable="true" style="text-align:center;">'+esc(welcomeTxt)+'</p>'
     +(d.welcomeSign?'<p class="bp editable" contenteditable="true" style="text-align:center;font-style:italic;">'+esc(d.welcomeSign)+'</p>':'')+'</div>';
 }
 function B_szuloknek(d){
@@ -4559,12 +4758,14 @@ function generate(){
   var tailPlan=buildTailPagePlan(split.tail,usable,GAP);
   var neededPages=mainPlan.pagesUsed+tailPlan.pagesUsed;
   if(neededPages>contentPages){
-    var sugg = (N===4 && neededPages<=7 && CFG.product!=='meghivo') ? 8 : null;
+    var sugg = (N===4 && neededPages<=7 && CFG.product!=='meghivo' && CFG.product!=='ujsag') ? 8 : null;
     var neededTxt=String(neededPages+1);
     if(sugg){
       eb.textContent='✕ '+L('A megadott tartalom nem fér el szépen 4 oldalra (kb. '+neededTxt+' oldalnyi tartalom). Válts 8 oldalas formátumra fent, és próbáld újra.','This much content doesn\'t fit neatly on 4 pages (about '+neededTxt+' pages\' worth). Switch to the 8-page format above and try again.');
     } else if(CFG.product==='meghivo'){
       eb.textContent='✕ '+L('A megadott tartalom nem fér el szépen a 4 oldalon (kb. '+neededTxt+' oldalnyi tartalom). Rövidítsd a szövegeket, vagy kapcsolj ki egy rovatot (pl. QR-kód), majd próbáld újra.','This much content doesn\'t fit neatly on the 4 pages (about '+neededTxt+' pages\' worth). Shorten the texts, or turn off a section (e.g. the QR code), then try again.');
+    } else if(CFG.product==='ujsag'){
+      eb.textContent='✕ '+L('A megadott tartalom nem fér el a '+N+' oldalon (kb. '+neededTxt+' oldalnyi tartalom). Törölj a szerkesztőben egy-két rovatot, vagy válassz nagyobb sablont, majd próbáld újra.','This much content doesn\'t fit on '+N+' pages (about '+neededTxt+' pages\' worth). Delete a section or two in the editor, or pick a bigger template, then try again.');
     } else {
       eb.textContent='✕ '+L('A megadott tartalom 8 oldalra sem fér el szépen (kb. '+neededTxt+' oldalnyi tartalom). Kapcsolj ki egy-két rovatot, majd próbáld újra.','This much content doesn\'t fit neatly even on 8 pages (about '+neededTxt+' pages\' worth). Turn off a section or two, then try again.');
     }
