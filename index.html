@@ -224,6 +224,8 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .adm-row div{display:flex;flex-direction:column;gap:2px;}
 .adm-row b{font-size:13.5px;color:#3a2630;}
 .adm-row span{font-size:11px;color:#8a7480;}
+.adm-row-on{background:var(--wiz-blush);border-color:var(--wiz-rose-pale);}
+.adm-on-tag{display:inline-block;font-size:9.5px!important;font-weight:700;color:var(--wiz-rose-dark)!important;letter-spacing:.03em;text-transform:uppercase;}
 .adm-feedback{font-size:12px;color:#3a2630;background:#fff8f0;border:1px solid #f5d9a8;border-radius:7px;padding:5px 8px;margin-top:2px;white-space:pre-wrap;max-width:320px;}
 .adm-order{font-size:12px;color:#2a4a6b;background:#eef4fb;border:1px solid #b6cfe6;border-radius:7px;padding:5px 8px;margin-top:2px;white-space:pre-wrap;max-width:320px;}
 .adm-status{font-size:12px;color:#7a5a1a;background:#fff6e0;border:1px solid #edcf8a;border-radius:7px;padding:5px 8px;margin-top:2px;max-width:320px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -1539,8 +1541,8 @@ hu:{
   tb_undo_title:"Legutóbbi mozgatás/átméretezés visszavonása",
   tb_undo_btn:"↺ Visszavonás",
   tb_back_to_data:"← Adatok",
-  tb_addsection_title:"Ha még marad szabad hely, ide tehetsz be egy plusz rovatot",
-  tb_addsection_btn:"➕ Rovat hozzáadása",
+  tb_addsection_title:"Rovatok hozzáadása vagy szerkesztése",
+  tb_addsection_btn:"🧩 Rovatok kezelése",
   tb_mode_btn:"Nyomtatási nézet",
   tb_mode_btn_edit:"Szerkesztés nézet",
   tb_help_title:"Rövid bemutató a szerkesztő használatáról",
@@ -1624,8 +1626,10 @@ hu:{
   asp_full_page:"(Egy egész oldal)",
   asp_half_page:"(fél oldal)",
   asp_add_btn:"Hozzáadás",
+  asp_edit_btn:"✎ Szerkesztés",
+  asp_on_tag:"bekapcsolva",
   asp_all_enabled:"Minden rovat már be van kapcsolva — nincs mit hozzáadni.",
-  asp_intro:"A rendszer megkeresi, melyik lapon van jelenleg a legtöbb szabad hely, és igyekszik odaigazítani (méretezni) a kiválasztott rovatot. Ha egy rovathoz még nincs elég kitöltött adat, itt helyben is kitöltheted.",
+  asp_intro:"A már bekapcsolt rovatokat itt szerkesztheted (pl. nevek, listák, extra sorok hozzáadása) — a rendszer újragenerálja a rovatot a helyén. A még kikapcsoltakat hozzáadhatod: megkeresi, melyik lapon van jelenleg a legtöbb szabad hely, és odaigazítja (méretezi) az új rovatot.",
   asp_confirm_btn:"Kitöltve, hozzáadás most",
   asp_close_btn:"Bezárás",
   asp_no_inline_data:"Ehhez a rovathoz még nincs elég kitöltött adat, és itt helyben sem tölthető ki — menj vissza az \"Adatok\" nézetbe.",
@@ -2155,8 +2159,8 @@ en:{
   tb_undo_title:"Undo the last move/resize",
   tb_undo_btn:"↺ Undo",
   tb_back_to_data:"← Details",
-  tb_addsection_title:"If there's still free space, you can add an extra section here",
-  tb_addsection_btn:"➕ Add section",
+  tb_addsection_title:"Add or edit sections",
+  tb_addsection_btn:"🧩 Manage sections",
   tb_mode_btn:"Print view",
   tb_mode_btn_edit:"Edit view",
   tb_help_title:"Quick walkthrough of the editor",
@@ -2240,8 +2244,10 @@ en:{
   asp_full_page:"(A full page)",
   asp_half_page:"(half page)",
   asp_add_btn:"Add",
+  asp_edit_btn:"✎ Edit",
+  asp_on_tag:"on",
   asp_all_enabled:"Every section is already switched on — nothing left to add.",
-  asp_intro:"The system finds which page currently has the most free space, and tries to fit (resize) the chosen section there. If a section doesn't have enough content yet, you can fill it in right here.",
+  asp_intro:"You can edit sections that are already switched on here (e.g. names, lists, adding extra rows) — the system regenerates the section in place. Sections still switched off can be added: it finds which page currently has the most free space, and fits (resizes) the new section there.",
   asp_confirm_btn:"Filled in, add it now",
   asp_close_btn:"Close",
   asp_no_inline_data:"This section doesn't have enough content yet, and can't be filled in here either — go back to the \"Details\" view.",
@@ -2726,7 +2732,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.7';
+  var APP_VERSION='6.8';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2805,7 +2811,7 @@ function backToTypeSelect(){
     <div class="fld"><label><span data-i18n="w_lbl_f_covercap">Címlap-képaláírás</span></label><div class="fld-row"><input id="f_coverCap" value="" data-i18n-ph="w_ph_f_covercap" placeholder="pl. A helyszín neve · a dátum"><button type="button" class="tipbtn" onclick="fillTip('f_coverCap')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
   </div>
 
-  <div class="card">
+  <div class="card" data-editgroup="welcome">
     <h3><span class="num">4</span><span data-i18n="w_h3num_k_sz_nt_gerinc_rovat">Köszöntő (gerinc-rovat)</span></h3>
     <div class="fld"><label><span data-i18n="w_lbl_f_welcome">Köszöntő szöveg</span></label><div class="fld-row"><textarea id="f_welcome" data-i18n-ph="w_ph_f_welcome" placeholder="Kedves Vendégünk! Ez a nap a tiétek is. Köszönjük, hogy itt vagytok velünk, és hogy a szeretetetekkel teszitek felejthetetlenné életünk legszebb napját. Egyetek, igyatok, táncoljatok és nevessetek velünk!"></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_welcome')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="fld"><label><span data-i18n="w_lbl_f_welcomesign">Aláírás</span></label><input id="f_welcomeSign" value=""></div>
@@ -3108,7 +3114,7 @@ function backToTypeSelect(){
     </div>
   </div>
 
-  <div class="card opt">
+  <div class="card opt" data-editgroup="menetrend_etlap">
     <h3><span data-i18n="w_h3plain_menetrend_amp_tlap_gerinc">Menetrend &amp; étlap (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
     <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span><span data-i18n="w_h3_chk_times">Időpontokat is mutassunk a menetrendben</span></label>
     <div class="fld"><label data-i18n="w_lbl_prog_header">Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
@@ -3195,7 +3201,7 @@ A kedvenc díszítésed
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" data-editgroup="closer">
     <h3><span class="num">★</span><span data-i18n="w_h3num_z_r_felirat">Záró felirat </span><span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda">mindig látszik, az utolsó oldalon</span></h3>
     <div class="fld"><input id="f_closer" value=""></div>
   </div>
@@ -3441,7 +3447,7 @@ A kedvenc díszítésed
         </select>
         <button class="back" id="undoBtn" onclick="undoStage()" disabled data-i18n-title="tb_undo_title" title="Legutóbbi mozgatás/átméretezés visszavonása" data-i18n="tb_undo_btn">↺ Visszavonás</button>
         <button class="back" onclick="backToWizard()" data-i18n="tb_back_to_data">← Adatok</button>
-        <button class="back" onclick="openAddSectionPicker()" data-i18n-title="tb_addsection_title" title="Ha még marad szabad hely, ide tehetsz be egy plusz rovatot" data-i18n="tb_addsection_btn">➕ Rovat hozzáadása</button>
+        <button class="back" onclick="openAddSectionPicker()" data-i18n-title="tb_addsection_title" title="Rovatok hozzáadása vagy szerkesztése" data-i18n="tb_addsection_btn">🧩 Rovatok kezelése</button>
         <button class="mode" id="modeBtn" onclick="toggleMode()" data-i18n="tb_mode_btn">Nyomtatási nézet</button>
         <button class="back" onclick="startEditorTutorial(true)" data-i18n-title="tb_help_title" title="Rövid bemutató a szerkesztő használatáról" data-i18n="tb_help_btn">❓ Súgó</button>
         <button class="done-btn" onclick="showDoneModal()" data-i18n-title="tb_done_title" title="Mentés és befejezés" data-i18n="tb_done_btn">✅ Kész</button>
@@ -5589,6 +5595,31 @@ function sectionLabel(chkId){
   var pref=clone.querySelector('.size-pref-lbl'); if(pref)pref.remove();
   return clone.textContent.trim()||chkId;
 }
+/* ===== Ujsag: "gerinc" (mindig aktív, checkbox nélküli) rovatcsoportok, amiket szintén
+   szerkeszteni lehet ugyanezzel a felülettel — a varázsló megfelelő (elrejtett) kártyáján
+   [data-editgroup] attribútummal jelölve. A menetrend+étlap+itallap+italok EGY közös kártyán
+   él a varázslóban, ezért egy szerkesztés mind a négy rovatot újragenerálja. */
+var UJSAG_CORE_EDIT_GROUPS=[
+  {key:'welcome',selector:'[data-editgroup="welcome"]',blks:['welcome'],fns:{welcome:function(d){return B_welcome(d);}}},
+  {key:'menetrend_etlap',selector:'[data-editgroup="menetrend_etlap"]',blks:['menetrend','etlap','itallap','italok'],
+    fns:{menetrend:function(d){return B_menetrend(d);},etlap:function(d){return B_etlap(d);},itallap:function(d){return B_itallap(d);},italok:function(d){return B_italok(d);}}},
+  {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
+];
+function coreGroupLabel(key){
+  var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
+  var card=document.querySelector(g.selector); if(!card)return key;
+  var h3=card.querySelector('h3'); if(!h3)return key;
+  var spans=Array.from(h3.querySelectorAll('span')).filter(function(s){return !s.classList.contains('num')&&!s.closest('label');});
+  return spans.length?spans[0].textContent.trim():key;
+}
+function sectionLabel(chkId){
+  var cb=document.getElementById('chk_'+chkId); if(!cb)return chkId;
+  var h3=cb.closest('h3'); if(!h3)return chkId;
+  var clone=h3.cloneNode(true);
+  var lbl=clone.querySelector('label'); if(lbl)lbl.remove();
+  var pref=clone.querySelector('.size-pref-lbl'); if(pref)pref.remove();
+  return clone.textContent.trim()||chkId;
+}
 function closeAddSectionOverlay(){
   restoreInlineFields();
   var ov=document.getElementById('addSecOverlay'); if(ov)ov.remove();
@@ -5600,19 +5631,24 @@ window.openAddSectionPicker=function(){
   restoreInlineFields(); /* ha egy korábbi, félbehagyott kitöltés mezői még "kölcsönben" vannak */
   var ov=document.getElementById('addSecOverlay'); if(ov)ov.remove();
   ov=document.createElement('div'); ov.id='addSecOverlay';
-  var rows=currentAddableSections().filter(function(s){var cb=document.getElementById('chk_'+s.chk);return cb&&!cb.checked;});
-  var rowsHtml=rows.length?rows.map(function(s){
-    /* csak a KIFEJEZETTEN fél/egész oldalra kényszerített rovatoknál mutatunk jelzést — a
-       negyed oldal az új, hallgatólagos alapértelmezés, azt nem kell minden egyes sornál
-       külön kiemelni, feleslegesen zajossá tenné a listát. */
+  /* MINDEN elérhető rovatot listázunk, bekapcsolva is — a bekapcsoltakhoz "✎ Szerkesztés",
+     a kikapcsoltakhoz "➕ Hozzáadás" gomb tartozik, de mindkettő ugyanazt a mező-kölcsönző
+     felületet nyitja meg, csak a bekapcsoltaknál a MÁR MEGLÉVŐ adatokkal előtöltve. */
+  var optRows=currentAddableSections().map(function(s){
+    var cb=document.getElementById('chk_'+s.chk);
+    var isOn=cb&&cb.checked;
     var pref=(typeof FIXED_SIZE_PREF!=='undefined')?FIXED_SIZE_PREF[s.blk]:'';
     var prefHtml=pref?('<span class="size-pref-lbl">'+(pref==='full'?t('asp_full_page'):t('asp_half_page'))+'</span>'):'';
-    return '<div class="adm-row"><div><b>'+esc(sectionLabel(s.chk))+'</b>'+prefHtml+'</div><button type="button" class="adm-open" data-chk="'+s.chk+'">'+t('asp_add_btn')+'</button></div>';
-  }).join(''):'<div class="tinyhint">'+t('asp_all_enabled')+'</div>';
+    var onTag=isOn?'<span class="adm-on-tag">'+t('asp_on_tag')+'</span>':'';
+    return '<div class="adm-row'+(isOn?' adm-row-on':'')+'"><div><b>'+esc(sectionLabel(s.chk))+'</b>'+onTag+prefHtml+'</div><button type="button" class="adm-open" data-chk="'+s.chk+'">'+(isOn?t('asp_edit_btn'):t('asp_add_btn'))+'</button></div>';
+  }).join('');
+  var coreRows=(CFG.product==='ujsag')?UJSAG_CORE_EDIT_GROUPS.map(function(g){
+    return '<div class="adm-row adm-row-on"><div><b>'+esc(coreGroupLabel(g.key))+'</b><span class="adm-on-tag">'+t('asp_on_tag')+'</span></div><button type="button" class="adm-open" data-core="'+g.key+'">'+t('asp_edit_btn')+'</button></div>';
+  }).join(''):'';
   ov.innerHTML='<div id="addSecBox">'
     +'<h2>'+t('tb_addsection_btn')+'</h2>'
     +'<div class="tinyhint">'+t('asp_intro')+'</div>'
-    +'<div id="addSecList">'+rowsHtml+'</div>'
+    +'<div id="addSecList">'+optRows+coreRows+'</div>'
     +'<div id="addSecMsg"></div>'
     +'<div id="addSecInlineFields" style="display:none;"></div>'
     +'<button type="button" class="btn-feedback" id="addSecConfirmBtn" style="display:none;margin-bottom:10px;">✓ '+t('asp_confirm_btn')+'</button>'
@@ -5622,45 +5658,57 @@ window.openAddSectionPicker=function(){
   document.body.appendChild(ov);
   document.getElementById('addSecCloseBtn').onclick=closeAddSectionOverlay;
   ov.querySelectorAll('[data-chk]').forEach(function(btn){
-    btn.onclick=function(){ addSectionToBestSpot(btn.getAttribute('data-chk')); };
+    btn.onclick=function(){ openSectionFieldsForOpt(btn.getAttribute('data-chk')); };
+  });
+  ov.querySelectorAll('[data-core]').forEach(function(btn){
+    btn.onclick=function(){ openSectionFieldsForCore(btn.getAttribute('data-core')); };
   });
 };
-var _addSecFieldsHome=null;
+var _addSecFieldsHome=null; /* {kind:'opt'|'core', key, el, parent, next} — melyik varázsló-kártya van épp "kölcsönben" */
 function restoreInlineFields(){
   if(!_addSecFieldsHome)return;
   var h=_addSecFieldsHome; _addSecFieldsHome=null;
-  h.el.classList.toggle('off',!document.getElementById('chk_'+h.chk).checked);
+  if(h.kind==='opt'){
+    var cb=document.getElementById('chk_'+h.key);
+    h.el.classList.toggle('off',!(cb&&cb.checked));
+  }
   if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(h.el,h.next); else h.parent.appendChild(h.el);
 }
-function showInlineFieldsForSection(entry){
-  var optBody=document.querySelector('.opt-body[data-for="chk_'+entry.chk+'"]');
+function relocateFieldsInto(kind,key,selector){
+  var el=document.querySelector(selector);
   var holder=document.getElementById('addSecInlineFields');
   var msgEl=document.getElementById('addSecMsg');
-  var confirmBtn=document.getElementById('addSecConfirmBtn');
-  if(!optBody||!holder){
+  if(!el||!holder){
     if(msgEl)msgEl.innerHTML='<div class="done-saved">⚠ '+t('asp_no_inline_data')+'</div>';
-    return;
+    return false;
   }
-  if(_addSecFieldsHome&&_addSecFieldsHome.chk!==entry.chk)restoreInlineFields(); /* csak egy rovat mezői "kölcsönözhetők" egyszerre */
-  if(!_addSecFieldsHome)_addSecFieldsHome={chk:entry.chk,el:optBody,parent:optBody.parentNode,next:optBody.nextSibling};
-  optBody.classList.remove('off');
-  holder.innerHTML=''; holder.appendChild(optBody); holder.style.display='block';
-  confirmBtn.style.display='block';
-  confirmBtn.onclick=function(){ addSectionToBestSpot(entry.chk); };
+  if(_addSecFieldsHome&&!(_addSecFieldsHome.kind===kind&&_addSecFieldsHome.key===key))restoreInlineFields(); /* csak egy kártya mezői "kölcsönözhetők" egyszerre */
+  if(!_addSecFieldsHome)_addSecFieldsHome={kind:kind,key:key,el:el,parent:el.parentNode,next:el.nextSibling};
+  if(kind==='opt')el.classList.remove('off');
+  holder.innerHTML=''; holder.appendChild(el); holder.style.display='block';
   if(msgEl)msgEl.innerHTML='<div class="tinyhint">'+t('asp_fill_inline')+'</div>';
+  return true;
 }
-function addSectionToBestSpot(chkId){
-  var entry=currentAddableSections().find(function(s){return s.chk===chkId;});
+function openSectionFieldsForOpt(chkId){
+  var entry=currentAddableSections().find(function(s){return s.chk===chkId;}); if(!entry)return;
+  if(!relocateFieldsInto('opt',chkId,'.opt-body[data-for="chk_'+chkId+'"]'))return;
+  var confirmBtn=document.getElementById('addSecConfirmBtn');
+  confirmBtn.style.display='block';
+  confirmBtn.onclick=function(){ applyOptSectionEdit(chkId); };
+}
+function openSectionFieldsForCore(key){
+  var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return;
+  if(!relocateFieldsInto('core',key,g.selector))return;
+  var confirmBtn=document.getElementById('addSecConfirmBtn');
+  confirmBtn.style.display='block';
+  confirmBtn.onclick=function(){ applyCoreGroupEdit(key); };
+}
+/* ===== a rovat-blokk beillesztése/cseréje a #stage-en — mindkét irányból (hozzáadás ÉS
+   szerkesztés) ide fut ki, hogy a "hol van üres hely" / "hogy méretezzük" logika egy helyen
+   éljen ===== */
+function insertBlockAtBestSpot(blkId,html){
   var msgEl=document.getElementById('addSecMsg');
-  if(!entry)return;
-  var d=gatherData();
-  var html=entry.fn(d);
-  if(!html){
-    showInlineFieldsForSection(entry);
-    return;
-  }
-  var GAP=8;
-  var best=null;
+  var GAP=8, best=null;
   Array.from(document.querySelectorAll('#stage .page')).forEach(function(pg,ix){
     if(ix===0)return; /* borító kimarad */
     var pbody=pg.querySelector('.pbody'); if(!pbody)return;
@@ -5679,9 +5727,8 @@ function addSectionToBestSpot(chkId){
   });
   if(!best||best.leftover<40){
     if(msgEl)msgEl.innerHTML='<div class="done-saved err">⚠ '+t('asp_no_space')+'</div>';
-    return;
+    return null;
   }
-  pushUndo();
   best.pbody.querySelectorAll('.filler-blk').forEach(function(f){f.remove();}); /* helyet ad a valódi tartalomnak */
   /* ha a célzott lap korábban "magányos" (.lonely) volt — azaz a CSS nagyította fel az egyetlen
      rajta lévő rovatot —, most hogy egy MÁSODIK rovat is odakerül, ez már nem igaz; mielőtt
@@ -5693,17 +5740,59 @@ function addSectionToBestSpot(chkId){
     });
     best.pbody.classList.remove('lonely');
   }
-  var tmp=document.createElement('div'); tmp.innerHTML=html.replace('<div class="blk','<div data-bid="'+entry.blk+'" class="blk');
+  var tmp=document.createElement('div'); tmp.innerHTML=html.replace('<div class="blk','<div data-bid="'+blkId+'" class="blk');
   var newBlk=tmp.firstElementChild;
   best.pbody.appendChild(newBlk);
   var box={left:best.pRect.left,right:best.pRect.right,top:best.maxBottom+GAP,bottom:best.pRect.bottom};
   fitBlockToBox(newBlk,box,2.2);
-  var cb=document.getElementById('chk_'+chkId); if(cb){cb.checked=true; if(typeof optToggle==='function')optToggle(cb);}
+  return newBlk;
+}
+function replaceBlockInPlace(existing,blkId,html){
+  var tmp=document.createElement('div'); tmp.innerHTML=html.replace('<div class="blk','<div data-bid="'+blkId+'" class="blk');
+  var newBlk=tmp.firstElementChild;
+  /* a felhasználó által kézzel átméretezett/nagyított rovat mérete maradjon meg szerkesztés után is */
+  if(existing.style.zoom)newBlk.style.zoom=existing.style.zoom;
+  if(existing.hasAttribute('data-size-pref'))newBlk.setAttribute('data-size-pref',existing.getAttribute('data-size-pref'));
+  existing.replaceWith(newBlk);
+  return newBlk;
+}
+function upsertBlock(blkId,html){
+  var existing=document.querySelector('#stage .blk[data-bid="'+blkId+'"]');
+  if(existing){
+    if(!html){ existing.remove(); return null; }
+    return replaceBlockInPlace(existing,blkId,html);
+  }
+  if(!html)return null;
+  return insertBlockAtBestSpot(blkId,html);
+}
+function afterBlockChange(){
   initAllImageBoxes(); if(typeof initBlockTools==='function')initBlockTools();
   if(typeof checkBlockOverflows==='function')checkBlockOverflows();
   if(typeof ensureMenuPair==='function')ensureMenuPair();
+}
+function applyOptSectionEdit(chkId){
+  var entry=currentAddableSections().find(function(s){return s.chk===chkId;}); if(!entry)return;
+  pushUndo();
+  var html=entry.fn(gatherData());
+  var blk=upsertBlock(entry.blk,html);
+  var cb=document.getElementById('chk_'+chkId);
+  if(cb){ cb.checked=!!html; if(typeof optToggle==='function')optToggle(cb); }
+  afterBlockChange();
   closeAddSectionOverlay(); /* ha a mezők ide voltak "kölcsönözve" kitöltésre, előbb visszatesszük a varázslóba, mielőtt a modal eltűnik */
-  newBlk.scrollIntoView({behavior:'smooth',block:'center'});
+  if(blk)blk.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function applyCoreGroupEdit(key){
+  var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return;
+  pushUndo();
+  var d=gatherData();
+  var lastBlk=null;
+  g.blks.forEach(function(blkId){
+    var blk=upsertBlock(blkId,g.fns[blkId](d));
+    if(blk)lastBlk=blk;
+  });
+  afterBlockChange();
+  closeAddSectionOverlay();
+  if(lastBlk)lastBlk.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function initImageBox(box){
   if(box.__init)return;box.__init=true;
