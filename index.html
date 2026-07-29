@@ -138,6 +138,32 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .preset-btn:hover{border-color:var(--wiz-rose-dark);transform:translateY(-1px);}
 .preset-btn .preset-n{font-size:19px;font-weight:800;line-height:1.1;}
 .preset-btn span:last-child{font-size:10.5px;font-weight:600;}
+.journey-h{font-family:'Old Standard TT',serif;font-size:16.5px;text-align:center;color:#2a1a20;margin:22px 0 10px;}
+.journey-path{background:#fff;border:1.6px solid var(--wiz-rose-pale);border-radius:16px;padding:14px 16px;margin-bottom:12px;}
+.journey-path-h{display:flex;align-items:center;gap:7px;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:14px;color:var(--wiz-rose-dark);margin-bottom:4px;}
+.journey-emoji{font-size:17px;}
+.journey-path-desc{font-family:'PT Serif',serif;font-size:12.5px;color:#6a5560;line-height:1.5;margin-bottom:10px;}
+.swipe-entry-btn{display:block;width:100%;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:14.5px;background:#fff;color:var(--wiz-rose-dark);border:1.8px solid var(--wiz-rose-dark);border-radius:12px;padding:12px;cursor:pointer;transition:background .12s;}
+.swipe-entry-btn:hover{background:var(--wiz-blush);}
+.swipe-overlay{position:fixed;inset:0;background:rgba(20,10,15,.72);z-index:9800;display:flex;align-items:center;justify-content:center;padding:16px;}
+.swipe-box{background:#fff;border-radius:20px;padding:20px;max-width:360px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.swipe-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.swipe-close{background:none;border:none;font-size:18px;color:#aaa;cursor:pointer;padding:2px 8px;}
+.swipe-progress{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;color:#8a7480;}
+.swipe-card{border:1.6px solid var(--wiz-rose-pale);border-radius:16px;overflow:hidden;margin-bottom:16px;}
+.swipe-card-photo{position:relative;width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--wiz-rose-pale),var(--wiz-blush));}
+.swipe-card-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.swipe-card-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:44px;color:var(--wiz-rose-dark);opacity:.55;}
+.swipe-card-body{padding:14px 16px 16px;text-align:center;}
+.swipe-card-body h3{font-family:'Old Standard TT',serif;font-size:17px;margin:0 0 6px;color:#2a1a20;}
+.swipe-card-body p{font-family:'PT Serif',serif;font-size:13px;color:#6a5560;margin:0;line-height:1.45;}
+.swipe-actions{display:flex;gap:10px;}
+.swipe-actions button{flex:1;padding:13px;border-radius:12px;border:none;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:transform .1s;}
+.swipe-actions button:active{transform:scale(.96);}
+.swipe-no{background:#f1e9e6;color:#8a5a5a;}
+.swipe-yes{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
+.swipe-done{text-align:center;}
+.swipe-done-emoji{font-size:44px;margin-bottom:6px;}
 .errbox{background:#fdecea;border:1px solid #e7a39a;color:#9a3327;border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:12px;display:none;font-family:'Libre Franklin',sans-serif;}
 .early-email-box{background:var(--wiz-blush);border:1.4px solid var(--wiz-rose-pale);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-family:'Libre Franklin',sans-serif;}
 .early-email-box label{display:block;font-size:13px;font-weight:700;color:#6e2233;margin-bottom:6px;}
@@ -1241,6 +1267,13 @@ hu:{
   w_preset_h:"Vagy válassz kész oldalszám-sablont:",
   w_preset_oldal:"oldal",
   w_preset_hint:"A kisebb sablonok a legfontosabbnak ítélt rovatokat tartalmazzák; a 16 oldalas az összeset.",
+  w_journey_h:"Így indulhatsz — válaszd ki, melyik illik hozzád:",
+  w_journey_fast_h:"Gyors indulás",
+  w_journey_fast_desc:"Minden elérhető rovat bekerül — a szerkesztőben törölheted, ami nem kell.",
+  w_journey_preset_h:"Kész sablon",
+  w_journey_swipe_h:"Válogatás",
+  w_journey_swipe_desc:"Végignézed egyenként az összes lehetséges rovatot egy példával együtt, és — mint egy társkereső appban — te döntöd el jobbra/balra húzva, melyik kerüljön az újságba.",
+  w_journey_swipe_btn:"🔀 Inkább válogatnék",
   w_tut_replay:"❓ Rövid bemutató — hogyan működik?",
   w_opt_intro_text:"Az alábbi rovatok <b>opcionálisak</b> — minél többet kapcsolsz be, annál tartalmasabb lesz az újság. Kattints bárhova a kártya fejlécén a be- vagy kikapcsoláshoz.",
   w_fitbar_ok_text:"A tartalom elfér a kiválasztott formátumban.",
@@ -1849,7 +1882,14 @@ en:{
   w_gen_btn_start:"✦ Continue to the editor ✦",
   w_preset_h:"Or pick a ready-made page-count template:",
   w_preset_oldal:"pages",
-  w_preset_hint:"The smaller templates include the sections judged most essential; the 16-page one includes all of them.",
+  w_preset_hint:"The smaller templates include the sections judged most essential; the 16-page one includes almost all of them.",
+  w_journey_h:"Here's how you can start — pick whichever fits you:",
+  w_journey_fast_h:"Quick start",
+  w_journey_fast_desc:"Every available section gets included — you can delete anything you don't want in the editor.",
+  w_journey_preset_h:"Ready-made template",
+  w_journey_swipe_h:"Curate it yourself",
+  w_journey_swipe_desc:"You go through every possible section one by one, each with an example — like a dating app, you swipe left/right to decide what goes into the gazette.",
+  w_journey_swipe_btn:"🔀 I'd rather curate it myself",
   w_tut_replay:"❓ Quick walkthrough — how does it work?",
   w_opt_intro_text:"The sections below are <b>optional</b> — the more you switch on, the richer the gazette becomes. Click anywhere on a card's header to turn it on or off.",
   w_fitbar_ok_text:"The content fits in the selected format.",
@@ -2657,7 +2697,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.5';
+  var APP_VERSION='6.6';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2681,17 +2721,29 @@ function backToTypeSelect(){
     <div class="tinyhint" data-i18n="w_hint_names_only">Minden más — a lap címe, a dátum, a helyszín, a rovatok — a szerkesztőben, közvetlenül a lapokon szerkeszthető. Semmit nem kell előre eldöntened.</div>
   </div>
 
-  <button class="gen-btn gen-btn-ujsag-start" onclick="startUjsagEditor()" data-i18n="w_gen_btn_start">✦ Tovább a szerkesztőbe ✦</button>
+  <div class="journey-h" data-i18n="w_journey_h">Így indulhatsz — válaszd ki, melyik illik hozzád:</div>
 
-  <div class="preset-picker">
-    <div class="preset-picker-h" data-i18n="w_preset_h">Vagy válassz kész oldalszám-sablont:</div>
+  <div class="journey-path">
+    <div class="journey-path-h"><span class="journey-emoji">⚡</span><span data-i18n="w_journey_fast_h">Gyors indulás</span></div>
+    <div class="journey-path-desc" data-i18n="w_journey_fast_desc">Minden elérhető rovat bekerül — a szerkesztőben törölheted, ami nem kell.</div>
+    <button class="gen-btn gen-btn-ujsag-start" onclick="startUjsagEditor()" data-i18n="w_gen_btn_start">✦ Tovább a szerkesztőbe ✦</button>
+  </div>
+
+  <div class="journey-path">
+    <div class="journey-path-h"><span class="journey-emoji">📐</span><span data-i18n="w_journey_preset_h">Kész sablon</span></div>
+    <div class="journey-path-desc" data-i18n="w_preset_hint">Előre összeállított, fix rovat-válogatás, oldalszám szerint — a kisebb sablonok a legfontosabbnak ítélt rovatokat tartalmazzák, a 16 oldalas majdnem az összeset.</div>
     <div class="preset-grid">
       <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(4)"><span class="preset-n">4</span><span data-i18n="w_preset_oldal">oldal</span></button>
       <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(8)"><span class="preset-n">8</span><span data-i18n="w_preset_oldal">oldal</span></button>
       <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(12)"><span class="preset-n">12</span><span data-i18n="w_preset_oldal">oldal</span></button>
       <button type="button" class="preset-btn" onclick="startUjsagEditorPreset(16)"><span class="preset-n">16</span><span data-i18n="w_preset_oldal">oldal</span></button>
     </div>
-    <div class="tinyhint" data-i18n="w_preset_hint">A kisebb sablonok a legfontosabbnak ítélt rovatokat tartalmazzák; a 16 oldalas az összeset.</div>
+  </div>
+
+  <div class="journey-path">
+    <div class="journey-path-h"><span class="journey-emoji">🔀</span><span data-i18n="w_journey_swipe_h">Válogatás</span></div>
+    <div class="journey-path-desc" data-i18n="w_journey_swipe_desc">Végignézed egyenként az összes lehetséges rovatot egy példával együtt, és — mint egy társkereső appban — te döntöd el jobbra/balra húzva, melyik kerüljön az újságba.</div>
+    <button type="button" class="swipe-entry-btn" onclick="openSwipePicker()" data-i18n="w_journey_swipe_btn">🔀 Inkább válogatnék</button>
   </div>
 
   <div id="wizLegacyFields" style="display:none;">
@@ -3478,61 +3530,159 @@ function autoFitPages(){
   }
   CFG.pages=MAX_UJSAG_PAGES;
 }
-/* ===== előre összeállított oldalszám-sablonok (4/8/12/16), kattintva váltogathatóak ===== */
-/* 16 oldalnál egyszerűen minden bekapcsol (ez a "minden rovat" sablon, ld. UJSAG_FORCE_ALL_CHKS),
-   a kisebb sablonoknál a UJSAG_TRIM_ORDER megfordított (legfontosabbtól induló) sorrendjében
-   kapcsolunk be rovatokat, amíg még belefér a célzott oldalszámba — így a kisebb sablonok mindig
-   a legfontosabbnak ítélt rovatokat tartalmazzák, nem egy véletlenszerű részhalmazt. */
+/* ===== előre összeállított, KÉZZEL RÖGZÍTETT oldalszám-sablonok (4/8/12/16) =====
+   Szándékosan FIX listák (nem élőben, mérés alapján számolt kiválasztás) — így minden
+   kitöltő ugyanazt a sablont (ugyanazokat a rovatokat) kapja adott oldalszámra, a sablon
+   tartalma stabil és előre átnézhető/módosítható. A listák tesztelve lettek, hogy a
+   megadott oldalszámra pontosan kiférjenek az alapértelmezett (seedUjsagDefaults) hosszú
+   placeholder-szövegekkel — ha itt módosítasz (rovatot veszel ki/teszel be), érdemes utána
+   újra kigenerálni egy próba-újságot, hogy tényleg kifér-e még a célzott oldalszámra. */
+var UJSAG_TEMPLATE_4=['szuloknek','stats','sztori','childhood','legelsokep','lanykeres','szinglik','dijak','qr','robbantsd','fotovadasz','message','times','drinks'];
+var UJSAG_TEMPLATE_8=UJSAG_TEMPLATE_4.concat(['ismerkedes','years','jegyesfoto','bakancslista','memorial','negylabu','szulok']);
+var UJSAG_TEMPLATE_12=UJSAG_TEMPLATE_8.concat(['utazas','csapat','igazhamis','jatekok','interju','naszut']);
+var UJSAG_TEMPLATE_16=UJSAG_TEMPLATE_12.concat(['lagziszab','masnapos','gyik','szinezo']);
+var UJSAG_TEMPLATES={4:UJSAG_TEMPLATE_4,8:UJSAG_TEMPLATE_8,12:UJSAG_TEMPLATE_12,16:UJSAG_TEMPLATE_16};
 function applyUjsagPreset(targetPages){
   seedUjsagDefaults();
   applyProductTailConfig();
-  var all=UJSAG_FORCE_ALL_CHKS;
-  if(targetPages>=MAX_UJSAG_PAGES){
-    all.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
-    autoFitPages();
-    return;
-  }
-  all.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=false; });
-  var priority=UJSAG_TRIM_ORDER.slice().reverse();
-  priority.forEach(function(id){
+  var keep=UJSAG_TEMPLATES[targetPages]||UJSAG_TEMPLATE_16;
+  UJSAG_FORCE_ALL_CHKS.forEach(function(id){
     var cb=document.getElementById('chk_'+id); if(!cb)return;
-    cb.checked=true;
-    if(ujsagPagesNeeded()>targetPages-1)cb.checked=false;
+    cb.checked=(keep.indexOf(id)>=0);
   });
   CFG.pages=targetPages;
 }
-function startUjsagEditorPreset(targetPages){
+function validateUjsagNames(){
   var eb=document.getElementById('errbox');
   var namesEl=document.getElementById('f_names');
   if(!namesEl.value.trim()){
     namesEl.classList.add('err');
     eb.textContent=L('Add meg a pár nevét a folytatáshoz.',"Enter the couple's name to continue.");
     eb.style.display='block'; namesEl.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
+    return false;
   }
   namesEl.classList.remove('err'); eb.style.display='none';
   CFG.size='A5';
+  return true;
+}
+function startUjsagEditorPreset(targetPages){
+  if(!validateUjsagNames())return;
   applyUjsagPreset(targetPages);
   trackEvent('ujsag_preset_clicked',{pages:targetPages});
   generate();
 }
 function startUjsagEditor(){
-  var eb=document.getElementById('errbox');
-  var namesEl=document.getElementById('f_names');
-  if(!namesEl.value.trim()){
-    namesEl.classList.add('err');
-    eb.textContent=L('Add meg a pár nevét a folytatáshoz.',"Enter the couple's name to continue.");
-    eb.style.display='block'; namesEl.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-  namesEl.classList.remove('err'); eb.style.display='none';
-  CFG.size='A5';
+  if(!validateUjsagNames())return;
   UJSAG_FORCE_ALL_CHKS.forEach(function(id){
     var cb=document.getElementById('chk_'+id);
     if(cb)cb.checked=true;
   });
   seedUjsagDefaults();
   trackEvent('ujsag_quickstart_clicked',{});
+  autoFitPages();
+  generate();
+}
+/* ===== Tinder-féle rovat-válogató ===== */
+/* a példaképeket a projekt gazdája tölti fel az assets/swipe/<rovat-id>.jpg útvonalra —
+   amíg egy adott kép nincs feltöltve, egy semleges, ikonos háttér jelenik meg helyette (ld.
+   .swipe-card-fallback / az <img> onerror kezelője lejjebb), tehát a funkció képek nélkül is
+   működik, csak kevésbé mutatós */
+var SWIPE_DECK_IDS=['szuloknek','stats','sztori','childhood','ismerkedes','legelsokep','years','lanykeres',
+  'jegyesfoto','utazas','bakancslista','csapat','memorial','negylabu','szulok','szinglik','dijak','igazhamis',
+  'jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','qr','robbantsd','fotovadasz','message','naszut'];
+var SWIPE_DESC={
+  szuloknek:['Köszönő szavak a szülőknek','Thank-you notes to the parents'],
+  stats:['Vicces számok a kapcsolatotokról','Fun numbers about your relationship'],
+  sztori:['A szerelmetek története dióhéjban','Your love story in a nutshell'],
+  childhood:['Gyerekkori fotók egymásról','Childhood photos of you both'],
+  ismerkedes:['Hogyan ismerkedtetek meg','How you met'],
+  legelsokep:['Az első közös fotótok','Your very first photo together'],
+  years:['Egy kép minden közös évetekből','One photo from every year together'],
+  lanykeres:['A lánykérés története','The proposal story'],
+  jegyesfoto:['Jegyesfotózás képei','Engagement photos'],
+  utazas:['Közös utazásaitok','Your trips together'],
+  bakancslista:['Amit még együtt szeretnétek megélni','What you still want to experience together'],
+  csapat:['A násznép és a tanúk bemutatása','Introducing the wedding party'],
+  memorial:['Megemlékezés az elhunyt szerettekről','In memory of loved ones who passed'],
+  negylabu:['A kedvenc állatotok is ünnepel','Your pet celebrates too'],
+  szulok:['A szüleitek esküvői képe',"Your parents' own wedding photo"],
+  szinglik:['A szingli vendégek bemutatása','Introducing the single guests'],
+  dijak:['Vicces "díjak" a vendégeknek','Fun "awards" for guests'],
+  igazhamis:['Igaz vagy hamis játék rólatok','True or false game about you'],
+  jatekok:['Sudoku, keresztrejtvény, szókereső','Sudoku, crossword, word search'],
+  lagziszab:['Vicces "lagzi-szabályzat"','A funny "wedding rulebook"'],
+  masnapos:['Túlélési tippek a másnaphoz','Survival tips for the morning after'],
+  horoszkop:['Vicces horoszkóp az estére','A funny horoscope for tonight'],
+  gyik:['Gyakori kérdések az estére','FAQ for tonight'],
+  interju:['Külön interjú veletek','A separate interview with you two'],
+  szinezo:['Kifestő a gyerek vendégeknek','A coloring page for kid guests'],
+  qr:['QR-kód (pl. közös albumhoz)','QR code (e.g. shared photo album)'],
+  robbantsd:['Kérés, hogy küldjenek fotókat','Ask guests to send photos'],
+  fotovadasz:['Fotóvadász játék a vendégeknek','A photo-hunt game for guests'],
+  message:['Vendégkönyv-üzenet kérése','Ask guests for a guestbook message'],
+  naszut:['A nászutatok bemutatása','Your honeymoon']
+};
+var _swipeState=null;
+function openSwipePicker(){
+  if(!validateUjsagNames())return;
+  seedUjsagDefaults();
+  trackEvent('ujsag_swipe_started',{});
+  _swipeState={ix:0,decisions:{}};
+  renderSwipeOverlay();
+}
+function renderSwipeOverlay(){
+  var ov=document.getElementById('swipeOverlay');
+  if(!ov){ ov=document.createElement('div'); ov.id='swipeOverlay'; ov.className='swipe-overlay'; document.body.appendChild(ov); }
+  var st=_swipeState;
+  if(st.ix>=SWIPE_DECK_IDS.length){ renderSwipeDone(ov); return; }
+  var id=SWIPE_DECK_IDS[st.ix];
+  var label=sectionLabel(id);
+  var desc=SWIPE_DESC[id]?L(SWIPE_DESC[id][0],SWIPE_DESC[id][1]):'';
+  ov.innerHTML='<div class="swipe-box">'
+    +'<div class="swipe-top">'
+      +'<button type="button" class="swipe-close" onclick="closeSwipePicker()">✕</button>'
+      +'<div class="swipe-progress">'+(st.ix+1)+' / '+SWIPE_DECK_IDS.length+'</div>'
+    +'</div>'
+    +'<div class="swipe-card">'
+      +'<div class="swipe-card-photo">'
+        +'<img src="assets/swipe/'+id+'.jpg" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+        +'<div class="swipe-card-fallback">'+ico('i-camera')+'</div>'
+      +'</div>'
+      +'<div class="swipe-card-body"><h3>'+esc(label)+'</h3><p>'+esc(desc)+'</p></div>'
+    +'</div>'
+    +'<div class="swipe-actions">'
+      +'<button type="button" class="swipe-no" onclick="swipeDecide(false)">✕ '+L('Kihagyom','Skip')+'</button>'
+      +'<button type="button" class="swipe-yes" onclick="swipeDecide(true)">❤️ '+L('Bekerül','Include')+'</button>'
+    +'</div>'
+    +'</div>';
+}
+function swipeDecide(keep){
+  _swipeState.decisions[SWIPE_DECK_IDS[_swipeState.ix]]=keep;
+  _swipeState.ix++;
+  renderSwipeOverlay();
+}
+function closeSwipePicker(){
+  var ov=document.getElementById('swipeOverlay'); if(ov)ov.remove();
+  _swipeState=null;
+}
+function renderSwipeDone(ov){
+  var count=Object.keys(_swipeState.decisions).filter(function(k){return _swipeState.decisions[k];}).length;
+  ov.innerHTML='<div class="swipe-box swipe-done">'
+    +'<div class="swipe-done-emoji">🎉</div>'
+    +'<h3>'+L('Kész!','All done!')+'</h3>'
+    +'<p>'+L(count+' rovatot választottál — irány a szerkesztő!',"You picked "+count+' sections — on to the editor!')+'</p>'
+    +'<button type="button" class="gen-btn" onclick="finishSwipePicker()">✦ '+L('Szerkesztő megnyitása','Open the editor')+' ✦</button>'
+    +'</div>';
+}
+function finishSwipePicker(){
+  var decisions=_swipeState.decisions;
+  SWIPE_DECK_IDS.forEach(function(id){
+    var cb=document.getElementById('chk_'+id); if(!cb)return;
+    cb.checked=!!decisions[id];
+  });
+  ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
+  closeSwipePicker();
+  trackEvent('ujsag_swipe_finished',{});
   autoFitPages();
   generate();
 }
