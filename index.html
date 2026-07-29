@@ -164,6 +164,35 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .swipe-yes{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
 .swipe-done{text-align:center;}
 .swipe-done-emoji{font-size:44px;margin-bottom:6px;}
+.admin-gear-btn{position:fixed;right:8px;bottom:8px;z-index:50;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.08);border:none;color:rgba(0,0,0,.35);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.admin-gear-btn:hover{background:rgba(0,0,0,.16);}
+.admin-overlay{position:fixed;inset:0;background:rgba(15,10,12,.78);z-index:9900;display:flex;align-items:center;justify-content:center;padding:14px;}
+.admin-box{background:#fff;border-radius:16px;padding:18px;max-width:640px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.45);}
+.admin-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.admin-top h2{font-family:'Old Standard TT',serif;font-size:19px;margin:0;color:#2a1a20;}
+.admin-close{background:none;border:none;font-size:18px;color:#aaa;cursor:pointer;padding:2px 8px;}
+.admin-tabs{display:flex;gap:8px;margin-bottom:14px;border-bottom:1.4px solid var(--wiz-rose-pale);padding-bottom:10px;}
+.admin-tab{flex:1;padding:9px;border-radius:10px;border:1.4px solid transparent;background:var(--wiz-blush);color:#8a5a70;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.admin-tab.sel{background:var(--wiz-rose-dark);color:#fff;}
+.admin-size-tabs{display:flex;gap:6px;margin-bottom:10px;}
+.admin-size-btn{flex:1;padding:8px;border-radius:8px;border:1.4px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.admin-size-btn.sel{background:var(--wiz-rose-dark);color:#fff;border-color:var(--wiz-rose-dark);}
+.admin-fit-status{font-family:'Libre Franklin',sans-serif;font-size:12px;color:#8a7480;background:var(--wiz-blush);border-radius:8px;padding:8px 10px;margin-bottom:10px;}
+.admin-chk-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:14px;max-height:44vh;overflow-y:auto;}
+.admin-chk-row{display:flex;align-items:center;gap:7px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#3a2630;padding:4px 0;cursor:pointer;}
+.admin-actions{display:flex;flex-wrap:wrap;gap:8px;}
+.admin-save-btn,.admin-reset-btn,.admin-export-btn{flex:1;min-width:120px;padding:10px;border-radius:10px;border:none;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.admin-save-btn{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
+.admin-reset-btn{background:#f1e9e6;color:#8a5a5a;}
+.admin-export-btn{background:#2a1a20;color:#fff;}
+.admin-swipe-list{max-height:60vh;overflow-y:auto;margin-bottom:14px;}
+.admin-swipe-row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--wiz-rose-pale);}
+.admin-swipe-thumb-wrap{flex-shrink:0;width:74px;}
+.admin-swipe-thumb{width:74px;height:56px;object-fit:cover;border-radius:8px;background:var(--wiz-rose-pale);display:block;margin-bottom:4px;}
+.admin-swipe-file{width:74px;font-size:9px;}
+.admin-swipe-fields{flex:1;display:flex;flex-direction:column;gap:4px;}
+.admin-swipe-fields b{font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#2a1a20;}
+.admin-swipe-hu,.admin-swipe-en{width:100%;box-sizing:border-box;padding:6px 8px;border:1.2px solid var(--wiz-rose-pale);border-radius:7px;font-family:'PT Serif',serif;font-size:12px;}
 .errbox{background:#fdecea;border:1px solid #e7a39a;color:#9a3327;border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:12px;display:none;font-family:'Libre Franklin',sans-serif;}
 .early-email-box{background:var(--wiz-blush);border:1.4px solid var(--wiz-rose-pale);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-family:'Libre Franklin',sans-serif;}
 .early-email-box label{display:block;font-size:13px;font-weight:700;color:#6e2233;margin-bottom:6px;}
@@ -2697,7 +2726,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.6';
+  var APP_VERSION='6.7';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3545,7 +3574,8 @@ var UJSAG_TEMPLATES={4:UJSAG_TEMPLATE_4,8:UJSAG_TEMPLATE_8,12:UJSAG_TEMPLATE_12,
 function applyUjsagPreset(targetPages){
   seedUjsagDefaults();
   applyProductTailConfig();
-  var keep=UJSAG_TEMPLATES[targetPages]||UJSAG_TEMPLATE_16;
+  var templates=(typeof currentUjsagTemplates==='function')?currentUjsagTemplates():UJSAG_TEMPLATES;
+  var keep=templates[targetPages]||UJSAG_TEMPLATE_16;
   UJSAG_FORCE_ALL_CHKS.forEach(function(id){
     var cb=document.getElementById('chk_'+id); if(!cb)return;
     cb.checked=(keep.indexOf(id)>=0);
@@ -3636,8 +3666,7 @@ function renderSwipeOverlay(){
   var st=_swipeState;
   if(st.ix>=SWIPE_DECK_IDS.length){ renderSwipeDone(ov); return; }
   var id=SWIPE_DECK_IDS[st.ix];
-  var label=sectionLabel(id);
-  var desc=SWIPE_DESC[id]?L(SWIPE_DESC[id][0],SWIPE_DESC[id][1]):'';
+  var meta=(typeof currentSwipeMeta==='function')?currentSwipeMeta(id):{label:sectionLabel(id),desc:(SWIPE_DESC[id]?L(SWIPE_DESC[id][0],SWIPE_DESC[id][1]):''),img:'assets/swipe/'+id+'.jpg'};
   ov.innerHTML='<div class="swipe-box">'
     +'<div class="swipe-top">'
       +'<button type="button" class="swipe-close" onclick="closeSwipePicker()">✕</button>'
@@ -3645,10 +3674,10 @@ function renderSwipeOverlay(){
     +'</div>'
     +'<div class="swipe-card">'
       +'<div class="swipe-card-photo">'
-        +'<img src="assets/swipe/'+id+'.jpg" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+        +'<img src="'+meta.img+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
         +'<div class="swipe-card-fallback">'+ico('i-camera')+'</div>'
       +'</div>'
-      +'<div class="swipe-card-body"><h3>'+esc(label)+'</h3><p>'+esc(desc)+'</p></div>'
+      +'<div class="swipe-card-body"><h3>'+esc(meta.label)+'</h3><p>'+esc(meta.desc)+'</p></div>'
     +'</div>'
     +'<div class="swipe-actions">'
       +'<button type="button" class="swipe-no" onclick="swipeDecide(false)">✕ '+L('Kihagyom','Skip')+'</button>'
@@ -7573,6 +7602,196 @@ function applyProjectState(data){
   /* induláskor 3s után elrejt */
   scheduleHide();
 })();
+</script>
+
+<button type="button" class="admin-gear-btn" onclick="tryOpenAdmin()" title="Admin">⚙</button>
+<script>
+/* ===== Admin mód: sablonszerkesztő + swipe-szerkesztő =====
+   FONTOS: ez a projekt jelenleg egy statikus HTML fájl, szerver/adatbázis nélkül (GitHub
+   Pages). Az admin módban végzett "Mentés" ezért NEM ír át azonnal semmit a customereknél —
+   csak EBBEN a böngészőben, localStorage-ban tárolja a módosításokat (élő előnézetként).
+   Az "Export" gombbal egy JSON fájlt tölthetsz le, amiben minden módosítás benne van
+   (sablonok + swipe leírások + feltöltött képek base64-ként) — ezt a fájlt add át (chatben),
+   és a kódba építve, commitolva/pusholva élesítjük mindenki számára.
+   Az itt használt jelszavas védelem KLIENSOLDALI, tehát nem valódi biztonság — bárki, aki
+   megnézi az oldal forráskódját, kiolvashatja. Csak a véletlen belépés ellen szűr. */
+var ADMIN_PASSCODE='ujsagadmin2026';
+function tryOpenAdmin(){
+  var pass=prompt(L('Admin jelszó:','Admin passcode:'));
+  if(pass===null)return;
+  if(pass!==ADMIN_PASSCODE){ alert(L('Hibás jelszó.','Wrong passcode.')); return; }
+  openAdminPanel();
+}
+function loadAdminTemplates(){
+  try{ var raw=localStorage.getItem('adminUjsagTemplates'); return raw?JSON.parse(raw):null; }catch(e){ return null; }
+}
+function saveAdminTemplates(obj){
+  try{ localStorage.setItem('adminUjsagTemplates',JSON.stringify(obj)); }
+  catch(e){ alert(L('Nem sikerült elmenteni a böngésző tárhelyébe.','Could not save to browser storage.')); }
+}
+function loadAdminSwipe(){
+  try{ var raw=localStorage.getItem('adminSwipeConfig'); return raw?JSON.parse(raw):{}; }catch(e){ return {}; }
+}
+function saveAdminSwipe(obj){
+  try{ localStorage.setItem('adminSwipeConfig',JSON.stringify(obj)); }
+  catch(e){ alert(L('Nem sikerült elmenteni — valószínűleg túl nagyok/túl sokan a képek a böngésző tárhelyéhez. Próbálj kisebb/tömörített fájlokkal, vagy mentsd kevesebb képpel egyszerre.','Could not save — the images are likely too large/numerous for browser storage. Try smaller/compressed files, or save fewer images at a time.')); }
+}
+function currentUjsagTemplates(){
+  var override=loadAdminTemplates();
+  if(!override)return UJSAG_TEMPLATES;
+  var merged={}; [4,8,12,16].forEach(function(n){ merged[n]=override[n]||UJSAG_TEMPLATES[n]; });
+  return merged;
+}
+function currentSwipeMeta(id){
+  var override=loadAdminSwipe()[id]||{};
+  var label=sectionLabel(id);
+  var descDefault=SWIPE_DESC[id]?L(SWIPE_DESC[id][0],SWIPE_DESC[id][1]):'';
+  var descHu=override.descHu!==undefined?override.descHu:(SWIPE_DESC[id]?SWIPE_DESC[id][0]:'');
+  var descEn=override.descEn!==undefined?override.descEn:(SWIPE_DESC[id]?SWIPE_DESC[id][1]:'');
+  var desc=(LANG==='en'?descEn:descHu)||descDefault;
+  var img=override.img||('assets/swipe/'+id+'.jpg');
+  return {label:label,desc:desc,img:img};
+}
+function openAdminPanel(){
+  var ov=document.getElementById('adminOverlay');
+  if(!ov){ ov=document.createElement('div'); ov.id='adminOverlay'; ov.className='admin-overlay'; document.body.appendChild(ov); }
+  ov.addEventListener('click',function(e){ if(e.target===ov)closeAdminPanel(); });
+  renderAdminPanel('templates');
+}
+function closeAdminPanel(){ var ov=document.getElementById('adminOverlay'); if(ov)ov.remove(); }
+function renderAdminPanel(tab){
+  var ov=document.getElementById('adminOverlay');
+  ov.innerHTML='<div class="admin-box">'
+    +'<div class="admin-top"><h2>⚙ '+L('Admin','Admin')+'</h2><button type="button" class="admin-close" onclick="closeAdminPanel()">✕</button></div>'
+    +'<div class="admin-tabs">'
+      +'<button type="button" class="admin-tab'+(tab==='templates'?' sel':'')+'" onclick="renderAdminPanel(\'templates\')">📐 '+L('Sablonszerkesztő','Templates')+'</button>'
+      +'<button type="button" class="admin-tab'+(tab==='swipe'?' sel':'')+'" onclick="renderAdminPanel(\'swipe\')">🔀 '+L('Swipe-szerkesztő','Swipe editor')+'</button>'
+    +'</div>'
+    +'<div class="admin-body" id="adminBody"></div>'
+    +'</div>';
+  if(tab==='templates')renderAdminTemplatesTab(); else renderAdminSwipeTab();
+}
+var _adminTemplateSize=4;
+function renderAdminTemplatesTab(){
+  var body=document.getElementById('adminBody');
+  var templates=currentUjsagTemplates();
+  var sizeBtns=[4,8,12,16].map(function(n){
+    return '<button type="button" class="admin-size-btn'+(n===_adminTemplateSize?' sel':'')+'" onclick="adminSwitchTemplateSize('+n+')">'+n+' '+L('oldal','pages')+'</button>';
+  }).join('');
+  var keep=templates[_adminTemplateSize]||[];
+  var rows=SWIPE_DECK_IDS.map(function(id){
+    var checked=keep.indexOf(id)>=0?'checked':'';
+    return '<label class="admin-chk-row"><input type="checkbox" data-id="'+id+'" '+checked+'>'+esc(sectionLabel(id))+'</label>';
+  }).join('');
+  body.innerHTML='<div class="admin-size-tabs">'+sizeBtns+'</div>'
+    +'<div class="admin-fit-status" id="adminFitStatus"></div>'
+    +'<div class="admin-chk-list">'+rows+'</div>'
+    +'<div class="admin-actions">'
+      +'<button type="button" class="admin-save-btn" onclick="adminSaveTemplate()">💾 '+L('Mentés (ebben a böngészőben)','Save (in this browser)')+'</button>'
+      +'<button type="button" class="admin-reset-btn" onclick="adminResetTemplate()">↺ '+L('Alaphelyzet','Reset')+'</button>'
+      +'<button type="button" class="admin-export-btn" onclick="adminExportAll()">⬇ '+L('Export (JSON)','Export (JSON)')+'</button>'
+    +'</div>';
+  updateAdminFitStatus();
+  body.querySelectorAll('.admin-chk-row input').forEach(function(cb){ cb.addEventListener('change',updateAdminFitStatus); });
+}
+function adminSwitchTemplateSize(n){ _adminTemplateSize=n; renderAdminTemplatesTab(); }
+function updateAdminFitStatus(){
+  var body=document.getElementById('adminBody'); if(!body)return;
+  var ids=[]; body.querySelectorAll('.admin-chk-row input:checked').forEach(function(cb){ ids.push(cb.getAttribute('data-id')); });
+  var namesEl=document.getElementById('f_names');
+  if(namesEl && !namesEl.value.trim())namesEl.value=L('Anna & Péter','Anna & Peter');
+  seedUjsagDefaults();
+  applyProductTailConfig();
+  SWIPE_DECK_IDS.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=(ids.indexOf(id)>=0); });
+  ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
+  var needed=ujsagPagesNeeded();
+  var status=document.getElementById('adminFitStatus');
+  if(status)status.textContent=L('Ennyi rovattal kb. '+(needed+1)+' oldal kellene (a borítóval együtt).','With this many sections, about '+(needed+1)+' pages would be needed (including the cover).');
+}
+function adminSaveTemplate(){
+  var body=document.getElementById('adminBody');
+  var ids=[]; body.querySelectorAll('.admin-chk-row input:checked').forEach(function(cb){ ids.push(cb.getAttribute('data-id')); });
+  var templates=currentUjsagTemplates();
+  templates[_adminTemplateSize]=ids;
+  saveAdminTemplates(templates);
+  alert(L('Mentve — ez a böngésző mostantól ezt a '+_adminTemplateSize+' oldalas sablont adja.','Saved — this browser will now serve this '+_adminTemplateSize+'-page template.'));
+}
+function adminResetTemplate(){
+  var override=loadAdminTemplates();
+  if(override){ delete override[_adminTemplateSize]; saveAdminTemplates(override); }
+  renderAdminTemplatesTab();
+}
+function renderAdminSwipeTab(){
+  var body=document.getElementById('adminBody');
+  var overrides=loadAdminSwipe();
+  var rows=SWIPE_DECK_IDS.map(function(id){
+    var ov=overrides[id]||{};
+    var img=ov.img||('assets/swipe/'+id+'.jpg');
+    var descHu=ov.descHu!==undefined?ov.descHu:(SWIPE_DESC[id]?SWIPE_DESC[id][0]:'');
+    var descEn=ov.descEn!==undefined?ov.descEn:(SWIPE_DESC[id]?SWIPE_DESC[id][1]:'');
+    return '<div class="admin-swipe-row" data-id="'+id+'">'
+      +'<div class="admin-swipe-thumb-wrap">'
+        +'<img class="admin-swipe-thumb" src="'+img+'" onerror="this.style.opacity=\'.15\';">'
+        +'<input type="file" accept="image/*" class="admin-swipe-file">'
+      +'</div>'
+      +'<div class="admin-swipe-fields"><b>'+esc(sectionLabel(id))+'</b>'
+        +'<input type="text" class="admin-swipe-hu" placeholder="Magyar leírás" value="'+esc(descHu)+'">'
+        +'<input type="text" class="admin-swipe-en" placeholder="English description" value="'+esc(descEn)+'"></div>'
+      +'</div>';
+  }).join('');
+  body.innerHTML='<div class="admin-swipe-list">'+rows+'</div>'
+    +'<div class="admin-actions">'
+      +'<button type="button" class="admin-save-btn" onclick="adminSaveSwipe()">💾 '+L('Mentés (ebben a böngészőben)','Save (in this browser)')+'</button>'
+      +'<button type="button" class="admin-export-btn" onclick="adminExportAll()">⬇ '+L('Export (JSON)','Export (JSON)')+'</button>'
+    +'</div>';
+  body.querySelectorAll('.admin-swipe-file').forEach(function(inp){
+    inp.addEventListener('change',function(e){
+      var file=e.target.files[0]; if(!file)return;
+      var reader=new FileReader();
+      reader.onload=function(){
+        var row=inp.closest('.admin-swipe-row');
+        row.querySelector('.admin-swipe-thumb').src=reader.result;
+        row.querySelector('.admin-swipe-thumb').style.opacity='1';
+        row.setAttribute('data-newimg',reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+}
+function adminSaveSwipe(){
+  var body=document.getElementById('adminBody');
+  var overrides=loadAdminSwipe();
+  body.querySelectorAll('.admin-swipe-row').forEach(function(row){
+    var id=row.getAttribute('data-id');
+    var newImg=row.getAttribute('data-newimg');
+    var hu=row.querySelector('.admin-swipe-hu').value;
+    var en=row.querySelector('.admin-swipe-en').value;
+    var cur=overrides[id]||{};
+    overrides[id]={img:newImg||cur.img||'',descHu:hu,descEn:en};
+  });
+  saveAdminSwipe(overrides);
+  alert(L('Mentve — ez a böngésző mostantól ezekkel a képekkel/leírásokkal működik.','Saved — this browser now uses these images/descriptions.'));
+}
+function adminExportAll(){
+  var templates=currentUjsagTemplates();
+  var overrides=loadAdminSwipe();
+  var swipe={};
+  SWIPE_DECK_IDS.forEach(function(id){
+    var ov=overrides[id]||{};
+    swipe[id]={
+      img: ov.img||null,
+      descHu: ov.descHu!==undefined?ov.descHu:(SWIPE_DESC[id]?SWIPE_DESC[id][0]:''),
+      descEn: ov.descEn!==undefined?ov.descEn:(SWIPE_DESC[id]?SWIPE_DESC[id][1]:'')
+    };
+  });
+  var payload={templates:templates,swipe:swipe,exportedAt:new Date().toISOString()};
+  var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ujsag-admin-export.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },2000);
+}
 </script>
 </body>
 </html>
