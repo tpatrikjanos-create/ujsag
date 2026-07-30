@@ -100,6 +100,23 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .tipbtn:hover{background:#fbf3df;}
 .tipbtn:active{transform:scale(.96);}
 .tipbtn-ta{align-self:flex-start;margin-top:0;}
+/* AI Tipp — a hagyományos (előre megírt, kész) Tipp gomb mellé kerül, minden olyan mezőnél,
+   ahol az is megvan; szándékosan feltűnő (gradiens, saját szín), hogy ne vesszen el mellette */
+.ai-tipbtn{flex:0 0 auto;font-family:'Libre Franklin',sans-serif;font-size:11px;font-weight:700;white-space:nowrap;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;border:none;border-radius:20px;padding:0 13px;cursor:pointer;height:38px;box-shadow:0 2px 8px rgba(91,63,174,.35);}
+.ai-tipbtn:hover{filter:brightness(1.08);}
+.ai-tipbtn:active{transform:scale(.96);}
+.ai-tipbtn:disabled{opacity:.6;cursor:default;}
+.ai-tipbtn-ta{align-self:flex-start;margin-top:0;}
+#aiTippConfirmOverlay{position:fixed;inset:0;z-index:9900;background:rgba(20,10,15,.55);display:flex;align-items:center;justify-content:center;padding:16px;}
+#aiTippConfirmBox{background:#fff;border-radius:18px;padding:22px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);font-family:'Libre Franklin',sans-serif;}
+#aiTippConfirmBox h3{font-family:'Old Standard TT',serif;font-size:18px;margin:0 0 10px;color:#2a1a20;}
+#aiTippConfirmBox p{font-size:13px;color:#5a4a52;line-height:1.5;margin:0 0 16px;}
+#aiTippConfirmBox .ai-confirm-err{font-size:12px;color:#a52a2a;margin:-8px 0 14px;display:none;}
+.ai-confirm-actions{display:flex;gap:10px;}
+.ai-confirm-actions button{flex:1;padding:12px;border-radius:10px;border:none;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
+.ai-confirm-cancel{background:#f1e9e6;color:#8a5a5a;}
+.ai-confirm-go{background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;}
+.ai-confirm-go:disabled{opacity:.6;cursor:default;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
 .tinyhint{font-size:11px;color:#a4889a;margin:-3px 0 9px;font-family:'Libre Franklin',sans-serif;font-style:italic;}
@@ -410,6 +427,14 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .ears .slogan{font-size:8px;max-width:60mm;}
 .nameplate{font-family:'Grenze Gotisch',serif;font-weight:700;text-align:center;font-size:46px;line-height:.92;margin:2px 0 0;}
 .size-a4 .nameplate{font-size:66px;}
+/* a lap NEVE (pl. "Esküvői Újság") egy kompakt, újságszerű banner — nem a fő cím, hanem
+   afölött, kis betűvel, csupa nagybetűvel álló "kiadó neve"; a tényleges főcím a pár neve +
+   kapcsolat-kifejezés (ld. B_coverUjsag, ami erre a .nameplate osztályt használja) */
+.masthead-band{font-family:'Grenze Gotisch',serif;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.12em;font-size:15px;line-height:1.15;margin:2px 0 0;}
+.size-a4 .masthead-band{font-size:20px;}
+.pack-romantic .masthead-band{font-family:'Marcellus',serif;letter-spacing:.14em;}
+.pack-modern .masthead-band{font-family:'Jost',sans-serif;font-weight:700;letter-spacing:.18em;}
+.pack-magazine .masthead-band{font-family:'Grenze Gotisch',serif;letter-spacing:.1em;}
 .subname{font-family:'Libre Franklin',sans-serif;text-align:center;font-size:7px;letter-spacing:.3em;text-transform:uppercase;margin:2px 0 0;}
 .size-a4 .subname{font-size:10px;}
 .dateline-strip{display:flex;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
@@ -2821,7 +2846,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.16';
+  var APP_VERSION='6.17';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4040,8 +4065,8 @@ function B_coverUjsag(d){
   var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
-    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(masthead)+'</h1>'
-    +'<div class="cover-phrase" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;"><span class="editable" contenteditable="true">'+esc(d.names)+'</span> <span class="editable" contenteditable="true">'+esc(phrase)+'</span></div>'
+    +'<div class="masthead-band editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'20px':'15px')+';">'+esc(masthead)+'</div>'
+    +'<h1 class="nameplate" style="font-size:'+(CFG.size==='A4'?'80px':'58px')+';margin-top:4px;"><span class="editable" contenteditable="true">'+esc(d.names)+'</span> <span class="editable" contenteditable="true">'+esc(phrase)+'</span></h1>'
     +'<hr class="rule-ox" style="margin-top:12px;"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
     +(d.coverCap?'<div class="caption editable" contenteditable="true">'+esc(d.coverCap)+'</div>':'')
@@ -7052,6 +7077,121 @@ function fillTip(id){
   el.focus();
   if(typeof scheduleFit==='function')scheduleFit();
 }
+/* ===== AI Tipp =====
+   A hagyományos "💡 Tipp" gomb előre megírt, kész szövegekből válogat (ld. TIPS/TIPS_EN) —
+   ez itt egy VALÓDI AI-hívás: vagy ír egy új, a mezőhöz illő ünnepi szöveget, vagy (ha a
+   customer már írt valamit) átfogalmazza azt szebbre/ünnepibbre, és javítja a helyesírást.
+
+   FONTOS, biztonsági okból: ez az oldal egy statikus HTML fájl (GitHub Pages), szerver
+   nélkül — egy AI-szolgáltató API-kulcsát SOHA nem szabad a kliens-oldali kódba beleírni
+   (bárki kiolvasná az oldal forráskódjából, és visszaélhetne vele / a te API-számládat
+   terhelné). Ezért egy KÜLÖN, apró szerver-oldali közvetítőn (Cloudflare Worker) keresztül
+   hívjuk az AI-t — ott van biztonságban a kulcs. A Worker kódja + a telepítés lépései a
+   projekt gyökerében, a cloudflare-worker/ai-tipp-proxy.js fájlban vannak leírva.
+
+   Amíg AI_PROXY_URL üresen marad, a gomb megjelenik (hogy a felület kész legyen), de
+   kattintásra egy barátságos üzenetet ír ki ahelyett, hogy hibázna — így ez a funkció a
+   Worker telepítése ELŐTT is biztonságosan élesíthető, és a Worker URL-jének beillesztése
+   után azonnal működni kezd, kód-módosítás nélkül. */
+var AI_PROXY_URL=''; /* ide kerül a Cloudflare Worker URL-je (pl. https://xxxxx.workers.dev) a telepítés után */
+var AI_TIPP_CONTEXT={
+  f_masthead:'the title/masthead of a humorous mock wedding newspaper — like a real newspaper\'s nameplate (e.g. "Wedding Gazette", "The Newlywed Times")',
+  f_phrase:'a short phrase that follows the couple\'s names on the newspaper cover, describing the event (e.g. "are getting married", "are tying the knot")',
+  f_slogan:'a tiny tagline/slogan printed in the top corner of the newspaper, like a real newspaper\'s corner slogan',
+  f_coverCap:'a short caption printed under the big cover photo of the couple',
+  f_welcome:'a warm welcome message from the couple to their wedding guests, printed inside the gazette',
+  f_thanksBrideMsg:'a thank-you message from the bride to her own parents, printed in the gazette',
+  f_thanksGroomMsg:'a thank-you message from the groom to his own parents, printed in the gazette',
+  f_memIntro:'a gentle introductory line for a memorial section honoring deceased loved ones who can\'t attend the wedding',
+  mh_phrase:'a short phrase that follows the couple\'s names on a wedding invitation cover, describing the event (e.g. "are getting married")',
+  mh_quote:'a short romantic quote about love, for a wedding invitation',
+  mh_ajandek:'a polite note about wedding gifts for a wedding invitation (e.g. presence over presents)'
+};
+var _aiTippState=null;
+function aiTippLabelFor(id){
+  var el=document.getElementById(id); if(!el)return id;
+  var fld=el.closest('.fld'); var lbl=fld&&fld.querySelector('label'); return lbl?lbl.textContent.trim():id;
+}
+function initAiTippButtons(){
+  document.querySelectorAll('.tipbtn').forEach(function(btn){
+    if(btn.dataset.aiWired)return; btn.dataset.aiWired='1';
+    var m=/fillTip\('([^']+)'\)/.exec(btn.getAttribute('onclick')||'');
+    if(!m)return;
+    var fieldId=m[1];
+    if(!AI_TIPP_CONTEXT[fieldId])return; /* csak azoknál a mezőknél, amikhez van AI-kontextusunk */
+    var aiBtn=document.createElement('button');
+    aiBtn.type='button';
+    aiBtn.className='ai-tipbtn'+(btn.classList.contains('tipbtn-ta')?' ai-tipbtn-ta':'');
+    aiBtn.innerHTML='✨ '+L('AI Tipp','AI Tip');
+    aiBtn.onclick=function(){ openAiTippConfirm(fieldId); };
+    btn.insertAdjacentElement('afterend',aiBtn);
+  });
+}
+function openAiTippConfirm(fieldId){
+  var el=document.getElementById(fieldId); if(!el)return;
+  var hasText=!!el.value.trim();
+  var ov=document.getElementById('aiTippConfirmOverlay');
+  if(!ov){ ov=document.createElement('div'); ov.id='aiTippConfirmOverlay'; document.body.appendChild(ov); }
+  var label=aiTippLabelFor(fieldId);
+  var desc=hasText
+    ? L('Az AI átfogalmazza a jelenlegi szövegedet ennél a mezőnél ("'+label+'"): szebbre, ünnepibbre formálja, és javítja a helyesírást. A jelenlegi szöveg felülíródik.','The AI will rewrite your current text for this field ("'+label+'"): making it more festive and polished, and fixing spelling/grammar. Your current text will be replaced.')
+    : L('Az AI ír egy új, a mezőhöz ("'+label+'") illő, ünnepi szöveget.','The AI will write a new, festive piece of text for this field ("'+label+'").');
+  ov.innerHTML='<div id="aiTippConfirmBox">'
+    +'<h3>✨ '+L('AI Tipp','AI Tip')+'</h3>'
+    +'<p>'+desc+'</p>'
+    +'<div class="ai-confirm-err"></div>'
+    +'<div class="ai-confirm-actions">'
+      +'<button type="button" class="ai-confirm-cancel">'+L('Mégse','Cancel')+'</button>'
+      +'<button type="button" class="ai-confirm-go">✨ '+L('Írd meg','Go ahead')+'</button>'
+    +'</div>'
+    +'</div>';
+  ov.addEventListener('click',function(e){ if(e.target===ov)closeAiTippConfirm(); });
+  ov.querySelector('.ai-confirm-cancel').onclick=closeAiTippConfirm;
+  ov.querySelector('.ai-confirm-go').onclick=function(){ runAiTipp(fieldId); };
+}
+function closeAiTippConfirm(){
+  var ov=document.getElementById('aiTippConfirmOverlay'); if(ov)ov.remove();
+}
+function runAiTipp(fieldId){
+  var el=document.getElementById(fieldId); if(!el)return;
+  var ov=document.getElementById('aiTippConfirmOverlay');
+  var goBtn=ov&&ov.querySelector('.ai-confirm-go');
+  var errBox=ov&&ov.querySelector('.ai-confirm-err');
+  if(!AI_PROXY_URL){
+    if(errBox){ errBox.textContent=L('Az AI Tipp funkció ezen az oldalon még nincs bekapcsolva.','The AI Tip feature isn\'t switched on for this site yet.'); errBox.style.display='block'; }
+    return;
+  }
+  if(goBtn){ goBtn.disabled=true; goBtn.textContent='⏳ '+L('Írás...','Writing...'); }
+  var namesFieldId=CFG.product==='meghivo'?'mh_names':CFG.product==='savethedate'?'std_names':'f_names';
+  var namesEl=document.getElementById(namesFieldId);
+  var dateEl=document.getElementById(CFG.product==='meghivo'?'mh_date':CFG.product==='savethedate'?'std_date':'f_date');
+  var venueEl=document.getElementById(CFG.product==='meghivo'?'mh_venue':CFG.product==='savethedate'?'std_venue':'f_venue');
+  var payload={
+    context:AI_TIPP_CONTEXT[fieldId]||'',
+    currentText:el.value||'',
+    lang:LANG==='en'?'en':'hu',
+    names:(namesEl&&namesEl.value.trim())||'',
+    date:(dateEl&&dateEl.value.trim())||'',
+    venue:(venueEl&&venueEl.value.trim())||''
+  };
+  fetch(AI_PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(function(res){ return res.json().then(function(data){ return {ok:res.ok,data:data}; }); })
+    .then(function(r){
+      if(!r.ok||!r.data||!r.data.text){ throw new Error((r.data&&r.data.error)||'AI hiba'); }
+      el.value=r.data.text.trim();
+      el.focus();
+      if(typeof scheduleFit==='function')scheduleFit();
+      closeAiTippConfirm();
+      trackEvent('ai_tipp_used',{field:fieldId});
+    })
+    .catch(function(err){
+      if(errBox){ errBox.textContent=L('Nem sikerült elérni az AI szolgáltatást. Próbáld újra kicsit később.','Could not reach the AI service. Please try again in a moment.'); errBox.style.display='block'; }
+      if(goBtn){ goBtn.disabled=false; goBtn.textContent='✨ '+L('Írd meg','Go ahead'); }
+      console.warn('AI Tipp hiba:',err);
+    });
+}
+if(document.readyState!=='loading')initAiTippButtons();
+else document.addEventListener('DOMContentLoaded',initAiTippButtons);
 /* ===== Meghívó szöveg (2. oldal) — adatvezérelt Tipp: a ténylegesen megadott dátumot/
    helyszínt fűzi bele egy körbeforgatott sablon-mondatba, nem csak statikus tippszöveget ír be */
 var MH_INTRO_TEMPLATES_HU=[
