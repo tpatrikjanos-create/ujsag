@@ -2762,7 +2762,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.11';
+  var APP_VERSION='6.12';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2805,10 +2805,7 @@ function backToTypeSelect(){
     <button type="button" class="swipe-entry-btn" onclick="openSwipePicker()" data-i18n="w_journey_swipe_btn">🔀 Inkább válogatnék</button>
   </div>
 
-  <div class="journey-path-h" style="justify-content:center;margin-top:26px;"><span class="journey-emoji">📝</span><span data-i18n="w_journey_manual_h">Saját kezűleg, részletesen</span></div>
-  <div class="journey-path-desc" style="text-align:center;margin-bottom:14px;" data-i18n="w_journey_manual_desc">Ha inkább te magad választanál formátumot, oldalszámot és rovatokat, és rögtön ki is töltenéd a szövegeket — itt lent minden mezőt megtalálsz.</div>
-
-  <div id="wizLegacyFields">
+  <div id="wizLegacyFields" style="display:none;">
   <div class="card">
     <h3><span class="num">2</span><span data-i18n="w_h3num_form_tum_amp_oldalsz_m">Formátum &amp; oldalszám</span></h3>
     <div class="fmt-grid">
@@ -3748,8 +3745,10 @@ function finishSwipePicker(){
   ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
   closeSwipePicker();
   trackEvent('ujsag_swipe_finished',{count:Object.keys(decisions).filter(function(k){return decisions[k];}).length});
+  /* a varázsló (wizLegacyFields) alapból rejtve van — csak a Válogatás (swipe) befejezése
+     után jelenik meg, a fenti szűréssel már csak az "igen" rovatok kártyáival */
   var legacy=document.getElementById('wizLegacyFields');
-  if(legacy)legacy.scrollIntoView({behavior:'smooth',block:'start'});
+  if(legacy){ legacy.style.display='block'; legacy.scrollIntoView({behavior:'smooth',block:'start'}); }
 }
 /* olyan mezők/sorok alapértelmezett kitöltése, amiknek a varázslóban eddig csak PLACEHOLDER
    szövege volt (nem valódi érték) — mivel a gyorsindításnál a felhasználó sosem látja/tölti ki
