@@ -150,9 +150,18 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .swipe-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .swipe-close{background:none;border:none;font-size:18px;color:#aaa;cursor:pointer;padding:2px 8px;}
 .swipe-progress{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;color:#8a7480;}
+.swipe-draghint{text-align:center;font-family:'Libre Franklin',sans-serif;font-size:11px;color:var(--wiz-rose-dark);background:var(--wiz-blush);border-radius:8px;padding:6px 8px;margin-bottom:10px;}
 .swipe-card{border:1.6px solid var(--wiz-rose-pale);border-radius:16px;overflow:hidden;margin-bottom:16px;}
+/* a valódi (Tinder-szerű) húzás-gesztus CSS-e csak a tényleges válogató-overlay kártyájára
+   vonatkozik — a .swipe-card osztályt a bemutató-carousel (sections-card) is újrahasznosítja,
+   ott nincs húzás-JS, nem szabad "megfoghatónak" tűnnie */
+#swipeOverlay .swipe-card{position:relative;touch-action:pan-y;cursor:grab;user-select:none;transition:transform .32s cubic-bezier(.22,.61,.36,1),opacity .32s ease;will-change:transform;}
+#swipeOverlay .swipe-card.dragging{transition:none;cursor:grabbing;}
+.swipe-stamp{position:absolute;top:14px;z-index:5;padding:6px 14px;border:3px solid;border-radius:8px;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;opacity:0;pointer-events:none;background:rgba(255,255,255,.85);}
+.swipe-stamp.like{left:14px;color:#2a8f5a;border-color:#2a8f5a;transform:rotate(-14deg);}
+.swipe-stamp.nope{right:14px;color:#b0355a;border-color:#b0355a;transform:rotate(14deg);}
 .swipe-card-photo{position:relative;width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,var(--wiz-rose-pale),var(--wiz-blush));}
-.swipe-card-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.swipe-card-photo img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none;}
 .swipe-card-fallback{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:44px;color:var(--wiz-rose-dark);opacity:.55;}
 .swipe-card-body{padding:14px 16px 16px;text-align:center;}
 .swipe-card-body h3{font-family:'Old Standard TT',serif;font-size:17px;margin:0 0 6px;color:#2a1a20;}
@@ -1211,7 +1220,7 @@ hu:{
   w_lbl_f_names:"A pár neve",
   w_lbl_f_phrase:"Kapcsolat-kifejezés",
   w_val_f_phrase:"összeházasodnak",
-  w_hint_masthead_folio:"A lap címe csak a belső oldalak alján, kis betűvel jelenik meg — a címlapon a pár neve a főcím.",
+  w_hint_masthead_folio:"A lap címe a címlap főcíme is egyben — ez jelenik meg (kisebb betűvel) a belső oldalak alján is.",
   w_lbl_f_masthead:"A lap címe",
   w_ph_f_masthead:"pl. Esküvői Újság",
   w_lbl_f_subname:"Alcím",
@@ -1837,7 +1846,7 @@ en:{
   w_lbl_f_names:"The couple's name",
   w_lbl_f_phrase:"Relationship phrase",
   w_val_f_phrase:"are getting married",
-  w_hint_masthead_folio:"The gazette's title only appears small, at the bottom of the inner pages — on the cover, the couple's name is the main headline.",
+  w_hint_masthead_folio:"The gazette's title is also the cover's main headline — it also appears (smaller) at the bottom of the inner pages.",
   w_lbl_f_masthead:"The gazette's title",
   w_ph_f_masthead:"e.g. Wedding Gazette",
   w_lbl_f_subname:"Subtitle",
@@ -2812,7 +2821,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.15';
+  var APP_VERSION='6.16';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2868,11 +2877,11 @@ function backToTypeSelect(){
 
   <div class="card">
     <h3><span class="num">3</span><span data-i18n="w_h3num_k_telez_adatok">Kötelező adatok</span></h3>
-    <div class="fld"><label><span data-i18n="w_lbl_f_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="f_phrase" value="összeházasodnak" data-i18n-val="w_val_f_phrase"><button type="button" class="tipbtn" onclick="fillTip('f_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span></label><div class="fld-row"><input id="f_masthead" value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="grid2">
-      <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span></label><div class="fld-row"><input id="f_masthead" value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="f_phrase" value="összeházasodnak" data-i18n-val="w_val_f_phrase"><button type="button" class="tipbtn" onclick="fillTip('f_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     </div>
-    <div class="tinyhint" data-i18n="w_hint_masthead_folio">A lap címe csak a belső oldalak alján, kis betűvel jelenik meg — a címlapon a pár neve a főcím.</div>
+    <div class="tinyhint" data-i18n="w_hint_masthead_folio">A lap címe a címlap főcíme is egyben — ez jelenik meg (kisebb betűvel) a belső oldalak alján is.</div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_date">Dátum</span></label><input id="f_date" value=""></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_venue">Helyszín</span></label><input id="f_venue" value=""></div>
@@ -3783,9 +3792,12 @@ function renderSwipeOverlay(){
       +'<button type="button" class="swipe-close" onclick="closeSwipePicker()">✕</button>'
       +'<div class="swipe-progress">'+(st.ix+1)+' / '+SWIPE_DECK_IDS.length+'</div>'
     +'</div>'
-    +'<div class="swipe-card">'
+    +(st.ix===0?'<div class="swipe-draghint">'+L('← húzd balra: kihagyom  ·  húzd jobbra: bekerül →','← swipe left: skip  ·  swipe right: include →')+'</div>':'')
+    +'<div class="swipe-card" id="swipeCardEl">'
       +'<div class="swipe-card-photo">'
-        +'<img src="'+meta.img+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+        +'<div class="swipe-stamp like">'+L('IGEN','YES')+'</div>'
+        +'<div class="swipe-stamp nope">'+L('KIHAGY','SKIP')+'</div>'
+        +'<img src="'+meta.img+'" alt="" draggable="false" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
         +'<div class="swipe-card-fallback">'+ico('i-camera')+'</div>'
       +'</div>'
       +'<div class="swipe-card-body"><h3>'+esc(meta.label)+'</h3><p>'+esc(meta.desc)+'</p></div>'
@@ -3795,6 +3807,54 @@ function renderSwipeOverlay(){
       +'<button type="button" class="swipe-yes" onclick="swipeDecide(true)">❤️ '+L('Bekerül','Include')+'</button>'
     +'</div>'
     +'</div>';
+  initSwipeCardDrag(document.getElementById('swipeCardEl'));
+}
+/* Valódi, Tinder-stílusú húzás: pointer eseményekkel (egér ÉS érintés egységesen), a kártya
+   követi az ujjat/kurzort, elfordul, és egy küszöb (THRESH) fölött a megfelelő irányba
+   "kirepül" — ugyanaz a döntés (swipeDecide) fut le, mint a ✕/❤️ gombokra kattintva, azok
+   tehát változatlanul működnek (billentyűzet/kattintás-alapú, akadálymentes alternatívaként). */
+function initSwipeCardDrag(card){
+  if(!card)return;
+  var THRESH=90;
+  var dragging=false,curX=0,curY=0,startX=0,startY=0,pid=null;
+  var likeStamp=card.querySelector('.swipe-stamp.like');
+  var nopeStamp=card.querySelector('.swipe-stamp.nope');
+  function applyTransform(x,y){
+    card.style.transform='translate('+x+'px,'+(y*.25)+'px) rotate('+(x/18)+'deg)';
+    var t=Math.min(1,Math.abs(x)/THRESH);
+    if(likeStamp)likeStamp.style.opacity=(x>0?t:0);
+    if(nopeStamp)nopeStamp.style.opacity=(x<0?t:0);
+  }
+  function onDown(e){
+    if(e.target.closest('.swipe-actions'))return;
+    dragging=true; pid=e.pointerId; curX=0; curY=0;
+    startX=e.clientX; startY=e.clientY;
+    card.classList.add('dragging');
+    try{card.setPointerCapture(pid);}catch(err){}
+  }
+  function onMove(e){
+    if(!dragging||(pid!==null&&e.pointerId!==pid))return;
+    curX=e.clientX-startX; curY=e.clientY-startY;
+    applyTransform(curX,curY);
+  }
+  function onUp(e){
+    if(!dragging||(pid!==null&&e.pointerId!==pid))return;
+    dragging=false;
+    card.classList.remove('dragging');
+    if(Math.abs(curX)>THRESH){
+      var keep=curX>0;
+      card.style.transform='translate('+(keep?600:-600)+'px,'+(curY*.4)+'px) rotate('+(keep?28:-28)+'deg)';
+      card.style.opacity='0';
+      setTimeout(function(){ swipeDecide(keep); },240);
+    } else {
+      applyTransform(0,0);
+      card.style.transform='';
+    }
+  }
+  card.addEventListener('pointerdown',onDown);
+  card.addEventListener('pointermove',onMove);
+  card.addEventListener('pointerup',onUp);
+  card.addEventListener('pointercancel',onUp);
 }
 function swipeDecide(keep){
   _swipeState.decisions[SWIPE_DECK_IDS[_swipeState.ix]]=keep;
@@ -3977,10 +4037,11 @@ function B_coverUjsag(d){
   var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
   var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
   var phrase=d.phrase||L('összeházasodnak','are getting married');
+  var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
-    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(d.names)+'</h1>'
-    +'<div class="cover-phrase editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;">'+esc(phrase)+'</div>'
+    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(masthead)+'</h1>'
+    +'<div class="cover-phrase" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;"><span class="editable" contenteditable="true">'+esc(d.names)+'</span> <span class="editable" contenteditable="true">'+esc(phrase)+'</span></div>'
     +'<hr class="rule-ox" style="margin-top:12px;"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
     +(d.coverCap?'<div class="caption editable" contenteditable="true">'+esc(d.coverCap)+'</div>':'')
