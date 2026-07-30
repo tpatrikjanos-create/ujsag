@@ -2846,7 +2846,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.17';
+  var APP_VERSION='6.18';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -7093,7 +7093,7 @@ function fillTip(id){
    kattintásra egy barátságos üzenetet ír ki ahelyett, hogy hibázna — így ez a funkció a
    Worker telepítése ELŐTT is biztonságosan élesíthető, és a Worker URL-jének beillesztése
    után azonnal működni kezd, kód-módosítás nélkül. */
-var AI_PROXY_URL=''; /* ide kerül a Cloudflare Worker URL-je (pl. https://xxxxx.workers.dev) a telepítés után */
+var AI_PROXY_URL='https://ujsag.tpatrikjanos.workers.dev/';
 var AI_TIPP_CONTEXT={
   f_masthead:'the title/masthead of a humorous mock wedding newspaper — like a real newspaper\'s nameplate (e.g. "Wedding Gazette", "The Newlywed Times")',
   f_phrase:'a short phrase that follows the couple\'s names on the newspaper cover, describing the event (e.g. "are getting married", "are tying the knot")',
