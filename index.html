@@ -213,6 +213,13 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 #resumeBar{background:linear-gradient(135deg,var(--wiz-blush),#fff);border:1.5px solid var(--wiz-rose);border-radius:14px;padding:12px 16px;margin-bottom:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#3a2630;box-shadow:0 4px 16px rgba(194,72,122,.15);}
 #adminOverlay,#addSecOverlay{position:fixed;inset:0;z-index:9999;background:rgba(40,28,32,.82);display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Libre Franklin',sans-serif;}
 #adminBox,#addSecBox{background:#fff;border-radius:18px;padding:26px 28px;max-width:520px;width:100%;max-height:84vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+/* PC-n, ha az újság oldala a nézet közepén, keskenyen van (sok üres hely a két szélén), a
+   rovat-szerkesztő (nem az admin!) a jobb szélre kerül, áttetsző háttérrel — így az újság
+   továbbra is látszik, miközben a mezőket töltöd ki, nem takarja le a teljes képernyőt. */
+@media(min-width:1100px){
+  #addSecOverlay{background:rgba(40,28,32,.28);justify-content:flex-end;padding-right:28px;}
+  #addSecBox{box-shadow:0 20px 60px rgba(0,0,0,.3);}
+}
 #addSecBox h2{margin:0 0 10px;font-family:'Old Standard TT',serif;color:var(--wiz-rose-dark);font-size:20px;}
 #addSecList{display:flex;flex-direction:column;gap:8px;margin:12px 0;}
 #addSecMsg{margin-bottom:10px;}
@@ -861,6 +868,8 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 @media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
 .blk-select-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover>.blk-select-btn,.blk.bsel>.blk-select-btn{display:flex;}
+.blk-edit-btn{position:absolute;top:2px;left:200px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,110,20,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk:hover>.blk-edit-btn,.blk.bsel>.blk-edit-btn{display:flex;}
 .blk-select-btn:hover{background:rgba(52,110,148,1);}
 .blk.bsel>.rsz{display:block;}
 .blk.bsel{outline:1.5px dashed var(--claret);outline-offset:3px;}
@@ -871,7 +880,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk.swap-target{outline:2.5px solid #2f7d3a !important;outline-offset:3px;background:rgba(47,125,58,.06);}
 .page.move-target{outline:3px solid #2f7d3a;outline-offset:-3px;}
 .page.over{outline:2px solid #c0392b;outline-offset:-2px;}
-@media print{.blk-grip,.blk-del-btn,.blk-select-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
+@media print{.blk-grip,.blk-del-btn,.blk-select-btn,.blk-edit-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
 .imgbox.lowres::after{content:'⚠ kis felbontás';position:absolute;top:3px;left:3px;z-index:30;background:rgba(154,51,39,.92);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;pointer-events:none;letter-spacing:.02em;}
 @media print{.imgbox.lowres::after{display:none!important;}}
 
@@ -893,7 +902,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   .rsz-move{width:25px;height:25px;font-size:11px;}
   /* ===== MOBIL ROVAT ESZKÖZTÁR — ugyanaz a fix, alsó rendszer, mint a képkereteknél ===== */
   /* a régi sarok-gombok (grip/resize/del) mobilon teljesen elrejtve — a .blk-actionbar veszi át a helyüket */
-  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn{display:none!important;}
+  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn,.blk-edit-btn{display:none!important;}
   .warnbar{font-size:10.5px;padding:6px 8px;}
   #resumeBar{font-size:11px;padding:10px 12px;}
   #resumeBar .resumeBtns{width:100%;justify-content:flex-end;}
@@ -1178,6 +1187,9 @@ hu:{
   w_fmt_a4_8_tag:"Csak nyomtatva",
   w_fmt_a4_8_desc:"2 db A3 — tőlünk, házhozszállítva.",
   w_lbl_f_names:"A pár neve",
+  w_lbl_f_phrase:"Kapcsolat-kifejezés",
+  w_val_f_phrase:"összeházasodnak",
+  w_hint_masthead_folio:"A lap címe csak a belső oldalak alján, kis betűvel jelenik meg — a címlapon a pár neve a főcím.",
   w_lbl_f_masthead:"A lap címe",
   w_ph_f_masthead:"pl. Esküvői Újság",
   w_lbl_f_subname:"Alcím",
@@ -1799,6 +1811,9 @@ en:{
   w_fmt_a4_8_tag:"Print only",
   w_fmt_a4_8_desc:"2 A3 sheets — delivered to your door by us.",
   w_lbl_f_names:"The couple's name",
+  w_lbl_f_phrase:"Relationship phrase",
+  w_val_f_phrase:"are getting married",
+  w_hint_masthead_folio:"The gazette's title only appears small, at the bottom of the inner pages — on the cover, the couple's name is the main headline.",
   w_lbl_f_masthead:"The gazette's title",
   w_ph_f_masthead:"e.g. Wedding Gazette",
   w_lbl_f_subname:"Subtitle",
@@ -2771,7 +2786,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.13';
+  var APP_VERSION='6.14';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2827,10 +2842,11 @@ function backToTypeSelect(){
 
   <div class="card">
     <h3><span class="num">3</span><span data-i18n="w_h3num_k_telez_adatok">Kötelező adatok</span></h3>
+    <div class="fld"><label><span data-i18n="w_lbl_f_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="f_phrase" value="összeházasodnak" data-i18n-val="w_val_f_phrase"><button type="button" class="tipbtn" onclick="fillTip('f_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_masthead">A lap címe</span></label><div class="fld-row"><input id="f_masthead" value="" data-i18n-ph="w_ph_f_masthead" placeholder="pl. Esküvői Újság"><button type="button" class="tipbtn" onclick="fillTip('f_masthead')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     </div>
-    <div class="fld"><label><span data-i18n="w_lbl_f_subname">Alcím</span></label><div class="fld-row"><input id="f_subname" value="" data-i18n-ph="w_ph_f_subname" placeholder="pl. Dorina & Patrik ünnepi lapja"><button type="button" class="tipbtn" onclick="fillTip('f_subname')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="tinyhint" data-i18n="w_hint_masthead_folio">A lap címe csak a belső oldalak alján, kis betűvel jelenik meg — a címlapon a pár neve a főcím.</div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_date">Dátum</span></label><input id="f_date" value=""></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_venue">Helyszín</span></label><input id="f_venue" value=""></div>
@@ -3898,16 +3914,14 @@ function B_cover(d){
 }
 function B_coverUjsag(d){
   var ears=(d.slogan?'<div class="ears" style="justify-content:center;"><div class="slogan">'+esc(d.slogan)+'</div></div>':'');
-  var masthead=d.masthead||(d.names?d.names+' '+L('Esküvői Újságja','Wedding Gazette'):L('Esküvői Újság','Wedding Gazette'));
   var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
   var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
+  var phrase=d.phrase||L('összeházasodnak','are getting married');
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
-    +'<h1 class="nameplate editable" contenteditable="true">'+esc(masthead)+'</h1>'
-    +'<div class="subname editable" contenteditable="true">'+esc(d.subname)+'</div>'
-    +'<hr class="rule-ox"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
-    +'<h2 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'70px':'48px')+';margin-top:5px;">'+esc(d.names)+'</h2>'
-    +'<div class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'32px':'22px')+';font-weight:700;margin:0 0 3px;">'+esc(d.married)+'</div>'
+    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(d.names)+'</h1>'
+    +'<div class="editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;">'+esc(phrase)+'</div>'
+    +'<hr class="rule-ox" style="margin-top:12px;"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
     +(d.coverCap?'<div class="caption editable" contenteditable="true">'+esc(d.coverCap)+'</div>':'')
     +'</div>';
@@ -4431,7 +4445,7 @@ function gatherData(){
   if(CFG.product==='meghivo')return gatherMeghivoData();
   if(CFG.product==='savethedate')return gatherSTDData();
   return {names:val('f_names'),masthead:val('f_masthead'),subname:val('f_subname'),date:val('f_date'),venue:val('f_venue'),
-    slogan:val('f_slogan'),coverCap:val('f_coverCap'),
+    phrase:val('f_phrase'),slogan:val('f_slogan'),coverCap:val('f_coverCap'),
     welcome:val('f_welcome'),welcomeSign:val('f_welcomeSign'),memIntro:val('f_memIntro'),duoCap:val('f_duoCap'),closer:val('f_closer'),
     drinks:on('chk_drinks'),robbantsd:on('chk_robbantsd'),message:on('chk_message'),foto:on('chk_fotovadasz')};
 }
@@ -5758,6 +5772,41 @@ function openSectionFieldsForCore(key){
   confirmBtn.style.display='block';
   confirmBtn.onclick=function(){ applyCoreGroupEdit(key); };
 }
+/* ===== egy adott, MÁR kirenderelt blokkhoz tartozó adatszerkesztő megnyitása közvetlenül a
+   rovaton lévő "✎ Adatok" gombbal — ugyanazt a mező-kölcsönző mechanizmust használja, mint a
+   "🧩 Rovatok kezelése" lista, csak a teljes lista kihagyásával, egyenesen az adott rovatra */
+function blockEditTarget(blkId){
+  if(CFG.product!=='ujsag')return null;
+  var entry=currentAddableSections().find(function(s){ return s.blk===blkId; });
+  if(entry){
+    var optBody=document.querySelector('.opt-body[data-for="chk_'+entry.chk+'"]');
+    if(optBody && optBody.querySelector('input,textarea,.rep'))return {kind:'opt',key:entry.chk};
+    return null; /* pl. horoszkóp/játékok/GYIK stb. — fix tartalom, nincs mit szerkeszteni */
+  }
+  if(typeof UJSAG_CORE_EDIT_GROUPS!=='undefined'){
+    var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){ return x.blks.indexOf(blkId)>=0; });
+    if(g)return {kind:'core',key:g.key};
+  }
+  return null;
+}
+function openSingleSectionEditor(kind,key){
+  if(document.body.classList.contains('print-mode'))toggleMode(false);
+  restoreInlineFields();
+  var ov=document.getElementById('addSecOverlay'); if(ov)ov.remove();
+  ov=document.createElement('div'); ov.id='addSecOverlay';
+  var titleHtml=kind==='core'?esc(coreGroupLabel(key)):esc(sectionLabel(key));
+  ov.innerHTML='<div id="addSecBox">'
+    +'<h2>✎ '+titleHtml+'</h2>'
+    +'<div id="addSecMsg"></div>'
+    +'<div id="addSecInlineFields" style="display:none;"></div>'
+    +'<button type="button" class="btn-feedback" id="addSecConfirmBtn" style="display:none;margin-bottom:10px;">✓ '+t('asp_confirm_btn')+'</button>'
+    +'<button type="button" class="btn-close" id="addSecCloseBtn">'+t('asp_close_btn')+'</button>'
+    +'</div>';
+  ov.addEventListener('click',function(e){ if(e.target===ov)closeAddSectionOverlay(); });
+  document.body.appendChild(ov);
+  document.getElementById('addSecCloseBtn').onclick=closeAddSectionOverlay;
+  if(kind==='core')openSectionFieldsForCore(key); else openSectionFieldsForOpt(key);
+}
 /* ===== a rovat-blokk beillesztése/cseréje a #stage-en — mindkét irányból (hozzáadás ÉS
    szerkesztés) ide fut ki, hogy a "hol van üres hely" / "hogy méretezzük" logika egy helyen
    éljen ===== */
@@ -6279,11 +6328,17 @@ function initBlockTools(){
   document.querySelectorAll('#stage .blk[data-bid]').forEach(function(blk){
     if(blk.__btools)return; blk.__btools=true; blk.style.position='relative';
 
+    /* ha a rovathoz tartozik szerkeszthető varázsló-adat (nem fix/statikus tartalom, mint pl.
+       a horoszkóp), a "✎ Adatok" gomb is bekerül a mobil gombsávba és a PC-s sarokgombok közé */
+    var editTarget=blockEditTarget(blk.getAttribute('data-bid'));
+
     /* Mobilon minden gomb (Mozgatás, Méret, Törlés) EGY fix, a képernyő aljához rögzített
        sávban — ugyanaz a rendszer, mint a képkereteknél. PC-n a régi sarok-fogantyúk (grip/
        resize-btn/del-btn) és a húzásos mozgatás/átméretezés változatlanul megmarad. */
     var actionbar=document.createElement('div'); actionbar.className='blk-actionbar';
-    actionbar.innerHTML='<button type="button" data-a="move" title="Mozgatás"><span class="ic">✥</span><span class="lbl">Mozgatás</span></button><button type="button" data-a="size" title="Méret"><span class="ic">⊡</span><span class="lbl">Méret</span></button><button type="button" data-a="del" title="Törlés"><span class="ic">🗑</span><span class="lbl">Törlés</span></button>';
+    actionbar.innerHTML='<button type="button" data-a="move" title="Mozgatás"><span class="ic">✥</span><span class="lbl">Mozgatás</span></button><button type="button" data-a="size" title="Méret"><span class="ic">⊡</span><span class="lbl">Méret</span></button>'
+      +(editTarget?'<button type="button" data-a="edit" title="Adatok szerkesztése"><span class="ic">✎</span><span class="lbl">Adatok</span></button>':'')
+      +'<button type="button" data-a="del" title="Törlés"><span class="ic">🗑</span><span class="lbl">Törlés</span></button>';
     actionbar.addEventListener('pointerdown',function(e){e.stopPropagation();});
     document.body.appendChild(actionbar);
     blk._actionbar=actionbar;
@@ -6532,6 +6587,15 @@ function initBlockTools(){
     delBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
     delBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();deleteThisBlock();});
 
+    /* ADATOK gomb — PC-n a kijelölés-gomb mellett; CSAK akkor jelenik meg, ha ehhez a rovathoz
+       tartozik ténylegesen kitölthető varázsló-mező (ld. blockEditTarget fentebb) */
+    if(editTarget){
+      var editBtn=blk.querySelector(':scope > .blk-edit-btn');
+      if(!editBtn){editBtn=document.createElement('button');editBtn.type='button';editBtn.className='blk-edit-btn';editBtn.title='Adatok szerkesztése';editBtn.innerHTML='<span class="ic">✎</span><span class="lbl">Adatok</span>';blk.appendChild(editBtn);}
+      editBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
+      editBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(editTarget.kind,editTarget.key);});
+    }
+
     /* PC-n a rovat tartalma zoom-mal kicsinyíthető/nagyítható (ld. clampBlockZoom) — mivel a
        CSS zoom a rovat MINDEN gyerekét (a gombokat és a .rsz fogantyúkat is) arányosan
        felskálázná/lekicsinyítené, itt egy ellentétes irányú transform:scale-lel visszaállítjuk
@@ -6542,7 +6606,7 @@ function initBlockTools(){
       var z=parseFloat(blk.style.zoom)||1;
       var inv=z?1/z:1;
       var t=(inv===1)?'':('scale('+inv+')');
-      [grip,delBtn,selectBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
+      [grip,delBtn,selectBtn,editBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
       blk.querySelectorAll(':scope > .rsz').forEach(function(h){ h.style.transform=t; });
     }
     syncBtnScale();
@@ -6556,6 +6620,7 @@ function initBlockTools(){
       var a=b.getAttribute('data-a');
       if(a==='move'){actionbar.classList.remove('active');blk._moveOv.classList.add('active');}
       else if(a==='size'){actionbar.classList.remove('active');blk._sizeBar.classList.add('active');}
+      else if(a==='edit'){ if(editTarget)openSingleSectionEditor(editTarget.kind,editTarget.key); }
       else if(a==='del'){deleteThisBlock();}
     });
   });
@@ -6836,13 +6901,16 @@ var TIPS={
     'Hálásak vagyunk minden pillanatért, amit mellettünk töltöttetek — ma ti is ott álltok velünk ezen a napon.',
     'Köszönjük, hogy mindig hittetek bennünk, és hogy otthont adtatok, ahova mindig visszatérhettünk.'],
   mh_phrase:['összeházasodnak','összekötik életüket','egymáséi lesznek','kimondják a boldogító igent','örök hűséget fogadnak egymásnak'],
-  mh_ajandek:[] /* pénzkérő-vers javaslatok később érkeznek — a Tipp gomb egyelőre no-op */
+  mh_ajandek:[], /* pénzkérő-vers javaslatok később érkeznek — a Tipp gomb egyelőre no-op */
+  f_phrase:['összeházasodnak','összekötik életüket','egymáséi lesznek','kimondják a boldogító igent','örök hűséget fogadnak egymásnak']
 };
 /* a régi (csak magyar) TIPS mellett angol változat is — ha egy kulcsra nincs angol lista, a
    fillTip() visszaesik a magyar TIPS-re (ez a régi, Újság-specifikus tippekre igaz, azokat
-   nem fordítottuk le, mert ott a felhasználó úgyis szabadon átírja a beszúrt szöveget) */
+   nem fordítottuk le, mert ott a felhasználó úgyis szabadon átírja a beszúrt szöveget) — a
+   f_phrase viszont a címlap fő, mindig látható eleme, ezért annak van rendes angol verziója is */
 var TIPS_EN={
-  mh_phrase:['are getting married','are tying the knot','are saying "I do"','become one','pledge eternal love to each other']
+  mh_phrase:['are getting married','are tying the knot','are saying "I do"','become one','pledge eternal love to each other'],
+  f_phrase:['are getting married','are tying the knot','are saying "I do"','become one','pledge eternal love to each other']
 };
 function fillTip(id){
   var el=document.getElementById(id); if(!el)return;
