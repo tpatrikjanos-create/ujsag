@@ -427,14 +427,6 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .ears .slogan{font-size:8px;max-width:60mm;}
 .nameplate{font-family:'Grenze Gotisch',serif;font-weight:700;text-align:center;font-size:46px;line-height:.92;margin:2px 0 0;}
 .size-a4 .nameplate{font-size:66px;}
-/* a lap NEVE (pl. "Esküvői Újság") egy kompakt, újságszerű banner — nem a fő cím, hanem
-   afölött, kis betűvel, csupa nagybetűvel álló "kiadó neve"; a tényleges főcím a pár neve +
-   kapcsolat-kifejezés (ld. B_coverUjsag, ami erre a .nameplate osztályt használja) */
-.masthead-band{font-family:'Grenze Gotisch',serif;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.12em;font-size:15px;line-height:1.15;margin:2px 0 0;}
-.size-a4 .masthead-band{font-size:20px;}
-.pack-romantic .masthead-band{font-family:'Marcellus',serif;letter-spacing:.14em;}
-.pack-modern .masthead-band{font-family:'Jost',sans-serif;font-weight:700;letter-spacing:.18em;}
-.pack-magazine .masthead-band{font-family:'Grenze Gotisch',serif;letter-spacing:.1em;}
 .subname{font-family:'Libre Franklin',sans-serif;text-align:center;font-size:7px;letter-spacing:.3em;text-transform:uppercase;margin:2px 0 0;}
 .size-a4 .subname{font-size:10px;}
 .dateline-strip{display:flex;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
@@ -900,7 +892,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 
 
 
-.blk-del-btn{position:absolute;top:2px;left:300px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,39,39,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk-del-btn{position:absolute;top:2px;left:390px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,39,39,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover>.blk-del-btn,.blk.bsel>.blk-del-btn{display:flex;}
 .blk-del-btn:hover{background:rgba(184,46,46,1);}
 /* hiányzott a pozicionálása — enélkül a gomb a normál dokumentumfolyamban maradt, és
@@ -919,6 +911,9 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    anélkül is, hogy a user előbb tudná, hogy egyáltalán rá kell/lehet kattintani a rovatra */
 .blk-edit-btn{position:absolute;top:2px;left:200px;z-index:47;display:flex;align-items:center;gap:4px;background:rgba(154,110,20,.95);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .blk:hover>.blk-edit-btn,.blk.bsel>.blk-edit-btn{opacity:1;}
+/* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
+.blk-ai-btn{position:absolute;top:2px;left:290px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.blk:hover>.blk-ai-btn,.blk.bsel>.blk-ai-btn{opacity:1;}
 .blk-select-btn:hover{background:rgba(52,110,148,1);}
 .blk.bsel>.rsz{display:block;}
 .blk.bsel{outline:1.5px dashed var(--claret);outline-offset:3px;}
@@ -929,7 +924,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk.swap-target{outline:2.5px solid #2f7d3a !important;outline-offset:3px;background:rgba(47,125,58,.06);}
 .page.move-target{outline:3px solid #2f7d3a;outline-offset:-3px;}
 .page.over{outline:2px solid #c0392b;outline-offset:-2px;}
-@media print{.blk-grip,.blk-del-btn,.blk-select-btn,.blk-edit-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
+@media print{.blk-grip,.blk-del-btn,.blk-select-btn,.blk-edit-btn,.blk-ai-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
 .imgbox.lowres::after{content:'⚠ kis felbontás';position:absolute;top:3px;left:3px;z-index:30;background:rgba(154,51,39,.92);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;pointer-events:none;letter-spacing:.02em;}
 @media print{.imgbox.lowres::after{display:none!important;}}
 
@@ -953,12 +948,14 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   /* a régi sarok-gombok (grip/resize/del) mobilon teljesen elrejtve — a .blk-actionbar veszi át a helyüket.
      Kivétel: a "✎ Adatok" gomb — ez mobilon is ÁLLANDÓAN látszik a rovat jobb felső sarkában, hogy a
      kitöltendő adatokra ne csak a rovat kijelölése (aljára húzódó eszköztár) után derüljön fény. */
-  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn{display:none!important;}
+  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn,.blk-ai-btn{display:none!important;}
   .blk-edit-btn{position:absolute;top:2px;left:auto;right:2px;font-size:10px;padding:3px 8px;opacity:.85;}
   /* a mobil eszköztárban (rovat kijelölésekor előjövő alsó sáv) az "Adatok" gomb kapjon
      eltérő, feltűnőbb színt a Mozgatás/Méret/Törlés gombok között */
   .blk-actionbar button[data-a="edit"]{background:rgba(154,110,20,.55);}
   .blk-actionbar button[data-a="edit"]:hover{background:rgba(154,110,20,.8);}
+  .blk-actionbar button[data-a="ai"]{background:linear-gradient(120deg,rgba(91,63,174,.7),rgba(138,95,214,.7));}
+  .blk-actionbar button[data-a="ai"]:hover{background:linear-gradient(120deg,rgba(91,63,174,.9),rgba(138,95,214,.9));}
   .warnbar{font-size:10.5px;padding:6px 8px;}
   #resumeBar{font-size:11px;padding:10px 12px;}
   #resumeBar .resumeBtns{width:100%;justify-content:flex-end;}
@@ -1245,7 +1242,7 @@ hu:{
   w_lbl_f_names:"A pár neve",
   w_lbl_f_phrase:"Kapcsolat-kifejezés",
   w_val_f_phrase:"összeházasodnak",
-  w_hint_masthead_folio:"A lap címe a címlap főcíme is egyben — ez jelenik meg (kisebb betűvel) a belső oldalak alján is.",
+  w_hint_masthead_folio:"A lap címe a címlap tetején, újságcím-szerűen jelenik meg — alatta a pár neve a valódi főcím. Ugyanez a cím fut végig a belső oldalak alján is, kisebb betűvel.",
   w_lbl_f_masthead:"A lap címe",
   w_ph_f_masthead:"pl. Esküvői Újság",
   w_lbl_f_subname:"Alcím",
@@ -1871,7 +1868,7 @@ en:{
   w_lbl_f_names:"The couple's name",
   w_lbl_f_phrase:"Relationship phrase",
   w_val_f_phrase:"are getting married",
-  w_hint_masthead_folio:"The gazette's title is also the cover's main headline — it also appears (smaller) at the bottom of the inner pages.",
+  w_hint_masthead_folio:"The gazette's title appears at the top of the cover, like a real newspaper's nameplate — below it, the couple's names are the true headline. The same title also runs along the bottom of the inner pages, in smaller print.",
   w_lbl_f_masthead:"The gazette's title",
   w_ph_f_masthead:"e.g. Wedding Gazette",
   w_lbl_f_subname:"Subtitle",
@@ -2846,7 +2843,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.18';
+  var APP_VERSION='6.19';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -2906,7 +2903,7 @@ function backToTypeSelect(){
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_phrase">Kapcsolat-kifejezés</span></label><div class="fld-row"><input id="f_phrase" value="összeházasodnak" data-i18n-val="w_val_f_phrase"><button type="button" class="tipbtn" onclick="fillTip('f_phrase')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
     </div>
-    <div class="tinyhint" data-i18n="w_hint_masthead_folio">A lap címe a címlap főcíme is egyben — ez jelenik meg (kisebb betűvel) a belső oldalak alján is.</div>
+    <div class="tinyhint" data-i18n="w_hint_masthead_folio">A lap címe a címlap tetején, újságcím-szerűen jelenik meg — alatta a pár neve a valódi főcím. Ugyanez a cím fut végig a belső oldalak alján is, kisebb betűvel.</div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_date">Dátum</span></label><input id="f_date" value=""></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_venue">Helyszín</span></label><input id="f_venue" value=""></div>
@@ -2922,7 +2919,7 @@ function backToTypeSelect(){
 
   <div class="card" data-editgroup="welcome">
     <h3><span class="num">5</span><span data-i18n="w_h3num_k_sz_nt_gerinc_rovat">Köszöntő (gerinc-rovat)</span></h3>
-    <div class="fld"><label><span data-i18n="w_lbl_f_welcome">Köszöntő szöveg</span></label><div class="fld-row"><textarea id="f_welcome" data-i18n-ph="w_ph_f_welcome" placeholder="Kedves Vendégünk! Ez a nap a tiétek is. Köszönjük, hogy itt vagytok velünk, és hogy a szeretetetekkel teszitek felejthetetlenné életünk legszebb napját. Egyetek, igyatok, táncoljatok és nevessetek velünk!"></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_welcome')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+    <div class="fld"><label><span data-i18n="w_lbl_f_welcome">Köszöntő szöveg</span></label><div class="fld-row"><textarea id="f_welcome" data-i18n-ph="w_ph_f_welcome" placeholder="Kedves Vendégünk! Ez a nap a tiétek is. Köszönjük, hogy itt vagytok velünk, és hogy a szeretetetekkel teszitek felejthetetlenné életünk legszebb napját. Egyetek, igyatok, táncoljatok és nevessetek velünk!"></textarea></div></div>
     <div class="fld"><label><span data-i18n="w_lbl_f_welcomesign">Aláírás</span></label><input id="f_welcomeSign" value=""></div>
   </div>
 
@@ -2930,9 +2927,9 @@ function backToTypeSelect(){
     <h3><span data-i18n="w_h3_chk_szuloknek">Köszönet a szülőknek</span> <label class="tgl"><input type="checkbox" id="chk_szuloknek" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_szuloknek">
       <div class="fld"><label><span data-i18n="w_lbl_f_thanksbridename">Menyasszony szüleinek (név, opcionális)</span></label><input id="f_thanksBrideName" data-i18n-ph="w_ph_f_thanksbridename" placeholder="pl. Kovács Béla és Ilona"></div>
-      <div class="fld"><label><span data-i18n="w_lbl_f_thanksbridemsg">Köszönő szöveg — menyasszony szüleinek</span></label><div class="fld-row"><textarea id="f_thanksBrideMsg" data-i18n-ph="w_ph_f_thanksbridemsg" placeholder="Köszönjük, hogy mindig mellettünk álltatok, és hogy azzá formáltatok, akik ma lehetünk. Szeretünk!"></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_thanksBrideMsg')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_thanksbridemsg">Köszönő szöveg — menyasszony szüleinek</span></label><div class="fld-row"><textarea id="f_thanksBrideMsg" data-i18n-ph="w_ph_f_thanksbridemsg" placeholder="Köszönjük, hogy mindig mellettünk álltatok, és hogy azzá formáltatok, akik ma lehetünk. Szeretünk!"></textarea></div></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_thanksgroomname">Vőlegény szüleinek (név, opcionális)</span></label><input id="f_thanksGroomName" data-i18n-ph="w_ph_f_thanksgroomname" placeholder="pl. Nagy Zoltán és Mária"></div>
-      <div class="fld"><label><span data-i18n="w_lbl_f_thanksgroommsg">Köszönő szöveg — vőlegény szüleinek</span></label><div class="fld-row"><textarea id="f_thanksGroomMsg" data-i18n-ph="w_ph_f_thanksgroommsg" placeholder="Köszönjük a szeretetet és támogatást, amit egész életünkben kaptunk tőletek."></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_thanksGroomMsg')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_thanksgroommsg">Köszönő szöveg — vőlegény szüleinek</span></label><div class="fld-row"><textarea id="f_thanksGroomMsg" data-i18n-ph="w_ph_f_thanksgroommsg" placeholder="Köszönjük a szeretetet és támogatást, amit egész életünkben kaptunk tőletek."></textarea></div></div>
       <div class="tinyhint" data-i18n-html="w_hint_2">Elég az egyik oldalt kitölteni, ha csak úgy szeretnétek — a másik marad üres.</div>
     </div>
   </div>
@@ -3096,7 +3093,7 @@ function backToTypeSelect(){
   <div class="card opt">
     <h3><span data-i18n="w_h3_chk_memorial">Akik fentről ünnepelnek</span> <label class="tgl"><input type="checkbox" id="chk_memorial" onchange="optToggle(this)"><span class="sw"></span></label></h3>
     <div class="opt-body off" data-for="chk_memorial">
-      <div class="fld"><label><span data-i18n="w_lbl_f_memintro">Bevezető</span></label><div class="fld-row"><textarea id="f_memIntro" data-i18n-ph="w_ph_f_memintro" placeholder="Vannak, akik ma testben nem lehetnek itt, de tudjuk, hogy fentről mosolyognak ránk. Egy gyertyát gyújtunk értük."></textarea><button type="button" class="tipbtn tipbtn-ta" onclick="fillTip('f_memIntro')" data-i18n="w_tip_btn">💡 Tipp</button></div></div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_memintro">Bevezető</span></label><div class="fld-row"><textarea id="f_memIntro" data-i18n-ph="w_ph_f_memintro" placeholder="Vannak, akik ma testben nem lehetnek itt, de tudjuk, hogy fentről mosolyognak ránk. Egy gyertyát gyújtunk értük."></textarea></div></div>
       <label class="minlbl" data-i18n-html="w_minlbl_mem">Egy fő / sor — név + kapcsolat (a „+ Új sor"-ral bővíthető)</label>
       <div class="rep" id="rep_mem" data-tpl='<input class="r-in r-wide" data-k="name" data-i18n-ph="w_rph_rep_mem_name_1" placeholder="Név"><input class="r-in" data-k="rel" data-i18n-ph="w_rph_rep_mem_rel_1" placeholder="kapcsolat (pl. nagymama)">'>
         <div class="rep-row"><input class="r-in r-wide" data-k="name" data-i18n-ph="w_rph_rep_mem_name_2" placeholder="Név"><input class="r-in" data-k="rel" data-i18n-ph="w_rph_rep_mem_rel_2" placeholder="kapcsolat (pl. nagymama)"><button type="button" class="rep-del" onclick="this.parentNode.remove();scheduleFit&&scheduleFit();">✕</button></div>
@@ -4065,9 +4062,10 @@ function B_coverUjsag(d){
   var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
-    +'<div class="masthead-band editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'20px':'15px')+';">'+esc(masthead)+'</div>'
-    +'<h1 class="nameplate" style="font-size:'+(CFG.size==='A4'?'80px':'58px')+';margin-top:4px;"><span class="editable" contenteditable="true">'+esc(d.names)+'</span> <span class="editable" contenteditable="true">'+esc(phrase)+'</span></h1>'
-    +'<hr class="rule-ox" style="margin-top:12px;"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
+    +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(masthead)+'</h1>'
+    +'<hr class="rule-ox"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
+    +'<h2 class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'70px':'48px')+';margin-top:5px;">'+esc(d.names)+'</h2>'
+    +'<div class="lead-head editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'32px':'22px')+';font-weight:700;margin:0 0 3px;">'+esc(phrase)+'</div>'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
     +(d.coverCap?'<div class="caption editable" contenteditable="true">'+esc(d.coverCap)+'</div>':'')
     +'</div>';
@@ -6477,6 +6475,10 @@ function initBlockTools(){
     /* ha a rovathoz tartozik szerkeszthető varázsló-adat (nem fix/statikus tartalom, mint pl.
        a horoszkóp), a "✎ Adatok" gomb is bekerül a mobil gombsávba és a PC-s sarokgombok közé */
     var editTarget=blockEditTarget(blk.getAttribute('data-bid'));
+    /* ha a rovathoz tartozik legalább egy szabad szöveges mező, amihez van AI-kontextusunk
+       (ld. AI_TIPP_FIELD_FOR_BLOCK), a "🤖 AI Tipp" gomb közvetlenül az "✎ Adatok" mellé kerül —
+       ez a valódi AI-t hívja meg a mező szövegére, majd rögtön újragenerálja a rovatot */
+    var aiTarget=(typeof aiTippTargetForBlock==='function')?aiTippTargetForBlock(blk.getAttribute('data-bid')):null;
 
     /* Mobilon minden gomb (Mozgatás, Méret, Törlés) EGY fix, a képernyő aljához rögzített
        sávban — ugyanaz a rendszer, mint a képkereteknél. PC-n a régi sarok-fogantyúk (grip/
@@ -6484,6 +6486,7 @@ function initBlockTools(){
     var actionbar=document.createElement('div'); actionbar.className='blk-actionbar';
     actionbar.innerHTML='<button type="button" data-a="move" title="Mozgatás"><span class="ic">✥</span><span class="lbl">Mozgatás</span></button><button type="button" data-a="size" title="Méret"><span class="ic">⊡</span><span class="lbl">Méret</span></button>'
       +(editTarget?'<button type="button" data-a="edit" title="Adatok szerkesztése"><span class="ic">✎</span><span class="lbl">Adatok</span></button>':'')
+      +(aiTarget?'<button type="button" data-a="ai" title="AI Tipp"><span class="ic">🤖</span><span class="lbl">AI Tipp</span></button>':'')
       +'<button type="button" data-a="del" title="Törlés"><span class="ic">🗑</span><span class="lbl">Törlés</span></button>';
     actionbar.addEventListener('pointerdown',function(e){e.stopPropagation();});
     document.body.appendChild(actionbar);
@@ -6742,6 +6745,15 @@ function initBlockTools(){
       editBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(editTarget.kind,editTarget.key);});
     }
 
+    /* AI TIPP gomb — PC-n közvetlenül az Adatok gomb mellett; csak akkor, ha ehhez a rovathoz
+       van legalább egy AI-írható szabad szöveges mezőnk (ld. AI_TIPP_FIELD_FOR_BLOCK) */
+    if(aiTarget){
+      var aiBtn=blk.querySelector(':scope > .blk-ai-btn');
+      if(!aiBtn){aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='blk-ai-btn';aiBtn.title='AI Tipp';aiBtn.innerHTML='<span class="ic">🤖</span><span class="lbl">AI Tipp</span>';blk.appendChild(aiBtn);}
+      aiBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
+      aiBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openAiTippBlockChooser(aiTarget);});
+    }
+
     /* PC-n a rovat tartalma zoom-mal kicsinyíthető/nagyítható (ld. clampBlockZoom) — mivel a
        CSS zoom a rovat MINDEN gyerekét (a gombokat és a .rsz fogantyúkat is) arányosan
        felskálázná/lekicsinyítené, itt egy ellentétes irányú transform:scale-lel visszaállítjuk
@@ -6752,7 +6764,7 @@ function initBlockTools(){
       var z=parseFloat(blk.style.zoom)||1;
       var inv=z?1/z:1;
       var t=(inv===1)?'':('scale('+inv+')');
-      [grip,delBtn,selectBtn,editBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
+      [grip,delBtn,selectBtn,editBtn,aiBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
       blk.querySelectorAll(':scope > .rsz').forEach(function(h){ h.style.transform=t; });
     }
     syncBtnScale();
@@ -6767,6 +6779,7 @@ function initBlockTools(){
       if(a==='move'){actionbar.classList.remove('active');blk._moveOv.classList.add('active');}
       else if(a==='size'){actionbar.classList.remove('active');blk._sizeBar.classList.add('active');}
       else if(a==='edit'){ if(editTarget)openSingleSectionEditor(editTarget.kind,editTarget.key); }
+      else if(a==='ai'){ if(aiTarget)openAiTippBlockChooser(aiTarget); }
       else if(a==='del'){deleteThisBlock();}
     });
   });
@@ -7107,7 +7120,30 @@ var AI_TIPP_CONTEXT={
   mh_quote:'a short romantic quote about love, for a wedding invitation',
   mh_ajandek:'a polite note about wedding gifts for a wedding invitation (e.g. presence over presents)'
 };
-var _aiTippState=null;
+/* melyik, MÁR kirenderelt rovathoz (blk kulcs, ld. blockEditTarget) melyik AI-mező(k)
+   tartoznak — ez teszi lehetővé, hogy a szerkesztőben, közvetlenül a "✎ Adatok" gomb
+   mellett egy "🤖 AI Tipp" gomb is megjelenjen, ami a kapcsolódó wizard-mezőt írja át
+   AI-val, majd AZONNAL újragenerálja a blokkot (applyOptSectionEdit/applyCoreGroupEdit),
+   szerkesztő-varázsló váltás nélkül. Csak azok a rovatok kapják meg, amikhez van legalább
+   egy szabad szöveges (nem dátum/hely jellegű) mezőnk. */
+var AI_TIPP_FIELD_FOR_BLOCK={
+  welcome:['f_welcome'],
+  szuloknek:['f_thanksBrideMsg','f_thanksGroomMsg'],
+  memorial:['f_memIntro']
+};
+function aiTippTargetForBlock(blkId){
+  var et=(typeof blockEditTarget==='function')?blockEditTarget(blkId):null;
+  if(!et)return null;
+  var fields=AI_TIPP_FIELD_FOR_BLOCK[et.key];
+  if(!fields||!fields.length)return null;
+  return {kind:et.kind,key:et.key,fields:fields};
+}
+function aiTippApplyCbFor(kind,key){
+  return function(){
+    if(kind==='core'&&typeof applyCoreGroupEdit==='function')applyCoreGroupEdit(key);
+    else if(kind==='opt'&&typeof applyOptSectionEdit==='function')applyOptSectionEdit(key);
+  };
+}
 function aiTippLabelFor(id){
   var el=document.getElementById(id); if(!el)return id;
   var fld=el.closest('.fld'); var lbl=fld&&fld.querySelector('label'); return lbl?lbl.textContent.trim():id;
@@ -7127,7 +7163,32 @@ function initAiTippButtons(){
     btn.insertAdjacentElement('afterend',aiBtn);
   });
 }
-function openAiTippConfirm(fieldId){
+/* a szerkesztőben, egy adott blokk "🤖 AI Tipp" gombjára kattintva — ha a rovathoz több
+   AI-mező is tartozik (pl. "Szülőknek" — menyasszony/vőlegény köszönő szövege), előbb
+   választani kell, melyikre vonatkozzon */
+function openAiTippBlockChooser(target){
+  if(target.fields.length===1){
+    openAiTippConfirm(target.fields[0],aiTippApplyCbFor(target.kind,target.key));
+    return;
+  }
+  var ov=document.getElementById('aiTippConfirmOverlay');
+  if(!ov){ ov=document.createElement('div'); ov.id='aiTippConfirmOverlay'; document.body.appendChild(ov); }
+  var rows=target.fields.map(function(fid){
+    return '<button type="button" class="ai-confirm-go ai-choose-row" data-fid="'+fid+'">'+esc(aiTippLabelFor(fid))+'</button>';
+  }).join('');
+  ov.innerHTML='<div id="aiTippConfirmBox">'
+    +'<h3>✨ '+L('AI Tipp','AI Tip')+'</h3>'
+    +'<p>'+L('Melyik szöveghez kérsz AI Tippet?','Which text would you like the AI Tip for?')+'</p>'
+    +'<div class="ai-confirm-actions" style="flex-direction:column;">'+rows+'</div>'
+    +'<div class="ai-confirm-actions" style="margin-top:10px;"><button type="button" class="ai-confirm-cancel">'+L('Mégse','Cancel')+'</button></div>'
+    +'</div>';
+  ov.addEventListener('click',function(e){ if(e.target===ov)closeAiTippConfirm(); });
+  ov.querySelector('.ai-confirm-cancel').onclick=closeAiTippConfirm;
+  ov.querySelectorAll('.ai-choose-row').forEach(function(btn){
+    btn.onclick=function(){ openAiTippConfirm(btn.getAttribute('data-fid'),aiTippApplyCbFor(target.kind,target.key)); };
+  });
+}
+function openAiTippConfirm(fieldId,applyCb){
   var el=document.getElementById(fieldId); if(!el)return;
   var hasText=!!el.value.trim();
   var ov=document.getElementById('aiTippConfirmOverlay');
@@ -7147,12 +7208,12 @@ function openAiTippConfirm(fieldId){
     +'</div>';
   ov.addEventListener('click',function(e){ if(e.target===ov)closeAiTippConfirm(); });
   ov.querySelector('.ai-confirm-cancel').onclick=closeAiTippConfirm;
-  ov.querySelector('.ai-confirm-go').onclick=function(){ runAiTipp(fieldId); };
+  ov.querySelector('.ai-confirm-go').onclick=function(){ runAiTipp(fieldId,applyCb); };
 }
 function closeAiTippConfirm(){
   var ov=document.getElementById('aiTippConfirmOverlay'); if(ov)ov.remove();
 }
-function runAiTipp(fieldId){
+function runAiTipp(fieldId,applyCb){
   var el=document.getElementById(fieldId); if(!el)return;
   var ov=document.getElementById('aiTippConfirmOverlay');
   var goBtn=ov&&ov.querySelector('.ai-confirm-go');
@@ -7179,8 +7240,7 @@ function runAiTipp(fieldId){
     .then(function(r){
       if(!r.ok||!r.data||!r.data.text){ throw new Error((r.data&&r.data.error)||'AI hiba'); }
       el.value=r.data.text.trim();
-      el.focus();
-      if(typeof scheduleFit==='function')scheduleFit();
+      if(applyCb)applyCb(); else { el.focus(); if(typeof scheduleFit==='function')scheduleFit(); }
       closeAiTippConfirm();
       trackEvent('ai_tipp_used',{field:fieldId});
     })
