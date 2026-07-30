@@ -194,6 +194,14 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .admin-save-btn{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
 .admin-reset-btn{background:#f1e9e6;color:#8a5a5a;}
 .admin-export-btn{background:#2a1a20;color:#fff;}
+.admin-visual-btn{width:100%;margin-top:8px;padding:11px;border-radius:10px;border:1.6px dashed var(--wiz-rose-dark);background:#fff;color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
+.admin-visual-btn:hover{background:var(--wiz-blush);}
+#adminTplEditBar{position:fixed;top:0;left:0;right:0;z-index:9600;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;background:rgba(20,20,20,.92);color:#fff;font-family:'Libre Franklin',sans-serif;padding:9px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);}
+#adminTplEditBar .lbl{font-weight:700;font-size:12.5px;margin-right:4px;}
+#adminTplEditBar button{border:none;border-radius:8px;padding:7px 12px;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
+#adminTplEditBar .admin-tpl-save{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
+#adminTplEditBar .admin-tpl-exit{background:rgba(255,255,255,.14);color:#fff;}
+@media print{#adminTplEditBar{display:none!important;}}
 .admin-swipe-list{max-height:60vh;overflow-y:auto;margin-bottom:14px;}
 .admin-swipe-row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--wiz-rose-pale);}
 .admin-swipe-thumb-wrap{flex-shrink:0;width:74px;}
@@ -671,6 +679,10 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .fmtbar .sep{width:1px;height:20px;background:rgba(255,255,255,.2);margin:0 4px;}
 .fmtbar label{font-size:11px;opacity:.8;}
 .fmtbar select{font-family:'Libre Franklin',sans-serif;font-size:12px;border-radius:6px;border:none;padding:7px 8px;background:#fff;color:#111;cursor:pointer;}
+.cover-phrase{text-align:center;font-family:'Grenze Gotisch',serif;}
+.pack-romantic .cover-phrase{font-family:'Marcellus',serif;letter-spacing:.02em;}
+.pack-modern .cover-phrase{font-family:'Jost',sans-serif;letter-spacing:.06em;}
+.pack-magazine .cover-phrase{font-family:'Grenze Gotisch',serif;letter-spacing:.01em;}
 .pack-romantic .nameplate{font-family:'Marcellus',serif;letter-spacing:.02em;}
 .pack-romantic .lead-head,.pack-romantic .col-head,.pack-romantic .qr-band-h,.pack-romantic .rovat-h,.pack-romantic .duo-cap,.pack-romantic .closer,.pack-romantic .filler-quote,.pack-romantic .mem-name,.pack-romantic .stat .num,.pack-romantic .hh .n{font-family:'Cormorant Garamond',serif;}
 .pack-romantic .bp,.pack-romantic p,.pack-romantic .hunt-list li,.pack-romantic .flow .step,.pack-romantic .menu .dish,.pack-romantic .qr-cap,.pack-romantic .mem-intro,.pack-romantic .qr-mid{font-family:'EB Garamond',serif;}
@@ -868,8 +880,11 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 @media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
 .blk-select-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover>.blk-select-btn,.blk.bsel>.blk-select-btn{display:flex;}
-.blk-edit-btn{position:absolute;top:2px;left:200px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,110,20,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
-.blk:hover>.blk-edit-btn,.blk.bsel>.blk-edit-btn{display:flex;}
+/* a többi sarok-gombbal ellentétben ez ÁLLANDÓAN látszik (halványabban), nem csak hoverre/
+   kijelöléskor — sok rovathoz adatot KELL megadni, ezért ennek felfedezhetőnek kell lennie
+   anélkül is, hogy a user előbb tudná, hogy egyáltalán rá kell/lehet kattintani a rovatra */
+.blk-edit-btn{position:absolute;top:2px;left:200px;z-index:47;display:flex;align-items:center;gap:4px;background:rgba(154,110,20,.95);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.blk:hover>.blk-edit-btn,.blk.bsel>.blk-edit-btn{opacity:1;}
 .blk-select-btn:hover{background:rgba(52,110,148,1);}
 .blk.bsel>.rsz{display:block;}
 .blk.bsel{outline:1.5px dashed var(--claret);outline-offset:3px;}
@@ -901,8 +916,15 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
   .rsz{width:17px;height:17px;}
   .rsz-move{width:25px;height:25px;font-size:11px;}
   /* ===== MOBIL ROVAT ESZKÖZTÁR — ugyanaz a fix, alsó rendszer, mint a képkereteknél ===== */
-  /* a régi sarok-gombok (grip/resize/del) mobilon teljesen elrejtve — a .blk-actionbar veszi át a helyüket */
-  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn,.blk-edit-btn{display:none!important;}
+  /* a régi sarok-gombok (grip/resize/del) mobilon teljesen elrejtve — a .blk-actionbar veszi át a helyüket.
+     Kivétel: a "✎ Adatok" gomb — ez mobilon is ÁLLANDÓAN látszik a rovat jobb felső sarkában, hogy a
+     kitöltendő adatokra ne csak a rovat kijelölése (aljára húzódó eszköztár) után derüljön fény. */
+  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn{display:none!important;}
+  .blk-edit-btn{position:absolute;top:2px;left:auto;right:2px;font-size:10px;padding:3px 8px;opacity:.85;}
+  /* a mobil eszköztárban (rovat kijelölésekor előjövő alsó sáv) az "Adatok" gomb kapjon
+     eltérő, feltűnőbb színt a Mozgatás/Méret/Törlés gombok között */
+  .blk-actionbar button[data-a="edit"]{background:rgba(154,110,20,.55);}
+  .blk-actionbar button[data-a="edit"]:hover{background:rgba(154,110,20,.8);}
   .warnbar{font-size:10.5px;padding:6px 8px;}
   #resumeBar{font-size:11px;padding:10px 12px;}
   #resumeBar .resumeBtns{width:100%;justify-content:flex-end;}
@@ -1597,12 +1619,14 @@ hu:{
   resume_found:"📝 Találtunk egy korábban elkezdett újságot — utoljára mentve: {when}",
   resume_yes:"Folytatom",
   resume_no:"Új kezdés",
-  tut_wiz_1:"Először válaszd ki a <b>formátumot és az oldalszámot</b>. A „Digitális” változatok otthon is nyomtathatók, az A4-esek tőlünk rendelhetők, nyomtatva.",
-  tut_wiz_2:"A csillagos (<span style=\"color:#b0355a\">*</span>) mezők <b>kötelezők</b> — a pár neve, a lap címe, a dátum és a helyszín mindenképp kell a címlaphoz.",
+  tut_wiz_1:"Kezdd a <b>pár nevével</b> — ez azonnal megjelenik a címlapon, ahogy gépeled.",
+  tut_wiz_2:"Innentől két úton juthatsz kész újsághoz: válassz egy <b>kész sablont</b> (4/8/12/16 oldal, rögtön kész elrendezéssel), vagy <b>válogass</b> gyors, kártyás döntésekkel — utána már csak a kiválasztott rovatokhoz adod meg az adatokat.",
   tut_wiz_3:"Ezek a <b>rovatok</b>. Kapcsold be, amiket szeretnél — bekapcsoláskor lenyílnak a hozzájuk tartozó mezők. Nem kell mindet: a kevesebb néha több!",
   tut_wiz_4:"Ha elakadnál, a <b>💡 Tipp</b> gombok kész szövegötleteket írnak be helyetted — utána szabadon átírhatod őket.",
   tut_wiz_5:"Ha megvagy, ezzel a gombbal <b>készül el az újság</b>. Utána a szerkesztőben töltheted fel a képeket, és mindent áthelyezhetsz. Ide bármikor visszajöhetsz módosítani.",
+  tut_swipe_1:"Ezek azok a rovatok, amelyekre <b>igent mondtál</b> a válogatásnál — itt add meg hozzájuk a részleteket. A 🧩 Rovatok kezelése alatt bármikor hozzáadhatsz még egyet, vagy elrejtheted, amit meggondoltál.",
   tut_ed_1:"Kattints a <b>+ mezőkre</b> a fényképek feltöltéséhez. A képet húzva pozicionálhatod, a sarkánál nagyíthatod, a <b>◇</b> gombbal keretet (kör/szív) adhatsz neki.",
+  tut_ed_edit:"Sok rovatnál <b>adatokat is meg kell adni</b> (szöveg, dátum, névsor stb.) — ehhez nyomd meg a rovat sarkában látható <b>✎ Adatok</b> gombot.",
   tut_ed_2:"Minden szöveg <b>átírható</b>: kattints bele és szerkeszd. Szöveg kijelölésekor lent formázósáv jelenik meg (félkövér, betűméret, betűtípus).",
   tut_ed_3:"A rovatok <b>mozgathatók és átméretezhetők</b> — vidd az egérmutatót a rovat fölé (mobilon koppints rá), és használd a megjelenő fogantyúkat.",
   tut_ed_4:"Itt egy kattintással <b>stílust</b> válthatsz az egész újságon.",
@@ -2221,12 +2245,14 @@ en:{
   resume_found:"📝 We found a gazette you started earlier — last saved: {when}",
   resume_yes:"Continue",
   resume_no:"Start over",
-  tut_wiz_1:"First, choose the <b>format and page count</b>. The \"Digital\" versions can also be printed at home, the A4 ones can be ordered from us, printed.",
-  tut_wiz_2:"Fields marked with a star (<span style=\"color:#b0355a\">*</span>) are <b>required</b> — the couple's name, the gazette's title, the date and the venue are all needed for the cover.",
+  tut_wiz_1:"Start with the <b>couple's name</b> — it shows up on the cover right away as you type.",
+  tut_wiz_2:"From here there are two paths to a finished gazette: pick a <b>ready-made template</b> (4/8/12/16 pages, laid out instantly), or <b>swipe through sections</b> with quick card decisions — afterwards you'll only fill in details for the ones you picked.",
   tut_wiz_3:"These are the <b>sections</b>. Switch on the ones you'd like — their fields expand when enabled. You don't need all of them: sometimes less is more!",
   tut_wiz_4:"If you get stuck, the <b>💡 Tip</b> buttons fill in ready-made text ideas for you — you can freely rewrite them afterwards.",
   tut_wiz_5:"Once you're done, this button <b>generates the gazette</b>. Then, in the editor, you can upload photos and move anything around. You can always come back here to make changes.",
+  tut_swipe_1:"These are the sections you <b>said yes to</b> while swiping — fill in the details here. You can always add another one, or hide one you changed your mind about, under 🧩 Manage sections.",
   tut_ed_1:"Click the <b>+ boxes</b> to upload photos. Drag the photo to position it, resize it from the corner, and use the <b>◇</b> button to give it a frame (circle/heart).",
+  tut_ed_edit:"Many sections also need <b>extra information</b> (text, dates, a name list, etc.) — tap the <b>✎ Data</b> button in the section's corner to fill it in.",
   tut_ed_2:"All text is <b>editable</b>: click into it and edit. Selecting text shows a formatting bar below (bold, font size, font).",
   tut_ed_3:"Sections can be <b>moved and resized</b> — hover over a section (tap it on mobile), and use the handles that appear.",
   tut_ed_4:"Here you can switch the <b>style</b> of the whole gazette with one click.",
@@ -2786,7 +2812,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.14';
+  var APP_VERSION='6.15';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3256,7 +3282,7 @@ A kedvenc díszítésed
   </div>
 
   <div class="fitbar ok" id="fitStatus" data-i18n="w_fitbar_ok_text">A tartalom elfér a kiválasztott formátumban.</div>
-  <button class="gen-btn" onclick="CFG.customOrder=null;generate();" data-i18n="w_gen_btn">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
+  <button class="gen-btn" onclick="CFG.customOrder=null;CFG.customBlockfx=null;generate();" data-i18n="w_gen_btn">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
   </div><!-- /wizLegacyFields -->
 
   <button type="button" class="lp-fab" id="lpFab" data-i18n="w_lp_fab">👀 Előnézet</button>
@@ -3564,7 +3590,7 @@ function elemScale(el){
   return z||1;
 }
 
-var CFG={size:'A5',pages:4,product:'ujsag',customOrder:null};
+var CFG={size:'A5',pages:4,product:'ujsag',customOrder:null,customBlockfx:null};
 function pickFmt(el){
   document.querySelectorAll('.fmt').forEach(function(f){f.classList.remove('sel');});
   el.classList.add('sel'); CFG.size=el.dataset.size; CFG.pages=parseInt(el.dataset.pages,10);
@@ -3626,11 +3652,36 @@ var UJSAG_TEMPLATE_8=UJSAG_TEMPLATE_4.concat(['ismerkedes','years','jegyesfoto',
 var UJSAG_TEMPLATE_12=UJSAG_TEMPLATE_8.concat(['utazas','csapat','igazhamis','jatekok','interju','naszut']);
 var UJSAG_TEMPLATE_16=UJSAG_TEMPLATE_12.concat(['lagziszab','masnapos','gyik','szinezo']);
 var UJSAG_TEMPLATES={4:UJSAG_TEMPLATE_4,8:UJSAG_TEMPLATE_8,12:UJSAG_TEMPLATE_12,16:UJSAG_TEMPLATE_16};
+/* A sablon-tárolás két alakot ismer: egyszerű tömb (csak rovat-sorrend — ez a fenti,
+   kézzel írt alapértelmezés), vagy {order:[...],blockfx:{...}} objektum, amit az admin
+   "Részletes szerkesztés" módja ment el, amikor a valódi szerkesztőben pontosan
+   elrendezett (mozgatott/átméretezett) rovatokat rögzít sablonként. A blockfx ugyanazt a
+   szerkezetet használja, mint a projekt-mentés (gatherProjectState) blockfx-e. */
+function normalizeTemplateEntry(entry){
+  if(Array.isArray(entry))return {order:entry.slice(),blockfx:{}};
+  if(entry&&typeof entry==='object')return {order:(entry.order||[]).slice(),blockfx:entry.blockfx||{}};
+  return {order:[],blockfx:{}};
+}
+function applyBlockfxMap(map){
+  if(!map)return;
+  Object.keys(map).forEach(function(bid){
+    var blk=document.querySelector('#stage .blk[data-bid="'+bid+'"]'); if(!blk)return;
+    var f=map[bid];
+    if(f.zoom)blk.style.zoom=f.zoom;
+    if(f.tr)blk.style.transform=f.tr;
+    if(f.w)blk.style.width=f.w;
+    if(f.h)blk.style.height=f.h;
+    if(f.lh)blk.style.lineHeight=f.lh;
+    if(f.sp)blk.dataset.sizePref=f.sp;
+  });
+  if(typeof checkBlockOverflows==='function')checkBlockOverflows();
+}
 function applyUjsagPreset(targetPages){
   seedUjsagDefaults();
   applyProductTailConfig();
   var templates=(typeof currentUjsagTemplates==='function')?currentUjsagTemplates():UJSAG_TEMPLATES;
-  var keep=templates[targetPages]||UJSAG_TEMPLATE_16;
+  var norm=normalizeTemplateEntry(templates[targetPages]||UJSAG_TEMPLATE_16);
+  var keep=norm.order;
   UJSAG_FORCE_ALL_CHKS.forEach(function(id){
     var cb=document.getElementById('chk_'+id); if(!cb)return;
     cb.checked=(keep.indexOf(id)>=0);
@@ -3646,6 +3697,10 @@ function applyUjsagPreset(targetPages){
      felülírja a rovatok alap-sorrendjét — ld. buildFlowUjsag(). Csak addig érvényes, amíg
      egy másik indítási mód (Válogatás, kézi varázsló) újra felül nem írja. */
   CFG.customOrder=keep.slice();
+  /* ha az admin a "Részletes szerkesztés" módban pontos pozíciót/méretet is rögzített a
+     rovatokhoz, ez a generálás UTÁN kerül alkalmazásra (ld. startUjsagEditorPreset /
+     adminOpenVisualEditor) — itt csak eltesszük, hogy a hívó tudja, van-e mit alkalmazni. */
+  CFG.customBlockfx=(norm.blockfx&&Object.keys(norm.blockfx).length)?norm.blockfx:null;
 }
 function validateUjsagNames(){
   var eb=document.getElementById('errbox');
@@ -3664,7 +3719,9 @@ function startUjsagEditorPreset(targetPages){
   if(!validateUjsagNames())return;
   applyUjsagPreset(targetPages);
   trackEvent('ujsag_preset_clicked',{pages:targetPages});
+  var fx=CFG.customBlockfx; CFG.customBlockfx=null;
   generate();
+  if(fx)setTimeout(function(){applyBlockfxMap(fx);},150);
 }
 /* ===== Tinder-féle rovat-válogató ===== */
 /* a példaképeket a projekt gazdája tölti fel az assets/swipe/<rovat-id>.jpg útvonalra —
@@ -3759,7 +3816,7 @@ function renderSwipeDone(ov){
 }
 function finishSwipePicker(){
   var decisions=_swipeState.decisions;
-  CFG.customOrder=null; /* a Válogatás nem sablon — az alap rovat-sorrend érvényes */
+  CFG.customOrder=null; CFG.customBlockfx=null; /* a Válogatás nem sablon — az alap rovat-sorrend és -elrendezés érvényes */
   /* a swipe eredménye a lenti (részletes, kézzel kitölthető) varázslót szűri: a "nem"
      válaszokat kapott rovatok kártyáját IDEIGLENESEN elrejtjük (nem töröljük) — a
      szerkesztőben, a "🧩 Rovatok kezelése" gombbal bármikor visszahozhatók, mert a
@@ -3778,7 +3835,10 @@ function finishSwipePicker(){
   /* a varázsló (wizLegacyFields) alapból rejtve van — csak a Válogatás (swipe) befejezése
      után jelenik meg, a fenti szűréssel már csak az "igen" rovatok kártyáival */
   var legacy=document.getElementById('wizLegacyFields');
-  if(legacy){ legacy.style.display='block'; legacy.scrollIntoView({behavior:'smooth',block:'start'}); }
+  if(legacy){
+    legacy.style.display='block'; legacy.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){ if(typeof startSwipeResultTutorial==='function')startSwipeResultTutorial(false); },500);
+  }
 }
 /* olyan mezők/sorok alapértelmezett kitöltése, amiknek a varázslóban eddig csak PLACEHOLDER
    szövege volt (nem valódi érték) — mivel a gyorsindításnál a felhasználó sosem látja/tölti ki
@@ -3920,7 +3980,7 @@ function B_coverUjsag(d){
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;">'
     +ears+'<hr class="rule-thin">'
     +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'62px':'44px')+';">'+esc(d.names)+'</h1>'
-    +'<div class="editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;">'+esc(phrase)+'</div>'
+    +'<div class="cover-phrase editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'22px':'16px')+';font-weight:600;color:var(--claret);margin:2px 0 0;">'+esc(phrase)+'</div>'
     +'<hr class="rule-ox" style="margin-top:12px;"><div class="dateline-strip"><span class="editable" contenteditable="true">'+esc(dateTxt)+'</span><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div><hr class="rule-thin">'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
     +(d.coverCap?'<div class="caption editable" contenteditable="true">'+esc(d.coverCap)+'</div>':'')
@@ -3930,7 +3990,7 @@ function B_coverMeghivo(d){
   return '<div class="blk" style="display:flex;flex-direction:column;flex:1;align-items:center;text-align:center;">'
     +'<div class="kicker editable" contenteditable="true" style="letter-spacing:.18em;text-transform:uppercase;margin-top:4px;">'+L('Esküvői meghívó','Wedding Invitation')+'</div>'
     +'<h1 class="nameplate editable" contenteditable="true" style="font-size:'+(CFG.size==='A4'?'56px':'40px')+';margin:8px 0 2px;">'+esc(d.names)+'</h1>'
-    +'<div class="editable" contenteditable="true" style="font-size:18px;font-weight:600;color:var(--claret);">'+esc(d.phrase||L('összeházasodnak','are getting married'))+'</div>'
+    +'<div class="cover-phrase editable" contenteditable="true" style="font-size:18px;font-weight:600;color:var(--claret);">'+esc(d.phrase||L('összeházasodnak','are getting married'))+'</div>'
     +'<hr class="rule-ox" style="width:80%;margin-top:12px;">'
     +'<div class="hero imgbox photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'" style="margin-top:12px;width:100%;"></div>'
     +'</div>';
@@ -7174,15 +7234,27 @@ function applyProjectState(data){
   function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
   function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 
+  /* A varázsló ma NEVEKKEL indul, utána egy elágazás: KÉSZ SABLON (azonnal generál) vagy
+     VÁLOGATÁS (Tinder-szerű kártyák, utána a szűrt, kitöltendő rovatokkal folytatódik a
+     varázsló). Ez a bemutató csak az induló képernyőt magyarázza — a sablon-úton innentől
+     egyenesen a szerkesztőbe kerül a user (ott az ED_STEPS folytatja), a válogatás-úton pedig
+     a swipe befejezése után külön, rövid bemutató jön (ld. SWIPE_STEPS / startSwipeResultTutorial). */
   var WIZ_STEPS=[
-    {sel:'.fmt-grid',key:'tut_wiz_1'},
-    {sel:'#f_names',key:'tut_wiz_2'},
-    {sel:'.card.opt',key:'tut_wiz_3'},
+    {sel:'#f_names',key:'tut_wiz_1'},
+    {sel:'.journey-h',key:'tut_wiz_2'},
+    {sel:'.tipbtn',key:'tut_wiz_4'},
+    {sel:'.gen-btn',key:'tut_wiz_5'}
+  ];
+  /* a Válogatás befejezése után, a szűrt (csak az igent kapott rovatokat mutató) varázslón —
+     ld. finishSwipePicker() a fő szkriptben */
+  var SWIPE_STEPS=[
+    {sel:'.card.opt',key:'tut_swipe_1'},
     {sel:'.tipbtn',key:'tut_wiz_4'},
     {sel:'.gen-btn',key:'tut_wiz_5'}
   ];
   var ED_STEPS=[
     {sel:'#stage .imgbox',key:'tut_ed_1'},
+    {sel:'.blk-edit-btn',key:'tut_ed_edit'},
     {sel:'#stage .editable',key:'tut_ed_2'},
     {sel:'#stage .blk',key:'tut_ed_3'},
     {sel:'#packSel',pre:'toolbar',key:'tut_ed_4'},
@@ -7249,6 +7321,7 @@ function applyProjectState(data){
   function startTut(steps,key,force){
     if(!force&&lsGet(key))return;
     if(location.search.indexOf('admin=1')!==-1)return; /* admin nézetben soha */
+    if(window._adminTemplateEditPages)return; /* sablon "Részletes szerkesztés" módban se — ne zavarja az admint */
     endTut(false);
     var backdrop=document.createElement('div');backdrop.className='tut-backdrop';
     var ring=document.createElement('div');ring.className='tut-ring';
@@ -7265,6 +7338,7 @@ function applyProjectState(data){
 
   window.startWizardTutorial=function(force){ startTut(WIZ_STEPS,'tutWizardSeen',force); };
   window.startEditorTutorial=function(force){ startTut(ED_STEPS,'tutEditorSeen',force); };
+  window.startSwipeResultTutorial=function(force){ startTut(SWIPE_STEPS,'tutSwipeResultSeen',force); };
 
   /* ===== Első-használat mini-buborékok (méretezés, mozgatás, kép-pozicionálás, stb.) =====
      A lépésenkénti bemutatótól függetlenül: amikor a felhasználó ELŐSZÖR használ egy adott
@@ -7889,12 +7963,15 @@ function renderAdminPanel(tab){
     +'</div>';
   if(tab==='templates'){
     var templates=currentUjsagTemplates();
-    _adminTemplateOrder=adminStripModifiers(templates[_adminTemplateSize]);
+    var norm=normalizeTemplateEntry(templates[_adminTemplateSize]);
+    _adminTemplateOrder=adminStripModifiers(norm.order);
+    _adminTemplateBlockfx=norm.blockfx;
     renderAdminTemplatesTab();
   } else renderAdminSwipeTab();
 }
 var _adminTemplateSize=4;
 var _adminTemplateOrder=[];
+var _adminTemplateBlockfx={};
 /* a "times"/"drinks" nem önálló, listázható rovat, hanem egy-egy másik rovat (menetrend/
    italok) belső kapcsolója — nincs saját kártyája, ezért nem jelenik meg a sorrend-listában;
    mentéskor viszont mindig hozzáfűzzük őket, hogy a menetrend-időpontok és az itallap-blokk
@@ -7934,7 +8011,11 @@ function renderAdminTemplatesTab(){
       +'<button type="button" class="admin-save-btn" onclick="adminSaveTemplate()">💾 '+L('Mentés (ebben a böngészőben)','Save (in this browser)')+'</button>'
       +'<button type="button" class="admin-reset-btn" onclick="adminResetTemplate()">↺ '+L('Alaphelyzet','Reset')+'</button>'
       +'<button type="button" class="admin-export-btn" onclick="adminExportAll()">⬇ '+L('Export (JSON)','Export (JSON)')+'</button>'
-    +'</div>';
+    +'</div>'
+    +'<div class="admin-order-h" style="margin-top:14px;">'+L('Pontos elrendezés (pozíció, méret):','Exact layout (position, size):')+'</div>'
+    +'<div class="tinyhint">'+L('A fenti lista csak azt szabja meg, MELYIK rovatok és MILYEN sorrendben kerülnek be. Ha a pontos helyüket/méretüket is rögzíteni szeretnéd — konkrétan megszerkeszteni egy újságot, ami aztán szóról szóra ez lesz a sablon —, nyisd meg a valódi szerkesztőt.','The list above only sets WHICH sections are included and in WHAT order. If you also want to fix their exact position/size — actually laying out a real gazette that then becomes the template verbatim — open the real editor.')+'</div>'
+    +'<button type="button" class="admin-visual-btn" onclick="adminOpenVisualEditor()">🖊️ '+L('Részletes szerkesztés a valódi szerkesztőben','Detailed editing in the real editor')+'</button>'
+    +(_adminTemplateBlockfx&&Object.keys(_adminTemplateBlockfx).length?'<div class="admin-fit-status">✓ '+L('Ehhez a sablonhoz van elmentett, pontos elrendezés is.','This template also has a saved, exact layout.')+'</div>':'');
   updateAdminFitStatus();
   body.querySelectorAll('#adminOrderList input[type=checkbox]').forEach(function(cb){
     cb.addEventListener('change',function(){
@@ -7963,7 +8044,9 @@ function renderAdminTemplatesTab(){
 function adminSwitchTemplateSize(n){
   _adminTemplateSize=n;
   var templates=currentUjsagTemplates();
-  _adminTemplateOrder=adminStripModifiers(templates[n]);
+  var norm=normalizeTemplateEntry(templates[n]);
+  _adminTemplateOrder=adminStripModifiers(norm.order);
+  _adminTemplateBlockfx=norm.blockfx;
   renderAdminTemplatesTab();
 }
 function updateAdminFitStatus(){
@@ -7981,7 +8064,9 @@ function updateAdminFitStatus(){
 }
 function adminSaveTemplate(){
   var templates=currentUjsagTemplates();
-  templates[_adminTemplateSize]=_adminTemplateOrder.concat(['times','drinks']);
+  /* a lista-szerkesztő csak a sorrendet/tagságot változtatja — a korábban (a valódi
+     szerkesztőben) esetleg rögzített pontos elrendezést (blockfx) megtartjuk */
+  templates[_adminTemplateSize]={order:_adminTemplateOrder.concat(['times','drinks']),blockfx:_adminTemplateBlockfx||{}};
   saveAdminTemplates(templates);
   alert(L('Mentve — ez a böngésző mostantól ezt a '+_adminTemplateSize+' oldalas sablont adja.','Saved — this browser will now serve this '+_adminTemplateSize+'-page template.'));
 }
@@ -7989,8 +8074,75 @@ function adminResetTemplate(){
   var override=loadAdminTemplates();
   if(override){ delete override[_adminTemplateSize]; saveAdminTemplates(override); }
   var templates=currentUjsagTemplates();
-  _adminTemplateOrder=adminStripModifiers(templates[_adminTemplateSize]);
+  var norm=normalizeTemplateEntry(templates[_adminTemplateSize]);
+  _adminTemplateOrder=adminStripModifiers(norm.order);
+  _adminTemplateBlockfx=norm.blockfx;
   renderAdminTemplatesTab();
+}
+/* ===== Sablon "Részletes szerkesztés" — a valódi szerkesztőben ===== */
+/* Az admin ITT ténylegesen megszerkeszt egy mintaújságot (ugyanazokkal az eszközökkel,
+   amiket a vásárló is használ: mozgatás, átméretezés, rovat hozzáadása/törlése) — mentéskor
+   a képernyőn LÁTOTT pontos elrendezés (sorrend + minden rovat pozíciója/mérete) lesz a
+   sablon, nem csak egy elvont bekapcsolt-rovatok lista. */
+window._adminTemplateEditPages=null;
+function adminOpenVisualEditor(){
+  var n=_adminTemplateSize;
+  closeAdminPanel();
+  CFG.product='ujsag';
+  var ts=document.getElementById('typeSelect'); if(ts)ts.style.display='none';
+  var sc=document.getElementById('introShowcase'); if(sc)sc.style.display='none';
+  var wiz=document.getElementById('wizard'); if(wiz)wiz.style.display='block';
+  var namesEl=document.getElementById('f_names'); if(namesEl)namesEl.value=L('Minta Pár','Sample Couple');
+  CFG.size='A5';
+  applyUjsagPreset(n);
+  var fx=CFG.customBlockfx; CFG.customBlockfx=null;
+  window._adminTemplateEditPages=n;
+  generate();
+  setTimeout(function(){
+    if(fx)applyBlockfxMap(fx);
+    showAdminTemplateEditBar(n);
+    window.scrollTo(0,0);
+  },200);
+}
+function showAdminTemplateEditBar(n){
+  var bar=document.getElementById('adminTplEditBar');
+  if(!bar){ bar=document.createElement('div'); bar.id='adminTplEditBar'; document.body.appendChild(bar); }
+  bar.innerHTML='<span class="lbl">🖊️ '+L('Sablon-szerkesztés','Template editing')+' — '+n+' '+L('oldal','pages')+'</span>'
+    +'<button type="button" class="admin-tpl-save">💾 '+L('Mentés sablonként','Save as template')+'</button>'
+    +'<button type="button" class="admin-tpl-exit">✕ '+L('Kilépés mentés nélkül','Exit without saving')+'</button>';
+  bar.querySelector('.admin-tpl-save').onclick=function(){ adminSaveVisualTemplate(n); };
+  bar.querySelector('.admin-tpl-exit').onclick=function(){ adminExitVisualEditor(); };
+}
+function adminExitVisualEditor(){
+  window._adminTemplateEditPages=null;
+  var bar=document.getElementById('adminTplEditBar'); if(bar)bar.remove();
+  var wiz=document.getElementById('wizard'); if(wiz)wiz.style.display='none';
+  var paper=document.getElementById('paper'); if(paper)paper.style.display='none';
+  var stage=document.getElementById('stage'); if(stage)stage.innerHTML='';
+  /* ne maradjon a mintaszerkesztésből "folytatható munka" jelzés a saját böngészőjében */
+  try{ localStorage.removeItem('eskuvoiHirado_autosave_v1'); }catch(e){}
+  openAdminPanel();
+}
+function adminSaveVisualTemplate(n){
+  var order=[];
+  document.querySelectorAll('#stage .blk[data-bid]').forEach(function(b){
+    var bid=b.getAttribute('data-bid');
+    var entry=ADDABLE_SECTIONS_UJSAG.find(function(s){return s.blk===bid;});
+    if(!entry)return; /* gerinc (welcome/menetrend/italok/closer) és töltő-blokkok kihagyva */
+    if(order.indexOf(entry.chk)<0)order.push(entry.chk);
+  });
+  var blockfx={};
+  document.querySelectorAll('#stage .blk[data-bid]').forEach(function(b){
+    blockfx[b.getAttribute('data-bid')]={zoom:b.style.zoom||'',tr:b.style.transform||'',w:b.style.width||'',h:b.style.height||'',lh:b.style.lineHeight||'',sp:b.dataset.sizePref||''};
+  });
+  if(order.indexOf('times')<0)order.push('times');
+  if(order.indexOf('drinks')<0)order.push('drinks');
+  var templates=currentUjsagTemplates();
+  templates[n]={order:order,blockfx:blockfx};
+  saveAdminTemplates(templates);
+  alert(L('Sablon elmentve ('+n+' oldal) — mostantól ezt a pontos elrendezést kapja mindenki, aki ezt a sablont választja.','Template saved ('+n+' pages) — everyone who picks this template will now get this exact layout.'));
+  _adminTemplateSize=n;
+  adminExitVisualEditor();
 }
 function renderAdminSwipeTab(){
   var body=document.getElementById('adminBody');
