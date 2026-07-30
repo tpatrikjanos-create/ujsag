@@ -178,8 +178,17 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .admin-size-btn{flex:1;padding:8px;border-radius:8px;border:1.4px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
 .admin-size-btn.sel{background:var(--wiz-rose-dark);color:#fff;border-color:var(--wiz-rose-dark);}
 .admin-fit-status{font-family:'Libre Franklin',sans-serif;font-size:12px;color:#8a7480;background:var(--wiz-blush);border-radius:8px;padding:8px 10px;margin-bottom:10px;}
-.admin-chk-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:14px;max-height:44vh;overflow-y:auto;}
+.admin-chk-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin-bottom:14px;max-height:30vh;overflow-y:auto;}
 .admin-chk-row{display:flex;align-items:center;gap:7px;font-family:'Libre Franklin',sans-serif;font-size:12.5px;color:#3a2630;padding:4px 0;cursor:pointer;}
+.admin-chk-row-off{color:#a89aa0;}
+.admin-order-h{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:11.5px;color:#8a7480;margin:10px 0 4px;}
+#adminOrderList{display:block;}
+.admin-order-row{display:flex;align-items:center;gap:6px;padding:2px 0;}
+.admin-order-row .admin-chk-row{flex:1;padding:2px 0;}
+.admin-order-arrows{display:flex;gap:2px;flex-shrink:0;}
+.admin-order-btn{width:22px;height:22px;border-radius:5px;border:1.2px solid var(--wiz-rose-pale);background:#fff;color:var(--wiz-rose-dark);font-size:10px;cursor:pointer;line-height:1;padding:0;}
+.admin-order-btn:hover{background:var(--wiz-blush);}
+.admin-order-btn:disabled{opacity:.3;cursor:default;}
 .admin-actions{display:flex;flex-wrap:wrap;gap:8px;}
 .admin-save-btn,.admin-reset-btn,.admin-export-btn{flex:1;min-width:120px;padding:10px;border-radius:10px;border:none;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
 .admin-save-btn{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
@@ -2762,7 +2771,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.12';
+  var APP_VERSION='6.13';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3231,7 +3240,7 @@ A kedvenc díszítésed
   </div>
 
   <div class="fitbar ok" id="fitStatus" data-i18n="w_fitbar_ok_text">A tartalom elfér a kiválasztott formátumban.</div>
-  <button class="gen-btn" onclick="generate()" data-i18n="w_gen_btn">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
+  <button class="gen-btn" onclick="CFG.customOrder=null;generate();" data-i18n="w_gen_btn">✦ Tovább a szerkesztőbe — Újság generálása ✦</button>
   </div><!-- /wizLegacyFields -->
 
   <button type="button" class="lp-fab" id="lpFab" data-i18n="w_lp_fab">👀 Előnézet</button>
@@ -3539,7 +3548,7 @@ function elemScale(el){
   return z||1;
 }
 
-var CFG={size:'A5',pages:4,product:'ujsag'};
+var CFG={size:'A5',pages:4,product:'ujsag',customOrder:null};
 function pickFmt(el){
   document.querySelectorAll('.fmt').forEach(function(f){f.classList.remove('sel');});
   el.classList.add('sel'); CFG.size=el.dataset.size; CFG.pages=parseInt(el.dataset.pages,10);
@@ -3617,6 +3626,10 @@ function applyUjsagPreset(targetPages){
     if(typeof optToggle==='function')optToggle(cb);
   });
   CFG.pages=targetPages;
+  /* a sablon saját, admin által (a checkbox-lista fölött, ▲▼-vel) beállított sorrendje
+     felülírja a rovatok alap-sorrendjét — ld. buildFlowUjsag(). Csak addig érvényes, amíg
+     egy másik indítási mód (Válogatás, kézi varázsló) újra felül nem írja. */
+  CFG.customOrder=keep.slice();
 }
 function validateUjsagNames(){
   var eb=document.getElementById('errbox');
@@ -3730,6 +3743,7 @@ function renderSwipeDone(ov){
 }
 function finishSwipePicker(){
   var decisions=_swipeState.decisions;
+  CFG.customOrder=null; /* a Válogatás nem sablon — az alap rovat-sorrend érvényes */
   /* a swipe eredménye a lenti (részletes, kézzel kitölthető) varázslót szűri: a "nem"
      válaszokat kapott rovatok kártyáját IDEIGLENESEN elrejtjük (nem töröljük) — a
      szerkesztőben, a "🧩 Rovatok kezelése" gombbal bármikor visszahozhatók, mert a
@@ -4490,6 +4504,18 @@ function buildFlowUjsag(d){
     'utazas','bakancslista','naszut','csapat','memorial','negylabu','szulok','szinglik','dijak',
     'igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','itallap','italok','qr','fotovadasz',
     'robbantsd','vendegkonyv','closer'];
+  /* egy sablon admin által beállított (▲▼-vel szerkesztett) rovat-sorrendje felülírja a fentit
+     — a "welcome" mindig legelöl marad, a sablonban nem szereplő (pl. mindig-aktív gerinc-)
+     rovatok a saját alap-sorrendjükben, a sablon-rovatok UTÁN következnek. Ez utóbbiak (menetrend/
+     étlap/itallap/italok/qr/fotóvadász/robbantsd/vendégkönyv/záró) úgyis mindig az utolsó
+     lap(ok)ra kerülnek a TAIL_IDS mechanizmus miatt, a helyük az ORDER-ben csak azt szabja meg,
+     hogy egyáltalán bekerüljenek-e a listába. */
+  if(CFG.customOrder && CFG.customOrder.length){
+    var customSet={}; CFG.customOrder.forEach(function(id){ customSet[id]=true; });
+    var remainder=ORDER.filter(function(id){ return !customSet[id]; });
+    ORDER=['welcome'].concat(CFG.customOrder.filter(function(id){ return id!=='welcome'; }))
+      .concat(remainder.filter(function(id){ return id!=='welcome'; }));
+  }
 
   var flow=[];
   ORDER.forEach(function(id){ if(B[id])flow.push({id:id,html:B[id],sizePref:getSizePref(id)}); });
@@ -7793,35 +7819,88 @@ function renderAdminPanel(tab){
     +'</div>'
     +'<div class="admin-body" id="adminBody"></div>'
     +'</div>';
-  if(tab==='templates')renderAdminTemplatesTab(); else renderAdminSwipeTab();
+  if(tab==='templates'){
+    var templates=currentUjsagTemplates();
+    _adminTemplateOrder=adminStripModifiers(templates[_adminTemplateSize]);
+    renderAdminTemplatesTab();
+  } else renderAdminSwipeTab();
 }
 var _adminTemplateSize=4;
+var _adminTemplateOrder=[];
+/* a "times"/"drinks" nem önálló, listázható rovat, hanem egy-egy másik rovat (menetrend/
+   italok) belső kapcsolója — nincs saját kártyája, ezért nem jelenik meg a sorrend-listában;
+   mentéskor viszont mindig hozzáfűzzük őket, hogy a menetrend-időpontok és az itallap-blokk
+   továbbra is alapból bekapcsolva maradjanak minden sablonban */
+function adminStripModifiers(ids){
+  return (ids||[]).filter(function(id){ return id!=='times'&&id!=='drinks'; });
+}
 function renderAdminTemplatesTab(){
+  /* FONTOS: ez a függvény NEM tölti újra a mentett sablont — csak a _adminTemplateOrder
+     JELENLEGI (folyamatban lévő szerkesztés alatt álló) állapotát jeleníti meg. A friss
+     betöltés kizárólag méret-váltáskor (adminSwitchTemplateSize) vagy a panel megnyitásakor
+     történik — különben minden sorrend-csere/ki-be pipálás visszaállna a mentett állapotra. */
   var body=document.getElementById('adminBody');
-  var templates=currentUjsagTemplates();
   var sizeBtns=[4,8,12,16].map(function(n){
     return '<button type="button" class="admin-size-btn'+(n===_adminTemplateSize?' sel':'')+'" onclick="adminSwitchTemplateSize('+n+')">'+n+' '+L('oldal','pages')+'</button>';
   }).join('');
-  var keep=templates[_adminTemplateSize]||[];
-  var rows=SWIPE_DECK_IDS.map(function(id){
-    var checked=keep.indexOf(id)>=0?'checked':'';
-    return '<label class="admin-chk-row"><input type="checkbox" data-id="'+id+'" '+checked+'>'+esc(sectionLabel(id))+'</label>';
+  var includedRows=_adminTemplateOrder.map(function(id,ix){
+    return '<div class="admin-order-row">'
+      +'<div class="admin-order-arrows">'
+        +'<button type="button" class="admin-order-btn" data-move="up" data-ix="'+ix+'" '+(ix===0?'disabled':'')+'>▲</button>'
+        +'<button type="button" class="admin-order-btn" data-move="down" data-ix="'+ix+'" '+(ix===_adminTemplateOrder.length-1?'disabled':'')+'>▼</button>'
+      +'</div>'
+      +'<label class="admin-chk-row"><input type="checkbox" data-id="'+id+'" checked>'+esc(sectionLabel(id))+'</label>'
+      +'</div>';
+  }).join('');
+  var notIncluded=SWIPE_DECK_IDS.filter(function(id){ return _adminTemplateOrder.indexOf(id)<0; });
+  var notIncludedRows=notIncluded.map(function(id){
+    return '<label class="admin-chk-row admin-chk-row-off"><input type="checkbox" data-id="'+id+'">'+esc(sectionLabel(id))+'</label>';
   }).join('');
   body.innerHTML='<div class="admin-size-tabs">'+sizeBtns+'</div>'
     +'<div class="admin-fit-status" id="adminFitStatus"></div>'
-    +'<div class="admin-chk-list">'+rows+'</div>'
+    +'<div class="admin-order-h">'+L('Bekerül, ebben a sorrendben (▲▼ mozgatható):','Included, in this order (▲▼ to move):')+'</div>'
+    +'<div class="admin-chk-list" id="adminOrderList">'+(includedRows||'<div class="tinyhint">'+L('Még nincs kiválasztott rovat.','No sections selected yet.')+'</div>')+'</div>'
+    +'<div class="admin-order-h">'+L('Nincs benne:','Not included:')+'</div>'
+    +'<div class="admin-chk-list" id="adminNotIncludedList">'+notIncludedRows+'</div>'
     +'<div class="admin-actions">'
       +'<button type="button" class="admin-save-btn" onclick="adminSaveTemplate()">💾 '+L('Mentés (ebben a böngészőben)','Save (in this browser)')+'</button>'
       +'<button type="button" class="admin-reset-btn" onclick="adminResetTemplate()">↺ '+L('Alaphelyzet','Reset')+'</button>'
       +'<button type="button" class="admin-export-btn" onclick="adminExportAll()">⬇ '+L('Export (JSON)','Export (JSON)')+'</button>'
     +'</div>';
   updateAdminFitStatus();
-  body.querySelectorAll('.admin-chk-row input').forEach(function(cb){ cb.addEventListener('change',updateAdminFitStatus); });
+  body.querySelectorAll('#adminOrderList input[type=checkbox]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      if(!cb.checked){
+        var id=cb.getAttribute('data-id');
+        _adminTemplateOrder=_adminTemplateOrder.filter(function(x){return x!==id;});
+        renderAdminTemplatesTab();
+      }
+    });
+  });
+  body.querySelectorAll('#adminNotIncludedList input[type=checkbox]').forEach(function(cb){
+    cb.addEventListener('change',function(){
+      if(cb.checked){ _adminTemplateOrder.push(cb.getAttribute('data-id')); renderAdminTemplatesTab(); }
+    });
+  });
+  body.querySelectorAll('.admin-order-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ix=parseInt(btn.getAttribute('data-ix'),10);
+      var swapWith=btn.getAttribute('data-move')==='up'?ix-1:ix+1;
+      if(swapWith<0||swapWith>=_adminTemplateOrder.length)return;
+      var tmp=_adminTemplateOrder[ix]; _adminTemplateOrder[ix]=_adminTemplateOrder[swapWith]; _adminTemplateOrder[swapWith]=tmp;
+      renderAdminTemplatesTab();
+    });
+  });
 }
-function adminSwitchTemplateSize(n){ _adminTemplateSize=n; renderAdminTemplatesTab(); }
+function adminSwitchTemplateSize(n){
+  _adminTemplateSize=n;
+  var templates=currentUjsagTemplates();
+  _adminTemplateOrder=adminStripModifiers(templates[n]);
+  renderAdminTemplatesTab();
+}
 function updateAdminFitStatus(){
   var body=document.getElementById('adminBody'); if(!body)return;
-  var ids=[]; body.querySelectorAll('.admin-chk-row input:checked').forEach(function(cb){ ids.push(cb.getAttribute('data-id')); });
+  var ids=_adminTemplateOrder;
   var namesEl=document.getElementById('f_names');
   if(namesEl && !namesEl.value.trim())namesEl.value=L('Anna & Péter','Anna & Peter');
   seedUjsagDefaults();
@@ -7833,16 +7912,16 @@ function updateAdminFitStatus(){
   if(status)status.textContent=L('Ennyi rovattal kb. '+(needed+1)+' oldal kellene (a borítóval együtt).','With this many sections, about '+(needed+1)+' pages would be needed (including the cover).');
 }
 function adminSaveTemplate(){
-  var body=document.getElementById('adminBody');
-  var ids=[]; body.querySelectorAll('.admin-chk-row input:checked').forEach(function(cb){ ids.push(cb.getAttribute('data-id')); });
   var templates=currentUjsagTemplates();
-  templates[_adminTemplateSize]=ids;
+  templates[_adminTemplateSize]=_adminTemplateOrder.concat(['times','drinks']);
   saveAdminTemplates(templates);
   alert(L('Mentve — ez a böngésző mostantól ezt a '+_adminTemplateSize+' oldalas sablont adja.','Saved — this browser will now serve this '+_adminTemplateSize+'-page template.'));
 }
 function adminResetTemplate(){
   var override=loadAdminTemplates();
   if(override){ delete override[_adminTemplateSize]; saveAdminTemplates(override); }
+  var templates=currentUjsagTemplates();
+  _adminTemplateOrder=adminStripModifiers(templates[_adminTemplateSize]);
   renderAdminTemplatesTab();
 }
 function renderAdminSwipeTab(){
