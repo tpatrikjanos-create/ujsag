@@ -72,9 +72,13 @@ function buildPrompt(body) {
   const names = String(body.names || '').slice(0, 100).trim();
   const date = String(body.date || '').slice(0, 60).trim();
   const venue = String(body.venue || '').slice(0, 120).trim();
+  const short = !!body.short;
   const langName = lang === 'en' ? 'English' : 'Hungarian';
 
   const facts = `The couple's names: ${names || '(not given)'}. Wedding date: ${date || '(not given)'}. Venue: ${venue || '(not given)'}.`;
+  const lengthNote = short
+    ? 'IMPORTANT: this field holds a SHORT phrase or headline, not a paragraph — reply with at most 8 words, no full sentence.'
+    : 'Keep it a natural length for this kind of field (usually one to a few sentences, or a short list if the field is a list).';
 
   if (currentText) {
     return `You are helping write text for a light-hearted, humorous mock wedding newspaper. The field you're writing for is: ${context}. ${facts}
@@ -82,11 +86,11 @@ function buildPrompt(body) {
 Here is the couple's current draft text for this field:
 """${currentText}"""
 
-Rewrite/polish this text: make it warmer, more festive and celebratory in tone, and fix any spelling or grammar issues — but KEEP the original meaning and keep it roughly the same length. Reply in ${langName}. Reply with ONLY the rewritten text — no quotes, no preamble, no explanation.`;
+Rewrite/polish this text: make it warmer, more festive and celebratory in tone, and fix any spelling or grammar issues — but KEEP the original meaning. ${lengthNote} Reply in ${langName}. Reply with ONLY the rewritten text — no quotes, no preamble, no explanation.`;
   }
   return `You are helping write text for a light-hearted, humorous mock wedding newspaper. The field you're writing for is: ${context}. ${facts}
 
-Write a warm, festive, celebratory piece of text for this field, from the couple's own perspective. Keep it a natural length for this kind of field (usually one to a few sentences). Reply in ${langName}. Reply with ONLY the text — no quotes, no preamble, no explanation.`;
+Write a warm, festive, celebratory piece of text for this field, from the couple's own perspective. ${lengthNote} Reply in ${langName}. Reply with ONLY the text — no quotes, no preamble, no explanation.`;
 }
 
 export default {
