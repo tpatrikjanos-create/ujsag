@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>fontosnap.hu — szórólap (Esküvői Újság)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style id="pgcss">@page{size:A5;margin:0;}</style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&display=swap');
+
+:root{--paper:#fffaf6;--ink:#111;--soft:#555;--claret:#6e2233;--wiz-rose:#c2487a;--wiz-rose-dark:#9c3361;--wiz-rose-pale:#f6d8e3;--wiz-gold:#cda434;--wiz-blush:#fdf2f5;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'PT Serif',Georgia,serif;color:#211c18;background:#5c5853;-webkit-font-smoothing:antialiased;}
+
+/* ===== keret a képernyős előnézethez — nyomtatáskor eltűnik ===== */
+.screen-wrap{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;padding:26px 16px 60px;}
+.screen-note{width:100%;text-align:center;color:#f3efe9;font-family:'Libre Franklin',sans-serif;font-size:13px;margin-bottom:4px;}
+.screen-note b{color:#fff;}
+
+/* ===== oldal (A5) ===== */
+.page{background:var(--paper);position:relative;overflow:hidden;box-shadow:0 6px 26px rgba(0,0,0,.4);width:148mm;height:210mm;padding:9mm 10mm 6mm;display:flex;flex-direction:column;flex-shrink:0;}
+.pbody{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;z-index:2;}
+
+.folio{position:absolute;left:10mm;right:10mm;bottom:2mm;display:flex;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);border-top:.6px solid var(--ink);padding-top:3px;z-index:5;}
+
+.rule-ox{border:0;border-top:3px solid var(--ink);position:relative;margin:4px 0;}
+.rule-ox::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--ink);}
+.rule-thin{border:0;border-top:1px solid var(--ink);margin:4px 0;}
+.rule-hair{border:0;border-top:.6px solid var(--ink);margin:4px 0;}
+
+.ears{display:flex;justify-content:space-between;align-items:flex-end;font-family:'Libre Franklin',sans-serif;font-size:6.5px;letter-spacing:.12em;text-transform:uppercase;line-height:1.4;}
+.nameplate{font-family:'Grenze Gotisch',serif;font-weight:700;text-align:center;font-size:44px;line-height:.92;margin:2px 0 0;}
+.dateline-strip{display:flex;justify-content:space-between;font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.kicker{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:8px;letter-spacing:.26em;text-transform:uppercase;text-align:center;border-bottom:1px solid var(--ink);padding-bottom:3px;margin:0 0 5px;}
+.lead-head{font-family:'Old Standard TT',serif;font-weight:700;text-align:center;line-height:1.05;margin:5px 0 2px;}
+.bp{margin:0 0 10px;font-size:11.5px;line-height:1.62;text-align:justify;}
+.col-head{font-family:'Old Standard TT',serif;font-weight:700;font-size:15px;text-align:center;border-bottom:1px solid var(--ink);padding-bottom:4px;margin:18px 0 9px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.col-head:first-child{margin-top:0;}
+.closer{display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Old Standard TT',serif;font-style:italic;font-size:13px;border-top:1px solid var(--ink);padding-top:10px;margin-top:20px;}
+
+.flow{display:flex;flex-direction:column;gap:14px;}
+.flow .step{font-size:12.5px;line-height:1.55;}
+.flow .step b.stepnum{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--claret);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:11px;margin-right:8px;flex-shrink:0;}
+
+.stat-row{display:flex;text-align:center;margin:10px 0 16px;}
+.stat{flex:1;border-right:.6px solid var(--ink);padding:0 4px;}
+.stat:last-child{border-right:none;}
+.stat .num{font-family:'Old Standard TT',serif;font-weight:700;font-size:28px;line-height:1;color:var(--claret);}
+.stat .lbl{font-family:'Libre Franklin',sans-serif;font-size:7.6px;letter-spacing:.05em;text-transform:uppercase;margin-top:4px;line-height:1.3;}
+
+.rovat-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;margin:4px 0 12px;}
+.rovat-grid li{font-size:11.5px;line-height:1.7;list-style:none;padding-left:14px;position:relative;}
+.rovat-grid li::before{content:"✦";position:absolute;left:0;color:var(--wiz-gold);font-size:9px;top:3px;}
+
+.price-list{margin:6px 0 14px;}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;padding:9px 0;border-bottom:.6px dashed #ccc;gap:10px;}
+.price-row .p-name{font-weight:700;}
+.price-row .p-desc{flex:1;color:var(--soft);font-size:10px;padding-left:10px;}
+.price-row .p-val{font-family:'Old Standard TT',serif;font-weight:700;color:var(--claret);white-space:nowrap;font-size:13px;}
+
+.qr-band{display:flex;align-items:center;gap:20px;justify-content:center;background:var(--wiz-blush);border:2px solid var(--wiz-rose-pale);border-radius:14px;padding:26px 24px;margin:20px 0;}
+.qr-band svg{width:38mm;height:38mm;flex-shrink:0;background:#fff;padding:2mm;border-radius:4px;}
+.qr-band .qr-txt{font-family:'Libre Franklin',sans-serif;}
+.qr-band .qr-txt .qh{font-weight:800;font-size:15px;color:var(--claret);margin-bottom:4px;line-height:1.3;}
+.qr-band .qr-txt .qs{font-size:10.5px;color:var(--soft);line-height:1.5;}
+.qr-band .qr-txt .qu{font-family:'Old Standard TT',serif;font-weight:700;font-size:18px;margin-top:6px;}
+
+.feat-strip{display:flex;justify-content:space-around;text-align:center;margin-top:10px;padding-top:10px;border-top:.6px solid var(--ink);}
+.feat-strip .f{flex:1;padding:0 4px;}
+.feat-strip .f .fic{font-size:20px;}
+.feat-strip .f .ft{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:9.5px;margin-top:4px;line-height:1.35;}
+
+.cover-hero{flex:1;border:2px solid var(--ink);border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(160deg,#fdf2f5,#fbe8ee 55%,#fbf0dd);margin-top:8px;padding:14px;}
+.cover-hero .ic{font-size:36px;}
+.cover-hero .ct{font-family:'Old Standard TT',serif;font-weight:700;font-size:15px;color:var(--claret);text-align:center;padding:0 8mm;line-height:1.4;}
+.sample-tag{position:absolute;top:6px;right:6px;background:rgba(110,34,51,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:7px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:4px;z-index:6;}
+
+@media print{
+  body{background:#fff;}
+  .screen-wrap{padding:0;gap:0;}
+  .screen-note{display:none;}
+  .page{box-shadow:none;page-break-after:always;}
+  .page:last-child{page-break-after:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="screen-wrap">
+<div class="screen-note">Előnézet — nyomtatáshoz (<b>Ctrl/Cmd+P</b>) 4 db A5 oldalt ad, oldalanként külön lapra. Nyomdában A5-ös füzetként (2 ív, összetűzve vagy egyszerű A5 lapokként) is kérhető.</div>
+
+<!-- ================= 1. OLDAL — CÍMLAP ================= -->
+<div class="page" id="p1">
+  <div class="pbody">
+    <div class="ears">
+      <span>Önkiszolgáló · online</span>
+      <span>fontosnap.hu</span>
+    </div>
+    <hr class="rule-thin">
+    <h1 class="nameplate">Esküvői Újság</h1>
+    <div class="dateline-strip"><span>Élő, szerkeszthető előnézet</span><span>Magyarország</span></div>
+    <hr class="rule-ox">
+    <h2 class="lead-head" style="font-size:34px;">Neked is lesz esküvőd?</h2>
+    <div class="lead-head" style="font-size:15px;font-weight:700;color:var(--claret);margin:0 0 4px;">Készítsd el a saját, vicces esküvői újságodat — percek alatt</div>
+    <div class="cover-hero">
+      <div class="ic">💍</div>
+      <div class="ct">Programfüzet · Meghívó · Save the Date<br>— mindhárom egy helyen</div>
+      <div class="feat-strip">
+        <div class="f"><div class="fic">✎</div><div class="ft">Élőben<br>szerkeszthető</div></div>
+        <div class="f"><div class="fic">📸</div><div class="ft">Saját fotókkal,<br>rovatokkal</div></div>
+        <div class="f"><div class="fic">🖨️</div><div class="ft">Digitálisan vagy<br>nyomtatva</div></div>
+      </div>
+    </div>
+    <div class="caption" style="font-family:'Libre Franklin',sans-serif;font-size:9px;letter-spacing:.04em;color:var(--soft);margin-top:8px;border-bottom:.6px solid var(--ink);padding-bottom:5px;text-align:center;">Belülről pontosan így néz ki — lapozz tovább</div>
+  </div>
+  <div class="folio"><span>1. oldal · fontosnap.hu</span><span>Esküvői Újság</span></div>
+</div>
+
+<!-- ================= 2. OLDAL — HOGYAN MŰKÖDIK ================= -->
+<div class="page" id="p2">
+  <div class="pbody">
+    <div class="kicker">Hogyan működik?</div>
+    <div class="col-head">3 lépésben kész</div>
+    <div class="flow">
+      <div class="step"><b class="stepnum">1</b>Megadod az alapadatokat — a pár nevét, a dátumot, a helyszínt.</div>
+      <div class="step"><b class="stepnum">2</b>Élőben szerkeszted: rovatokat kapcsolsz be/ki, fotókat töltesz fel, mozgatod, ahogy szereted — <i>mielőtt bármit fizetnél</i>.</div>
+      <div class="step"><b class="stepnum">3</b>Letöltöd digitálisan, vagy nyomtatva kéred, postázva.</div>
+    </div>
+    <div class="col-head">Miért más, mint a többi?</div>
+    <p class="bp">A legtöbb hasonló szolgáltatásnál e-mailben kapod meg a kész terméket, előzetes betekintés nélkül. Nálunk a vízjeles előnézet <b>ingyenes</b>, és fizetés előtt teljes egészében megnézheted, átszerkesztheted — addig alakítod, amíg tökéletes nem lesz.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="num">3</div><div class="lbl">Terméktípus</div></div>
+      <div class="stat"><div class="num">16</div><div class="lbl">Oldalig bővíthető</div></div>
+      <div class="stat"><div class="num">30+</div><div class="lbl">Választható rovat</div></div>
+      <div class="stat"><div class="num">0 Ft</div><div class="lbl">Az előnézet</div></div>
+    </div>
+    <div class="col-head">Három termék, egy helyen</div>
+    <p class="bp" style="text-align:center;"><b>Esküvői Újság</b> — vicces, személyes programfüzet a nagy napra.<br><b>Esküvői Meghívó</b> — klasszikus, elegáns meghívókártya.<br><b>Save the Date</b> — egyetlen fotós értesítő kártya.</p>
+    <div class="col-head">Mikor van rá szükséged?</div>
+    <div class="flow">
+      <div class="step"><b class="stepnum">✓</b>Amíg az ifjú pár fényképezkedik, a vendégek addig se unatkozzanak.</div>
+      <div class="step"><b class="stepnum">✓</b>Szeretnétek valami személyeset és vicceset adni a hivatalos program mellé.</div>
+      <div class="step"><b class="stepnum">✓</b>Emlékbe is jó, ha marad valami kézzelfogható a napról.</div>
+    </div>
+  </div>
+  <div class="folio"><span>2. oldal · fontosnap.hu</span><span>Esküvői Újság</span></div>
+</div>
+
+<!-- ================= 3. OLDAL — ROVATOK ================= -->
+<div class="page" id="p3">
+  <div class="pbody">
+    <div class="kicker">Válogass kedvedre</div>
+    <div class="col-head">Milyen rovatok közül választhatsz?</div>
+    <ul class="rovat-grid">
+      <li>Szülőknek</li>
+      <li>Számokban a szerelmünk</li>
+      <li>A sztorink dióhéjban</li>
+      <li>Gyerekkori képek</li>
+      <li>Hogyan ismerkedtünk meg?</li>
+      <li>A legelső közös kép</li>
+      <li>A lánykérés</li>
+      <li>A jegyesfotózás képei</li>
+      <li>Utazási rovat</li>
+      <li>Közös bakancslistánk</li>
+      <li>A csapatunk</li>
+      <li>Akik fentről ünnepelnek</li>
+      <li>Szerelmek, melyekből születtünk</li>
+      <li>Igaz-Hamis</li>
+      <li>Exkluzív interjú</li>
+      <li>Horoszkóp — ma éjjelre</li>
+      <li>Menetrend &amp; étlap</li>
+      <li>Gyakran Ismételt Kérdések</li>
+      <li>Fotóvadász játék</li>
+      <li>Gyerekeknek színező</li>
+      <li>Robbantsd fel a telefonunkat!</li>
+      <li>Hagyj nekünk üzenetet!</li>
+    </ul>
+    <p class="bp" style="text-align:center;font-style:italic;">…és még sok más — 4, 8, 12 vagy 16 oldalig, te döntöd el, mennyi kerüljön bele.</p>
+    <div class="col-head">Kész sablon, vagy válogatás?</div>
+    <p class="bp" style="text-align:center;">Választhatsz előre összeállított sablont oldalszám szerint, vagy végignézed a rovatokat egyenként — mint egy társkereső appban — és te döntöd el, jobbra vagy balra húzva, mi kerüljön bele.</p>
+    <div class="cover-hero" style="flex:0 0 auto;min-height:38mm;position:relative;margin-top:14px;">
+      <div class="sample-tag">Illusztráció</div>
+      <div class="ct" style="font-size:13px;">Igaz vagy hamis? 🕵</div>
+      <p class="bp" style="font-style:italic;text-align:center;margin:0;padding:0 6mm;">„Az első randinkon esett az eső." — a vendégek élőben tippelnek, a pár pedig felfedi az igazságot.</p>
+    </div>
+  </div>
+  <div class="folio"><span>3. oldal · fontosnap.hu</span><span>Esküvői Újság</span></div>
+</div>
+
+<!-- ================= 4. OLDAL — ÁRAK + QR ================= -->
+<div class="page" id="p4">
+  <div class="pbody">
+    <div class="kicker">Árak</div>
+    <div class="col-head">Nincs előfizetés, csak egyszeri díj</div>
+    <p class="bp" style="text-align:center;">Minden vásárlás egyszeri, esküvőnkénti — a varázsló és a szerkesztő mindig ingyenesen, korlátozás nélkül kipróbálható, a vízjeles előnézettel együtt.</p>
+    <div class="price-list">
+      <div class="price-row"><span class="p-name">Ingyenes</span><span class="p-desc">teljes varázsló + szerkesztő, korlátlan vízjeles előnézet és nyomtatás</span><span class="p-val">0 Ft</span></div>
+      <div class="price-row"><span class="p-name">Digitális</span><span class="p-desc">vízjel nélküli, letölthető — otthon korlátlanul nyomtatható</span><span class="p-val">5 000 Ft</span></div>
+      <div class="price-row"><span class="p-name">Nyomtatott</span><span class="p-desc">min. 10 db, + 1 250 Ft postaköltség</span><span class="p-val">500 Ft / db</span></div>
+      <div class="price-row"><span class="p-name">Tervezési díj</span><span class="p-desc">egyszeri, bármelyik fizetős rendelésnél</span><span class="p-val">5 000 Ft</span></div>
+    </div>
+    <div class="qr-band">
+      <svg viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg"><path d="M2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM5,2H6V3H5zM6,2H7V3H6zM7,2H8V3H7zM8,2H9V3H8zM10,2H11V3H10zM11,2H12V3H11zM14,2H15V3H14zM16,2H17V3H16zM18,2H19V3H18zM20,2H21V3H20zM21,2H22V3H21zM22,2H23V3H22zM23,2H24V3H23zM24,2H25V3H24zM25,2H26V3H25zM26,2H27V3H26zM2,3H3V4H2zM8,3H9V4H8zM11,3H12V4H11zM15,3H16V4H15zM16,3H17V4H16zM20,3H21V4H20zM26,3H27V4H26zM2,4H3V5H2zM4,4H5V5H4zM5,4H6V5H5zM6,4H7V5H6zM8,4H9V5H8zM10,4H11V5H10zM11,4H12V5H11zM12,4H13V5H12zM13,4H14V5H13zM15,4H16V5H15zM16,4H17V5H16zM17,4H18V5H17zM18,4H19V5H18zM20,4H21V5H20zM22,4H23V5H22zM23,4H24V5H23zM24,4H25V5H24zM26,4H27V5H26zM2,5H3V6H2zM4,5H5V6H4zM5,5H6V6H5zM6,5H7V6H6zM8,5H9V6H8zM11,5H12V6H11zM13,5H14V6H13zM15,5H16V6H15zM16,5H17V6H16zM18,5H19V6H18zM20,5H21V6H20zM22,5H23V6H22zM23,5H24V6H23zM24,5H25V6H24zM26,5H27V6H26zM2,6H3V7H2zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM12,6H13V7H12zM16,6H17V7H16zM20,6H21V7H20zM22,6H23V7H22zM23,6H24V7H23zM24,6H25V7H24zM26,6H27V7H26zM2,7H3V8H2zM8,7H9V8H8zM10,7H11V8H10zM11,7H12V8H11zM18,7H19V8H18zM20,7H21V8H20zM26,7H27V8H26zM2,8H3V9H2zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM10,8H11V9H10zM12,8H13V9H12zM14,8H15V9H14zM16,8H17V9H16zM18,8H19V9H18zM20,8H21V9H20zM21,8H22V9H21zM22,8H23V9H22zM23,8H24V9H23zM24,8H25V9H24zM25,8H26V9H25zM26,8H27V9H26zM11,9H12V10H11zM12,9H13V10H12zM13,9H14V10H13zM14,9H15V10H14zM2,10H3V11H2zM4,10H5V11H4zM8,10H9V11H8zM9,10H10V11H9zM12,10H13V11H12zM13,10H14V11H13zM17,10H18V11H17zM18,10H19V11H18zM21,10H22V11H21zM24,10H25V11H24zM26,10H27V11H26zM3,11H4V12H3zM4,11H5V12H4zM5,11H6V12H5zM7,11H8V12H7zM10,11H11V12H10zM14,11H15V12H14zM16,11H17V12H16zM17,11H18V12H17zM18,11H19V12H18zM20,11H21V12H20zM21,11H22V12H21zM23,11H24V12H23zM25,11H26V12H25zM26,11H27V12H26zM5,12H6V13H5zM6,12H7V13H6zM8,12H9V13H8zM10,12H11V13H10zM15,12H16V13H15zM17,12H18V13H17zM18,12H19V13H18zM21,12H22V13H21zM23,12H24V13H23zM24,12H25V13H24zM26,12H27V13H26zM4,13H5V14H4zM6,13H7V14H6zM10,13H11V14H10zM13,13H14V14H13zM16,13H17V14H16zM17,13H18V14H17zM18,13H19V14H18zM19,13H20V14H19zM20,13H21V14H20zM21,13H22V14H21zM23,13H24V14H23zM2,14H3V15H2zM3,14H4V15H3zM4,14H5V15H4zM5,14H6V15H5zM6,14H7V15H6zM8,14H9V15H8zM9,14H10V15H9zM10,14H11V15H10zM15,14H16V15H15zM16,14H17V15H16zM18,14H19V15H18zM20,14H21V15H20zM21,14H22V15H21zM26,14H27V15H26zM3,15H4V16H3zM5,15H6V16H5zM9,15H10V16H9zM10,15H11V16H10zM11,15H12V16H11zM12,15H13V16H12zM15,15H16V16H15zM17,15H18V16H17zM18,15H19V16H18zM20,15H21V16H20zM21,15H22V16H21zM25,15H26V16H25zM26,15H27V16H26zM2,16H3V17H2zM3,16H4V17H3zM7,16H8V17H7zM8,16H9V17H8zM10,16H11V17H10zM11,16H12V17H11zM12,16H13V17H12zM13,16H14V17H13zM17,16H18V17H17zM23,16H24V17H23zM24,16H25V17H24zM26,16H27V17H26zM6,17H7V18H6zM7,17H8V18H7zM9,17H10V18H9zM10,17H11V18H10zM11,17H12V18H11zM15,17H16V18H15zM17,17H18V18H17zM20,17H21V18H20zM21,17H22V18H21zM22,17H23V18H22zM23,17H24V18H23zM2,18H3V19H2zM3,18H4V19H3zM4,18H5V19H4zM5,18H6V19H5zM6,18H7V19H6zM7,18H8V19H7zM8,18H9V19H8zM9,18H10V19H9zM12,18H13V19H12zM13,18H14V19H13zM14,18H15V19H14zM15,18H16V19H15zM17,18H18V19H17zM18,18H19V19H18zM19,18H20V19H19zM20,18H21V19H20zM21,18H22V19H21zM22,18H23V19H22zM25,18H26V19H25zM10,19H11V20H10zM11,19H12V20H11zM12,19H13V20H12zM14,19H15V20H14zM17,19H18V20H17zM18,19H19V20H18zM22,19H23V20H22zM26,19H27V20H26zM2,20H3V21H2zM3,20H4V21H3zM4,20H5V21H4zM5,20H6V21H5zM6,20H7V21H6zM7,20H8V21H7zM8,20H9V21H8zM10,20H11V21H10zM14,20H15V21H14zM15,20H16V21H15zM16,20H17V21H16zM18,20H19V21H18zM20,20H21V21H20zM22,20H23V21H22zM26,20H27V21H26zM2,21H3V22H2zM8,21H9V22H8zM11,21H12V22H11zM13,21H14V22H13zM14,21H15V22H14zM16,21H17V22H16zM17,21H18V22H17zM18,21H19V22H18zM22,21H23V22H22zM2,22H3V23H2zM4,22H5V23H4zM5,22H6V23H5zM6,22H7V23H6zM8,22H9V23H8zM11,22H12V23H11zM12,22H13V23H12zM15,22H16V23H15zM16,22H17V23H16zM17,22H18V23H17zM18,22H19V23H18zM19,22H20V23H19zM20,22H21V23H20zM21,22H22V23H21zM22,22H23V23H22zM26,22H27V23H26zM2,23H3V24H2zM4,23H5V24H4zM5,23H6V24H5zM6,23H7V24H6zM8,23H9V24H8zM12,23H13V24H12zM15,23H16V24H15zM16,23H17V24H16zM17,23H18V24H17zM18,23H19V24H18zM19,23H20V24H19zM22,23H23V24H22zM24,23H25V24H24zM25,23H26V24H25zM2,24H3V25H2zM4,24H5V25H4zM5,24H6V25H5zM6,24H7V25H6zM8,24H9V25H8zM10,24H11V25H10zM11,24H12V25H11zM13,24H14V25H13zM21,24H22V25H21zM22,24H23V25H22zM23,24H24V25H23zM25,24H26V25H25zM26,24H27V25H26zM2,25H3V26H2zM8,25H9V26H8zM11,25H12V26H11zM12,25H13V26H12zM15,25H16V26H15zM18,25H19V26H18zM19,25H20V26H19zM21,25H22V26H21zM22,25H23V26H22zM2,26H3V27H2zM3,26H4V27H3zM4,26H5V27H4zM5,26H6V27H5zM6,26H7V27H6zM7,26H8V27H7zM8,26H9V27H8zM10,26H11V27H10zM11,26H12V27H11zM13,26H14V27H13zM14,26H15V27H14zM15,26H16V27H15zM18,26H19V27H18zM19,26H20V27H19zM20,26H21V27H20zM23,26H24V27H23zM26,26H27V27H26z" fill="#111" fill-rule="nonzero" stroke="none"/></svg>
+      <div class="qr-txt">
+        <div class="qh">Olvasd be, és próbáld ki ingyen!</div>
+        <div class="qs">Nincs regisztráció, nincs kockázat —<br>a vízjeles előnézet mindig ingyenes.</div>
+        <div class="qu">fontosnap.hu</div>
+      </div>
+    </div>
+    <div class="closer">💍&nbsp; Sok boldogságot — és jó szerkesztést! &nbsp;💍</div>
+  </div>
+  <div class="folio"><span>4. oldal · fontosnap.hu</span><span>Esküvői Újság</span></div>
+</div>
+
+</div>
+</body>
+</html>
