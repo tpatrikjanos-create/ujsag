@@ -886,34 +886,37 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .imgbox.has-img.sel .rsz-move{display:flex;}
 .imgbox.wrap-left{float:left;margin:0 4mm 2mm 0;}
 .imgbox.wrap-right{float:right;margin:0 0 2mm 4mm;}
-.blk-grip{position:absolute;top:2px;left:2px;z-index:46;display:flex;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:grab;opacity:.4;touch-action:none;user-select:none;}
-.blk:hover>.blk-grip,.blk.bsel>.blk-grip{opacity:1;}
+/* Az összes PC-s sarok-gomb (Mozgatás/Kijelölés/Adatok/AI Tipp/Törlés) EGY közös,
+   flex-wrap-elő tárolóban ("toolbar") él, ami a rovat bal felső sarkához van rögzítve, de
+   a SZÉLESSÉGE a rovat tényleges méretéhez igazodik (left+right, nem fix width) — ha egy
+   rovat keskeny, a gombok nem lógnak ki a lapról/a rovatból, hanem a flex-wrap miatt új
+   sorba törnek. Korábban minden gomb saját, fix pixel-eltolással (left:2/90/200/290/390px)
+   volt pozicionálva, ami keskeny rovatoknál a lap szélén túlra, láthatatlanná tolta őket. */
+.blk-toolbar{position:absolute;top:2px;left:2px;right:2px;z-index:47;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none;transform-origin:top left;}
+.blk-toolbar>*{pointer-events:auto;flex-shrink:0;}
+.blk-grip{z-index:46;display:flex;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:grab;opacity:.4;touch-action:none;user-select:none;}
+.blk:hover .blk-toolbar>.blk-grip,.blk.bsel .blk-toolbar>.blk-grip{opacity:1;}
 .blk-grip:active{cursor:grabbing;}
 
-
-
-.blk-del-btn{position:absolute;top:2px;left:390px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,39,39,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
-.blk:hover>.blk-del-btn,.blk.bsel>.blk-del-btn{display:flex;}
+.blk-del-btn{z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,39,39,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk:hover .blk-toolbar>.blk-del-btn,.blk.bsel .blk-toolbar>.blk-del-btn{display:flex;}
 .blk-del-btn:hover{background:rgba(184,46,46,1);}
-/* hiányzott a pozicionálása — enélkül a gomb a normál dokumentumfolyamban maradt, és
-   (zoommal felnagyított rovatoknál, pl. "egész oldal" terjedelemnél) érdemben megnövelte
-   a rovat magasságát, ami a lap aljáról való túllógáshoz vezetett */
 .blk-resize-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover>.blk-resize-btn,.blk.bsel>.blk-resize-btn{display:flex;}
 .blk-resize-btn:hover{background:rgba(140,44,66,1);}
 /* PC-n a "Méret" gomb (mobil-stílusú alsó ±/✓ sávot nyitna meg) nem kell — ott a kijelölés
    gombbal előhívott .rsz fogantyúkkal közvetlenül húzva méretezhető a rovat. */
 @media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
-.blk-select-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
-.blk:hover>.blk-select-btn,.blk.bsel>.blk-select-btn{display:flex;}
+.blk-select-btn{z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk:hover .blk-toolbar>.blk-select-btn,.blk.bsel .blk-toolbar>.blk-select-btn{display:flex;}
 /* a többi sarok-gombbal ellentétben ez ÁLLANDÓAN látszik (halványabban), nem csak hoverre/
    kijelöléskor — sok rovathoz adatot KELL megadni, ezért ennek felfedezhetőnek kell lennie
    anélkül is, hogy a user előbb tudná, hogy egyáltalán rá kell/lehet kattintani a rovatra */
-.blk-edit-btn{position:absolute;top:2px;left:200px;z-index:47;display:flex;align-items:center;gap:4px;background:rgba(154,110,20,.95);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
-.blk:hover>.blk-edit-btn,.blk.bsel>.blk-edit-btn{opacity:1;}
+.blk-edit-btn{z-index:47;display:flex;align-items:center;gap:4px;background:rgba(154,110,20,.95);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.blk:hover .blk-toolbar>.blk-edit-btn,.blk.bsel .blk-toolbar>.blk-edit-btn{opacity:1;}
 /* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
-.blk-ai-btn{position:absolute;top:2px;left:290px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
-.blk:hover>.blk-ai-btn,.blk.bsel>.blk-ai-btn{opacity:1;}
+.blk-ai-btn{z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.blk:hover .blk-toolbar>.blk-ai-btn,.blk.bsel .blk-toolbar>.blk-ai-btn{opacity:1;}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
    AI Tipp gombot kap, ugyanabban a sarokban, ugyanolyan mindig-látható elven */
 .cover-ai-btn{position:absolute;top:2px;right:2px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
@@ -2850,7 +2853,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.20';
+  var APP_VERSION='6.21';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -6523,9 +6526,16 @@ function initBlockTools(){
       if(!blk.classList.contains('bsel')){e.preventDefault();selectB();}
     },true);
 
+    /* Az összes PC-s sarok-gomb (grip/kijelölés/adatok/AI tipp/törlés) EGY közös, flex-wrap-elő
+       tárolóban él — ez teszi lehetővé, hogy keskeny rovatoknál a gombok új sorba törjenek
+       ahelyett, hogy kilógnának a rovatból/a lapról (ld. .blk-toolbar CSS). */
+    var toolbar=blk.querySelector(':scope > .blk-toolbar');
+    if(!toolbar){toolbar=document.createElement('div');toolbar.className='blk-toolbar';blk.appendChild(toolbar);}
+    blk._toolbar=toolbar;
+
     /* GRIP — bal felső sarok; CSAK PC-n látszik, ott húzható */
-    var grip=blk.querySelector(':scope > .blk-grip');
-    if(!grip){grip=document.createElement('div');grip.className='blk-grip';grip.title='Mozgatás';grip.innerHTML='<span class="ic">✥</span><span class="lbl">Mozgatás</span>';blk.appendChild(grip);}
+    var grip=toolbar.querySelector(':scope > .blk-grip');
+    if(!grip){grip=document.createElement('div');grip.className='blk-grip';grip.title='Mozgatás';grip.innerHTML='<span class="ic">✥</span><span class="lbl">Mozgatás</span>';toolbar.appendChild(grip);}
     grip.addEventListener('pointerdown',function(e){e.preventDefault();e.stopPropagation();
       if(window.tutFirstUse)window.tutFirstUse('blkMove',grip,t('tut_tiny_blkmove'));
       selectB();
@@ -6661,8 +6671,8 @@ function initBlockTools(){
        jelölni (és így a rá kattintva megjelenő .rsz fogantyúkat elérni) anélkül, hogy ez
        — mint a grip húzása — azonnal el is mozdítaná a rovatot. Mobilon nem jelenik meg
        (ott a rovatra koppintás már önmagában kijelöl, ld. a pointerdown-figyelőt fentebb). */
-    var selectBtn=blk.querySelector(':scope > .blk-select-btn');
-    if(!selectBtn){selectBtn=document.createElement('button');selectBtn.type='button';selectBtn.className='blk-select-btn';selectBtn.title='Kijelölés';selectBtn.innerHTML='<span class="ic">☑</span><span class="lbl">Kijelölés</span>';blk.appendChild(selectBtn);}
+    var selectBtn=toolbar.querySelector(':scope > .blk-select-btn');
+    if(!selectBtn){selectBtn=document.createElement('button');selectBtn.type='button';selectBtn.className='blk-select-btn';selectBtn.title='Kijelölés';selectBtn.innerHTML='<span class="ic">☑</span><span class="lbl">Kijelölés</span>';toolbar.appendChild(selectBtn);}
     selectBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
     selectBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();});
 
@@ -6739,16 +6749,16 @@ function initBlockTools(){
       if(typeof checkBlockOverflows==='function')checkBlockOverflows();
       if(typeof ensureMenuPair==='function')ensureMenuPair();
     }
-    var delBtn=blk.querySelector(':scope > .blk-del-btn');
-    if(!delBtn){delBtn=document.createElement('button');delBtn.type='button';delBtn.className='blk-del-btn';delBtn.textContent='🗑';delBtn.title='Rovat törlése';blk.appendChild(delBtn);}
+    var delBtn=toolbar.querySelector(':scope > .blk-del-btn');
+    if(!delBtn){delBtn=document.createElement('button');delBtn.type='button';delBtn.className='blk-del-btn';delBtn.textContent='🗑';delBtn.title='Rovat törlése';toolbar.appendChild(delBtn);}
     delBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
     delBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();deleteThisBlock();});
 
     /* ADATOK gomb — PC-n a kijelölés-gomb mellett; CSAK akkor jelenik meg, ha ehhez a rovathoz
        tartozik ténylegesen kitölthető varázsló-mező (ld. blockEditTarget fentebb) */
     if(editTarget){
-      var editBtn=blk.querySelector(':scope > .blk-edit-btn');
-      if(!editBtn){editBtn=document.createElement('button');editBtn.type='button';editBtn.className='blk-edit-btn';editBtn.title='Adatok szerkesztése';editBtn.innerHTML='<span class="ic">✎</span><span class="lbl">Adatok</span>';blk.appendChild(editBtn);}
+      var editBtn=toolbar.querySelector(':scope > .blk-edit-btn');
+      if(!editBtn){editBtn=document.createElement('button');editBtn.type='button';editBtn.className='blk-edit-btn';editBtn.title='Adatok szerkesztése';editBtn.innerHTML='<span class="ic">✎</span><span class="lbl">Adatok</span>';toolbar.appendChild(editBtn);}
       editBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
       editBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(editTarget.kind,editTarget.key);});
     }
@@ -6756,8 +6766,8 @@ function initBlockTools(){
     /* AI TIPP gomb — PC-n közvetlenül az Adatok gomb mellett; csak akkor, ha ehhez a rovathoz
        van legalább egy AI-írható szabad szöveges mezőnk (ld. AI_TIPP_FIELD_FOR_BLOCK) */
     if(aiTarget){
-      var aiBtn=blk.querySelector(':scope > .blk-ai-btn');
-      if(!aiBtn){aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='blk-ai-btn';aiBtn.title='AI Tipp';aiBtn.innerHTML='<span class="ic">✨</span><span class="lbl">AI Tipp</span>';blk.appendChild(aiBtn);}
+      var aiBtn=toolbar.querySelector(':scope > .blk-ai-btn');
+      if(!aiBtn){aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='blk-ai-btn';aiBtn.title='AI Tipp';aiBtn.innerHTML='<span class="ic">✨</span><span class="lbl">AI Tipp</span>';toolbar.appendChild(aiBtn);}
       aiBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
       aiBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openAiTippBlockChooser(aiTarget);});
     }
@@ -6772,7 +6782,7 @@ function initBlockTools(){
       var z=parseFloat(blk.style.zoom)||1;
       var inv=z?1/z:1;
       var t=(inv===1)?'':('scale('+inv+')');
-      [grip,delBtn,selectBtn,editBtn,aiBtn].forEach(function(btn){ if(btn)btn.style.transform=t; });
+      if(toolbar)toolbar.style.transform=t;
       blk.querySelectorAll(':scope > .rsz').forEach(function(h){ h.style.transform=t; });
     }
     syncBtnScale();
