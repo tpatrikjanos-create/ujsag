@@ -1236,6 +1236,9 @@ hu:{
   w_h3num_z_r_felirat:"Záró felirat",
   w_note_mindig_l_tszik_az_utols_olda:"mindig látszik, az utolsó oldalon",
   w_h3plain_menetrend_amp_tlap_gerinc:"Menetrend & étlap (gerinc)",
+  w_h3plain_menetrend_gerinc:"Menetrend (gerinc)",
+  w_h3plain_etlap_gerinc:"Étlap (gerinc)",
+  w_h3plain_itallap_gerinc:"Itallap (gerinc)",
   w_note_mindig_l_tszik_az_utols_olda_2:"mindig látszik, az utolsó oldalon",
   w_fmt_a5_4_ttl:"A5 · 4 oldal",
   w_fmt_a5_4_tag:"Digitális",
@@ -1862,6 +1865,9 @@ en:{
   w_h3num_z_r_felirat:"Closing note",
   w_note_mindig_l_tszik_az_utols_olda:"always shown, on the last page",
   w_h3plain_menetrend_amp_tlap_gerinc:"Schedule & menu (core section)",
+  w_h3plain_menetrend_gerinc:"Schedule (core section)",
+  w_h3plain_etlap_gerinc:"Menu (core section)",
+  w_h3plain_itallap_gerinc:"Drinks list (core section)",
   w_note_mindig_l_tszik_az_utols_olda_2:"always shown, on the last page",
   w_fmt_a5_4_ttl:"A5 · 4 pages",
   w_fmt_a5_4_tag:"Digital",
@@ -2853,7 +2859,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.21';
+  var APP_VERSION='6.22';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3230,8 +3236,8 @@ function backToTypeSelect(){
     </div>
   </div>
 
-  <div class="card opt" data-editgroup="menetrend_etlap">
-    <h3><span data-i18n="w_h3plain_menetrend_amp_tlap_gerinc">Menetrend &amp; étlap (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
+  <div class="card" data-editgroup="menetrend">
+    <h3><span data-i18n="w_h3plain_menetrend_gerinc">Menetrend (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
     <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_times" onchange="optToggle(this)"><span class="sw"></span><span data-i18n="w_h3_chk_times">Időpontokat is mutassunk a menetrendben</span></label>
     <div class="fld"><label data-i18n="w_lbl_prog_header">Menetrend — időpont + esemény (az időpontok megjelenését a fenti kapcsoló vezérli)</label>
       <div class="rep" id="rep_prog" data-tpl='<input class="r-in r-time" data-k="time" data-i18n-ph="w_rph_rep_prog_time_1" placeholder="időpont"><input class="r-in r-wide" data-k="event" data-i18n-ph="w_rph_rep_prog_event_1" placeholder="esemény">'>
@@ -3244,6 +3250,10 @@ function backToTypeSelect(){
       </div>
       <button type="button" class="addrow" onclick="addRow('rep_prog')" data-i18n="w_addrow_rep_prog">+ Új sor</button>
     </div>
+  </div>
+
+  <div class="card" data-editgroup="etlap">
+    <h3><span data-i18n="w_h3plain_etlap_gerinc">Étlap (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
     <div class="tinyhint" data-i18n-html="w_hint_25">Az étlap fogásai — soronként egy étel, üres rész kimarad:</div>
     <div class="grid2">
       <div class="fld"><label><span data-i18n="w_lbl_f_m_app">Vendégvárás / előétel</span></label><textarea id="f_m_app" style="min-height:54px;" data-i18n-ph="w_ph_f_m_app" placeholder="pl. Libamáj brióssal"></textarea></div>
@@ -3253,20 +3263,25 @@ Burgonyapüré, párolt zöldség"></textarea></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_m_night">Éjféli fogás</span></label><textarea id="f_m_night" style="min-height:54px;" data-i18n-ph="w_ph_f_m_night" placeholder="pl. Sült kolbász, savanyúság"></textarea></div>
     </div>
     <div class="fld"><label><span data-i18n="w_lbl_f_m_dessert">Desszert</span></label><textarea id="f_m_dessert" style="min-height:54px;" data-i18n-ph="w_ph_f_m_dessert" placeholder="pl. Menyasszonytorta"></textarea></div>
+  </div>
+
+  <div class="card" data-editgroup="itallap">
+    <h3><span data-i18n="w_h3plain_itallap_gerinc">Itallap (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
     <div class="fld"><label data-i18n="w_lbl_f_itallap">Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;" data-i18n-ph="w_ph_f_itallap" placeholder="pl. Pezsgő: Törley Gála
 Vörösbor: Egri Bikavér
 Fehérbor: Olaszrizling
 Sör: csapolt
 Alkoholmentes: limonádé, üdítők"></textarea></div>
-    <div class="opt" style="border-top:1px dashed #e4ddcf;padding-top:10px;margin-top:4px;">
-      <label class="tgl" style="margin-bottom:8px;"><input type="checkbox" id="chk_drinks" onchange="optToggle(this)"><span class="sw"></span><span data-i18n="w_h3_chk_drinks">Férj/feleség itala</span></label>
-      <div class="opt-body off" data-for="chk_drinks">
-        <div class="grid2">
-          <div class="fld"><label><span data-i18n="w_lbl_f_husband">A férj itala</span></label><input id="f_husband" data-i18n-ph="w_ph_f_husband" placeholder="pl. Jägermeister"></div>
-          <div class="fld"><label><span data-i18n="w_lbl_f_wife">A feleség itala</span></label><input id="f_wife" data-i18n-ph="w_ph_f_wife" placeholder="pl. Gin Tonic"></div>
-        </div>
-        <div class="fld"><label><span data-i18n="w_lbl_f_barnote">Bárpult-felirat</span></label><input id="f_barNote" data-i18n-ph="w_ph_f_barnote" placeholder="pl. Kérd „a férj” vagy „a feleség” italát a bárpultban!"></div>
+  </div>
+
+  <div class="card opt">
+    <h3><span data-i18n="w_h3_chk_drinks">Férj/feleség itala</span> <label class="tgl"><input type="checkbox" id="chk_drinks" onchange="optToggle(this)"><span class="sw"></span></label></h3>
+    <div class="opt-body off" data-for="chk_drinks">
+      <div class="grid2">
+        <div class="fld"><label><span data-i18n="w_lbl_f_husband">A férj itala</span></label><input id="f_husband" data-i18n-ph="w_ph_f_husband" placeholder="pl. Jägermeister"></div>
+        <div class="fld"><label><span data-i18n="w_lbl_f_wife">A feleség itala</span></label><input id="f_wife" data-i18n-ph="w_ph_f_wife" placeholder="pl. Gin Tonic"></div>
       </div>
+      <div class="fld"><label><span data-i18n="w_lbl_f_barnote">Bárpult-felirat</span></label><input id="f_barNote" data-i18n-ph="w_ph_f_barnote" placeholder="pl. Kérd „a férj” vagy „a feleség” italát a bárpultban!"></div>
     </div>
   </div>
 
@@ -3771,7 +3786,7 @@ function startUjsagEditorPreset(targetPages){
    működik, csak kevésbé mutatós */
 var SWIPE_DECK_IDS=['szuloknek','stats','sztori','childhood','ismerkedes','legelsokep','years','lanykeres',
   'jegyesfoto','utazas','bakancslista','csapat','memorial','negylabu','szulok','szinglik','dijak','igazhamis',
-  'jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','qr','robbantsd','fotovadasz','message','naszut'];
+  'jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','qr','robbantsd','fotovadasz','message','naszut','drinks'];
 var SWIPE_DESC={
   szuloknek:['Köszönő szavak a szülőknek','Thank-you notes to the parents'],
   stats:['Vicces számok a kapcsolatotokról','Fun numbers about your relationship'],
@@ -3802,7 +3817,8 @@ var SWIPE_DESC={
   robbantsd:['Kérés, hogy küldjenek fotókat','Ask guests to send photos'],
   fotovadasz:['Fotóvadász játék a vendégeknek','A photo-hunt game for guests'],
   message:['Vendégkönyv-üzenet kérése','Ask guests for a guestbook message'],
-  naszut:['A nászutatok bemutatása','Your honeymoon']
+  naszut:['A nászutatok bemutatása','Your honeymoon'],
+  drinks:['A férj és a feleség kedvenc itala','The groom\'s and bride\'s favorite drink']
 };
 var _swipeState=null;
 function openSwipePicker(){
@@ -3921,7 +3937,7 @@ function finishSwipePicker(){
     var card=cb.closest('.card.opt');
     if(card)card.style.display=keep?'':'none';
   });
-  ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
+  ['times'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
   closeSwipePicker();
   trackEvent('ujsag_swipe_finished',{count:Object.keys(decisions).filter(function(k){return decisions[k];}).length});
   /* a varázsló (wizLegacyFields) alapból rejtve van — csak a Válogatás (swipe) befejezése
@@ -5794,7 +5810,8 @@ var ADDABLE_SECTIONS_UJSAG=[
   {chk:'robbantsd',blk:'robbantsd',fn:function(d){return B_robbantsd(d);}},
   {chk:'fotovadasz',blk:'fotovadasz',fn:function(d){return B_fotovadasz(d);}},
   {chk:'message',blk:'vendegkonyv',fn:function(d){return B_vendegkonyv(d);}},
-  {chk:'naszut',blk:'naszut',fn:function(d){return B_naszut(d);}}
+  {chk:'naszut',blk:'naszut',fn:function(d){return B_naszut(d);}},
+  {chk:'drinks',blk:'italok',fn:function(d){return B_italok(d);}}
 ];
 var ADDABLE_SECTIONS_MEGHIVO=[
   {chk:'mh_gyerekek',blk:'mh_gyerekek',fn:function(d){return B_mhGyerekek(d);}},
@@ -5825,8 +5842,9 @@ function sectionLabel(chkId){
    él a varázslóban, ezért egy szerkesztés mind a négy rovatot újragenerálja. */
 var UJSAG_CORE_EDIT_GROUPS=[
   {key:'welcome',selector:'[data-editgroup="welcome"]',blks:['welcome'],fns:{welcome:function(d){return B_welcome(d);}}},
-  {key:'menetrend_etlap',selector:'[data-editgroup="menetrend_etlap"]',blks:['menetrend','etlap','itallap','italok'],
-    fns:{menetrend:function(d){return B_menetrend(d);},etlap:function(d){return B_etlap(d);},itallap:function(d){return B_itallap(d);},italok:function(d){return B_italok(d);}}},
+  {key:'menetrend',selector:'[data-editgroup="menetrend"]',blks:['menetrend'],fns:{menetrend:function(d){return B_menetrend(d);}}},
+  {key:'etlap',selector:'[data-editgroup="etlap"]',blks:['etlap'],fns:{etlap:function(d){return B_etlap(d);}}},
+  {key:'itallap',selector:'[data-editgroup="itallap"]',blks:['itallap'],fns:{itallap:function(d){return B_itallap(d);}}},
   {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
 ];
 function coreGroupLabel(key){
@@ -7177,7 +7195,9 @@ var AI_TIPP_FIELD_FOR_BLOCK={
   lanykeres:['f_lanykeres'],
   naszut:['f_naszut'],
   szinglik:['f_singlesIntro'],
-  menetrend_etlap:['f_m_app','f_m_soup','f_m_main','f_m_night','f_m_dessert','f_itallap','f_barNote'],
+  etlap:['f_m_app','f_m_soup','f_m_main','f_m_night','f_m_dessert'],
+  itallap:['f_itallap'],
+  drinks:['f_barNote'],
   qr:['f_qrHead','f_driveCap','f_qrMid','f_djCap'],
   fotovadasz:['f_hunt'],
   robbantsd:['f_robText'],
@@ -8306,18 +8326,30 @@ function renderAdminPanel(tab){
     var norm=normalizeTemplateEntry(templates[_adminTemplateSize]);
     _adminTemplateOrder=adminStripModifiers(norm.order);
     _adminTemplateBlockfx=norm.blockfx;
+    _adminGerincOrder=adminExtractGerincOrder(norm.order);
     renderAdminTemplatesTab();
   } else renderAdminSwipeTab();
 }
 var _adminTemplateSize=4;
 var _adminTemplateOrder=[];
 var _adminTemplateBlockfx={};
-/* a "times"/"drinks" nem önálló, listázható rovat, hanem egy-egy másik rovat (menetrend/
-   italok) belső kapcsolója — nincs saját kártyája, ezért nem jelenik meg a sorrend-listában;
-   mentéskor viszont mindig hozzáfűzzük őket, hogy a menetrend-időpontok és az itallap-blokk
-   továbbra is alapból bekapcsolva maradjanak minden sablonban */
+/* a "times" nem önálló, listázható rovat, hanem a menetrend rovat belső kapcsolója — nincs
+   saját kártyája, ezért nem jelenik meg a sorrend-listában; mentéskor viszont mindig
+   hozzáfűzzük, hogy a menetrend-időpontok továbbra is alapból bekapcsolva maradjanak minden
+   sablonban. A "drinks" (Férj/feleség itala) ezzel szemben MÁR valódi, önálló, ki/bekapcsolható
+   rovat (ld. SWIPE_DECK_IDS) — a normál be/kikapcsolható lista része, nem kell kiszűrni. */
 function adminStripModifiers(ids){
-  return (ids||[]).filter(function(id){ return id!=='times'&&id!=='drinks'; });
+  return (ids||[]).filter(function(id){ return id!=='times'&&UJSAG_TAIL_CORE_IDS.indexOf(id)<0; });
+}
+/* Menetrend / Étlap / Itallap: mindig bekerülő "gerinc" rovatok (nem kapcsolhatók ki), de a
+   sablonban egymáshoz és a többi farok-rovathoz (QR, fotóvadász stb.) képest a SORRENDJÜK
+   admin-szinten állítható — ld. a Sablonszerkesztő külön "Gerinc-rovatok sorrendje" blokkját. */
+var UJSAG_TAIL_CORE_IDS=['menetrend','etlap','itallap'];
+var _adminGerincOrder=UJSAG_TAIL_CORE_IDS.slice();
+function adminExtractGerincOrder(ids){
+  var present=(ids||[]).filter(function(id){return UJSAG_TAIL_CORE_IDS.indexOf(id)>=0;});
+  var rest=UJSAG_TAIL_CORE_IDS.filter(function(id){return present.indexOf(id)<0;});
+  return present.concat(rest);
 }
 function renderAdminTemplatesTab(){
   /* FONTOS: ez a függvény NEM tölti újra a mentett sablont — csak a _adminTemplateOrder
@@ -8341,12 +8373,23 @@ function renderAdminTemplatesTab(){
   var notIncludedRows=notIncluded.map(function(id){
     return '<label class="admin-chk-row admin-chk-row-off"><input type="checkbox" data-id="'+id+'">'+esc(sectionLabel(id))+'</label>';
   }).join('');
+  var gerincRows=_adminGerincOrder.map(function(id,ix){
+    return '<div class="admin-order-row">'
+      +'<div class="admin-order-arrows">'
+        +'<button type="button" class="admin-order-btn admin-gerinc-order-btn" data-move="up" data-ix="'+ix+'" '+(ix===0?'disabled':'')+'>▲</button>'
+        +'<button type="button" class="admin-order-btn admin-gerinc-order-btn" data-move="down" data-ix="'+ix+'" '+(ix===_adminGerincOrder.length-1?'disabled':'')+'>▼</button>'
+      +'</div>'
+      +'<span class="admin-chk-row">'+esc(coreGroupLabel(id))+'</span>'
+      +'</div>';
+  }).join('');
   body.innerHTML='<div class="admin-size-tabs">'+sizeBtns+'</div>'
     +'<div class="admin-fit-status" id="adminFitStatus"></div>'
     +'<div class="admin-order-h">'+L('Bekerül, ebben a sorrendben (▲▼ mozgatható):','Included, in this order (▲▼ to move):')+'</div>'
     +'<div class="admin-chk-list" id="adminOrderList">'+(includedRows||'<div class="tinyhint">'+L('Még nincs kiválasztott rovat.','No sections selected yet.')+'</div>')+'</div>'
     +'<div class="admin-order-h">'+L('Nincs benne:','Not included:')+'</div>'
     +'<div class="admin-chk-list" id="adminNotIncludedList">'+notIncludedRows+'</div>'
+    +'<div class="admin-order-h" style="margin-top:14px;">'+L('Gerinc-rovatok sorrendje (mindig szerepelnek, csak a sorrendjük állítható):','Backbone sections order (always included, only their order can be adjusted):')+'</div>'
+    +'<div class="admin-chk-list" id="adminGerincList">'+gerincRows+'</div>'
     +'<div class="admin-actions">'
       +'<button type="button" class="admin-save-btn" onclick="adminSaveTemplate()">💾 '+L('Mentés (ebben a böngészőben)','Save (in this browser)')+'</button>'
       +'<button type="button" class="admin-reset-btn" onclick="adminResetTemplate()">↺ '+L('Alaphelyzet','Reset')+'</button>'
@@ -8371,12 +8414,21 @@ function renderAdminTemplatesTab(){
       if(cb.checked){ _adminTemplateOrder.push(cb.getAttribute('data-id')); renderAdminTemplatesTab(); }
     });
   });
-  body.querySelectorAll('.admin-order-btn').forEach(function(btn){
+  body.querySelectorAll('.admin-order-btn:not(.admin-gerinc-order-btn)').forEach(function(btn){
     btn.addEventListener('click',function(){
       var ix=parseInt(btn.getAttribute('data-ix'),10);
       var swapWith=btn.getAttribute('data-move')==='up'?ix-1:ix+1;
       if(swapWith<0||swapWith>=_adminTemplateOrder.length)return;
       var tmp=_adminTemplateOrder[ix]; _adminTemplateOrder[ix]=_adminTemplateOrder[swapWith]; _adminTemplateOrder[swapWith]=tmp;
+      renderAdminTemplatesTab();
+    });
+  });
+  body.querySelectorAll('.admin-gerinc-order-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var ix=parseInt(btn.getAttribute('data-ix'),10);
+      var swapWith=btn.getAttribute('data-move')==='up'?ix-1:ix+1;
+      if(swapWith<0||swapWith>=_adminGerincOrder.length)return;
+      var tmp=_adminGerincOrder[ix]; _adminGerincOrder[ix]=_adminGerincOrder[swapWith]; _adminGerincOrder[swapWith]=tmp;
       renderAdminTemplatesTab();
     });
   });
@@ -8387,6 +8439,7 @@ function adminSwitchTemplateSize(n){
   var norm=normalizeTemplateEntry(templates[n]);
   _adminTemplateOrder=adminStripModifiers(norm.order);
   _adminTemplateBlockfx=norm.blockfx;
+  _adminGerincOrder=adminExtractGerincOrder(norm.order);
   renderAdminTemplatesTab();
 }
 function updateAdminFitStatus(){
@@ -8397,7 +8450,7 @@ function updateAdminFitStatus(){
   seedUjsagDefaults();
   applyProductTailConfig();
   SWIPE_DECK_IDS.forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=(ids.indexOf(id)>=0); });
-  ['times','drinks'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
+  ['times'].forEach(function(id){ var cb=document.getElementById('chk_'+id); if(cb)cb.checked=true; });
   var needed=ujsagPagesNeeded();
   var status=document.getElementById('adminFitStatus');
   if(status)status.textContent=L('Ennyi rovattal kb. '+(needed+1)+' oldal kellene (a borítóval együtt).','With this many sections, about '+(needed+1)+' pages would be needed (including the cover).');
@@ -8406,7 +8459,7 @@ function adminSaveTemplate(){
   var templates=currentUjsagTemplates();
   /* a lista-szerkesztő csak a sorrendet/tagságot változtatja — a korábban (a valódi
      szerkesztőben) esetleg rögzített pontos elrendezést (blockfx) megtartjuk */
-  templates[_adminTemplateSize]={order:_adminTemplateOrder.concat(['times','drinks']),blockfx:_adminTemplateBlockfx||{}};
+  templates[_adminTemplateSize]={order:_adminTemplateOrder.concat(_adminGerincOrder).concat(['times']),blockfx:_adminTemplateBlockfx||{}};
   saveAdminTemplates(templates);
   alert(L('Mentve — ez a böngésző mostantól ezt a '+_adminTemplateSize+' oldalas sablont adja.','Saved — this browser will now serve this '+_adminTemplateSize+'-page template.'));
 }
@@ -8417,6 +8470,7 @@ function adminResetTemplate(){
   var norm=normalizeTemplateEntry(templates[_adminTemplateSize]);
   _adminTemplateOrder=adminStripModifiers(norm.order);
   _adminTemplateBlockfx=norm.blockfx;
+  _adminGerincOrder=adminExtractGerincOrder(norm.order);
   renderAdminTemplatesTab();
 }
 /* ===== Sablon "Részletes szerkesztés" — a valódi szerkesztőben ===== */
@@ -8468,7 +8522,7 @@ function adminSaveVisualTemplate(n){
   document.querySelectorAll('#stage .blk[data-bid]').forEach(function(b){
     var bid=b.getAttribute('data-bid');
     var entry=ADDABLE_SECTIONS_UJSAG.find(function(s){return s.blk===bid;});
-    if(!entry)return; /* gerinc (welcome/menetrend/italok/closer) és töltő-blokkok kihagyva */
+    if(!entry)return; /* gerinc (welcome/menetrend/etlap/itallap/closer) és töltő-blokkok kihagyva — az italok (Férj/feleség itala) MÁR valódi ADDABLE_SECTIONS_UJSAG-tag, tehát a fenti loop a jelenlétét/sorrendjét is helyesen rögzíti */
     if(order.indexOf(entry.chk)<0)order.push(entry.chk);
   });
   var blockfx={};
@@ -8476,7 +8530,6 @@ function adminSaveVisualTemplate(n){
     blockfx[b.getAttribute('data-bid')]={zoom:b.style.zoom||'',tr:b.style.transform||'',w:b.style.width||'',h:b.style.height||'',lh:b.style.lineHeight||'',sp:b.dataset.sizePref||''};
   });
   if(order.indexOf('times')<0)order.push('times');
-  if(order.indexOf('drinks')<0)order.push('drinks');
   var templates=currentUjsagTemplates();
   templates[n]={order:order,blockfx:blockfx};
   saveAdminTemplates(templates);
