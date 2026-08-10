@@ -19,9 +19,10 @@
  *         Név:   ANTHROPIC_API_KEY
  *         Érték: a saját Anthropic API-kulcsod (https://console.anthropic.com/settings/keys)
  *      Fontos: válaszd a "Secret" típust, NE a sima "Text"-et, hogy titkosítva tárolódjon.
- *   6. Az ALLOWED_ORIGINS listába (lásd lent) írd be a weboldalad tényleges címét —
- *      alapból a GitHub Pages cím már benne van, ha egyedi domaint használsz, azt is
- *      vedd fel ide.
+ *   6. Az ALLOWED_ORIGINS listába (lásd lent) fel van véve a GitHub Pages cím ÉS a
+ *      fontosnap.hu (www-vel és anélkül is) — ha később újabb domaint/aldomaint adsz
+ *      hozzá az oldalhoz, azt is ide kell felvenni, különben az AI Tipp gomb 403-mal
+ *      elutasítja a kéréseket arról a címről.
  *   7. Mentsd/telepítsd újra a Workert. A Worker oldalán megkapod a saját URL-jét
  *      (valami ilyesmi: https://ai-tipp-proxy.<a-te-cloudflare-felhasználóneved>.workers.dev).
  *   8. Ezt az URL-t illeszd be az index.html-ben az `AI_PROXY_URL` konstansba
@@ -44,8 +45,8 @@
 
 const ALLOWED_ORIGINS = [
   'https://tpatrikjanos-create.github.io',
-  // Ha egyedi domaint használsz (pl. https://eskuvoiujsag.hu), írd ide is:
-  // 'https://eskuvoiujsag.hu',
+  'https://fontosnap.hu',
+  'https://www.fontosnap.hu',
 ];
 
 const MODEL = 'claude-haiku-4-5-20251001';
