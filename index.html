@@ -2859,7 +2859,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.22';
+  var APP_VERSION='6.23';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3985,6 +3985,12 @@ function seedUjsagDefaults(){
   seedVal('f_par2',L('« Másik pár neve »','« The other couple\'s name »'));
   seedVal('f_husband',L('« itala »','« drink »'));
   seedVal('f_wife',L('« itala »','« drink »'));
+  seedVal('f_m_app',L('« Vendégvárás itala / előétel »','« Welcome drink / starter »'));
+  seedVal('f_m_soup',L('« Leves »','« Soup »'));
+  seedVal('f_m_main',L('« Főétel »','« Main course »'));
+  seedVal('f_m_night',L('« Éjféli fogás »','« Midnight course »'));
+  seedVal('f_m_dessert',L('« Desszert »','« Dessert »'));
+  seedVal('f_itallap',L('« Sorold fel, milyen italokat kínáltok »','« List the drinks you\'ll be serving »'));
   seedRepeater('rep_prog',['time','event'],[
     ['15:00',L('Érkezés, köszöntő ital','Arrival, welcome drink')],
     ['16:00',L('Szertartás','Ceremony')],
