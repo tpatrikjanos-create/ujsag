@@ -222,7 +222,11 @@ body{font-family:'PT Serif',Georgia,serif;color:#211c18;-webkit-font-smoothing:a
 .admin-export-btn{background:#2a1a20;color:#fff;}
 .admin-visual-btn{width:100%;margin-top:8px;padding:11px;border-radius:10px;border:1.6px dashed var(--wiz-rose-dark);background:#fff;color:var(--wiz-rose-dark);font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;}
 .admin-visual-btn:hover{background:var(--wiz-blush);}
-#adminTplEditBar{position:fixed;top:0;left:0;right:0;z-index:9600;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;background:rgba(20,20,20,.92);color:#fff;font-family:'Libre Franklin',sans-serif;padding:9px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);}
+/* fixed, DE a .topbar (a valódi eszköztár-sáv, ami maga is position:fixed;top:0 — ld.
+   .topbar CSS) ALÁ, nem fölé pozicionálva (a "top" értéket showAdminTemplateEditBar()
+   állítja be JS-ből, a .topbar tényleges magassága alapján) — így nem takarja el/nem
+   tiltja le a toolbar gombjait (pl. a "🧩 Rovatok kezelése" gombot). */
+#adminTplEditBar{position:fixed;left:0;right:0;z-index:59;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;background:rgba(20,20,20,.92);color:#fff;font-family:'Libre Franklin',sans-serif;padding:9px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);}
 #adminTplEditBar .lbl{font-weight:700;font-size:12.5px;margin-right:4px;}
 #adminTplEditBar button{border:none;border-radius:8px;padding:7px 12px;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:12px;cursor:pointer;}
 #adminTplEditBar .admin-tpl-save{background:linear-gradient(120deg,var(--wiz-rose-dark),var(--wiz-rose));color:#fff;}
@@ -917,6 +921,15 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
 .blk-ai-btn{z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .blk:hover .blk-toolbar>.blk-ai-btn,.blk.bsel .blk-toolbar>.blk-ai-btn{opacity:1;}
+/* Admin "Részletes szerkesztés" (sablon-építés) mód: erős piros keret + nagy, középre helyezett
+   gomb azokon a rovatokon, amiknek a tartalma generikus sablonban nem tölthető ki érdemben
+   (ld. UJSAG_ADMIN_TPL_NEEDS_DATA_IDS). inset box-shadow-t használunk border helyett, hogy a
+   .blk overflow:hidden-je se vágja le semelyik oldalon. */
+.blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
+.blk-needs-data-badge{position:absolute;top:2px;left:2px;z-index:48;background:#e0342f;color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:5px;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.blk-needs-data-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:13px;letter-spacing:.02em;padding:10px 18px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(224,52,47,.45);white-space:nowrap;}
+.blk-needs-data-btn:hover{background:linear-gradient(120deg,#c92924,#e0342f);}
+@media print{.blk-needs-data,.blk-needs-data-badge,.blk-needs-data-btn{box-shadow:none!important;display:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
    AI Tipp gombot kap, ugyanabban a sarokban, ugyanolyan mindig-látható elven */
 .cover-ai-btn{position:absolute;top:2px;right:2px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
@@ -2859,7 +2872,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.23';
+  var APP_VERSION='6.24';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5853,6 +5866,11 @@ var UJSAG_CORE_EDIT_GROUPS=[
   {key:'itallap',selector:'[data-editgroup="itallap"]',blks:['itallap'],fns:{itallap:function(d){return B_itallap(d);}}},
   {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
 ];
+/* Ezeknek a rovatoknak a tartalma egy generikus SABLONBAN eleve nem tölthető ki érdemben —
+   konkrét, pár-specifikus adat kell hozzájuk (számok, névsorok, menü) —, ezért az admin
+   "Részletes szerkesztés" módjában külön, erős piros kerettel és nagy gombbal jelöljük őket
+   (ld. initBlockTools "blk-needs-data" ága). */
+var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','csapat','szinglik','etlap','itallap','menetrend'];
 function coreGroupLabel(key){
   var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
   var card=document.querySelector(g.selector); if(!card)return key;
@@ -6794,6 +6812,28 @@ function initBlockTools(){
       if(!aiBtn){aiBtn=document.createElement('button');aiBtn.type='button';aiBtn.className='blk-ai-btn';aiBtn.title='AI Tipp';aiBtn.innerHTML='<span class="ic">✨</span><span class="lbl">AI Tipp</span>';toolbar.appendChild(aiBtn);}
       aiBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
       aiBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openAiTippBlockChooser(aiTarget);});
+    }
+
+    /* Admin "Részletes szerkesztés" (sablon-építés) módban: néhány rovat tartalma eleve NEM
+       tölthető ki érdemben egy generikus sablonban (pl. a "Számokban a szerelmünk" konkrét
+       számai, a násznép/tanúk NEVEI, a szingli vendégek névsora) — ezeket erős piros kerettel
+       és egy nagy, jól látható "Adatok megadása" gombbal jelöljük, hogy az admin ne felejtse
+       el/hagyja ki véletlenül üresen ezeket a sablon mentésekor. Kizárólag ebben a módban fut —
+       a valódi vásárlói szerkesztőt nem zavarja. */
+    if(window._adminTemplateEditPages && UJSAG_ADMIN_TPL_NEEDS_DATA_IDS.indexOf(blk.getAttribute('data-bid'))>=0){
+      blk.classList.add('blk-needs-data');
+      if(!blk.querySelector(':scope > .blk-needs-data-badge')){
+        var ndBadge=document.createElement('div'); ndBadge.className='blk-needs-data-badge'; ndBadge.textContent='⚠ '+L('Adatot igényel','Needs data');
+        blk.appendChild(ndBadge);
+      }
+      var ndTarget=editTarget; /* ugyanaz a cél, amit a kis "✎ Adatok" gomb is használ */
+      if(ndTarget && !blk.querySelector(':scope > .blk-needs-data-btn')){
+        var ndBtn=document.createElement('button'); ndBtn.type='button'; ndBtn.className='blk-needs-data-btn';
+        ndBtn.textContent='✎ '+L('Adatok megadása','Enter data');
+        ndBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
+        ndBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(ndTarget.kind,ndTarget.key);});
+        blk.appendChild(ndBtn);
+      }
     }
 
     /* PC-n a rovat tartalma zoom-mal kicsinyíthető/nagyítható (ld. clampBlockZoom) — mivel a
@@ -8512,6 +8552,14 @@ function showAdminTemplateEditBar(n){
     +'<button type="button" class="admin-tpl-exit">✕ '+L('Kilépés mentés nélkül','Exit without saving')+'</button>';
   bar.querySelector('.admin-tpl-save').onclick=function(){ adminSaveVisualTemplate(n); };
   bar.querySelector('.admin-tpl-exit').onclick=function(){ adminExitVisualEditor(); };
+  /* a .topbar (a valódi PC/mobil eszköztár-sáv) tényleges magassága alá pozicionáljuk, ne
+     fölé/rá — így nem takarja el a benne lévő gombokat (pl. "🧩 Rovatok kezelése"). */
+  var placeBelowTopbar=function(){
+    var topbarEl=document.querySelector('.topbar');
+    bar.style.top=(topbarEl?topbarEl.getBoundingClientRect().height:0)+'px';
+  };
+  placeBelowTopbar();
+  setTimeout(placeBelowTopbar,300);
 }
 function adminExitVisualEditor(){
   window._adminTemplateEditPages=null;
