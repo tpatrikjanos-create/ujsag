@@ -673,7 +673,12 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 /* az utolsó-lapos csoport "nyolcadolt" negyed-párjai (ld. buildTailPagePlan) — ezeknek,
    ellentétben a régi (természetes magasságú) duo-row-val, EGYENLŐ magassággal kell kitölteniük
    a közösen elfoglalt sávot. */
-.duo-row.tail-pair-row{align-items:stretch;}
+.duo-row.tail-pair-row{align-items:stretch;gap:4mm;}
+/* a Menetrend+Étlap pár EGY rovatként jelenik meg: vékony, felül-alul elhalványuló függőleges
+   vonal a bal (Menetrend) és jobb (Étlap/Itallap) fél között, hogy a két oldal EGY, középen
+   elválasztott szekciónak tűnjön, ne két külön doboznak. */
+.pair-divider{flex:0 0 auto;width:1px;align-self:stretch;background:linear-gradient(to bottom,transparent,var(--claret) 15%,var(--claret) 85%,transparent);opacity:.4;}
+@media print{.pair-divider{opacity:.3;}}
 .filler-quote{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-size:13px;line-height:1.35;color:var(--claret);padding:8px 6px;border-top:1px solid var(--claret);border-bottom:1px solid var(--claret);}
 body.pack-magazine .filler-quote{position:relative;border:none;padding:14px 18px 10px;font-size:15px;}
 body.pack-magazine .filler-quote::before{content:'"';position:absolute;top:-6px;left:2px;font-family:'Grenze Gotisch',serif;font-size:42px;color:var(--claret);opacity:.4;line-height:1;}
@@ -939,6 +944,12 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
 .blk-needs-data .blk-toolbar>.blk-edit-btn{background:linear-gradient(120deg,#c92924,#e0342f);opacity:1;}
 @media print{.blk-needs-data{box-shadow:none!important;}}
+/* a Menetrend+Étlap pár EGY rovatként viselkedik (ld. .pair-divider) — admin sablon-építő
+   módban emiatt is EGY, a teljes párt körbefogó piros kerettel jelöljük, ha mindkét fele
+   adatot igényel, nem két külön (a köztük lévő vékony vonal miatt "eltörő") insettel. */
+.tail-pair-row.pair-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
+.tail-pair-row.pair-needs-data>.blk-needs-data{box-shadow:none;}
+@media print{.tail-pair-row.pair-needs-data{box-shadow:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
    AI Tipp gombot kap, ugyanabban a sarokban, ugyanolyan mindig-látható elven */
 .cover-ai-btn{position:absolute;top:2px;right:2px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
@@ -2880,7 +2891,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.31';
+  var APP_VERSION='6.33';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5282,7 +5293,11 @@ function generate(){
     var sumH=0, rows=0;
     for(var qi=0;qi<parts.length;qi++){
       if(parts[qi].sidePair==='start' && parts[qi+1] && parts[qi+1].sidePair==='end'){
-        html+='<div class="duo-row tail-pair-row">'+parts[qi].html+parts[qi+1].html+'</div>';
+        /* Menetrend + Étlap/Itallap EGY rovatként viselkedik: a lapot vízszintesen pontosan
+           félbevágva a bal oldalon a Menetrend, a jobb oldalon az Étlap/Itallap — a
+           ".pair-divider" egy vékony függőleges vonal a két fél között, hogy EGY, középen
+           elválasztott szekciónak tűnjön, ne két külön, egymás mellé sodródott doboznak. */
+        html+='<div class="duo-row tail-pair-row">'+parts[qi].html+'<div class="pair-divider"></div>'+parts[qi+1].html+'</div>';
         sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++;
       } else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
@@ -6513,7 +6528,15 @@ function fitBlockToBox(blk,box,cap){
     blk.style.zoom=lo2;
     return;
   }
-  var lo=0.3, hi=1;
+  /* A zsugorítás alsó határa NEM a nyers 0.3 (ami pl. sok étlap-tétel esetén a szöveget
+     olvashatatlanul aprócskára, gyakorlatilag láthatatlanra zsugorítaná) — hanem ugyanaz a
+     "sose menjen 8pt alá / a kép sose menjen a minimum alá" biztonsági küszöb, amit a kézi
+     átméretezés is használ (ld. blockMinZoom/blockImgMinZoom). Ha MÉG EZ a minimum sem fér a
+     dobozba, inkább hagyjuk kilógni (a doboz szélén túl, ill. a data-size-pref rovatok
+     overflow:hidden-je miatt a doboz alján levágva) — ez akkor is jobban olvasható marad, mint
+     egy mindent 0.3×-ra zsugorító "megoldás". */
+  var floor=Math.min(1,Math.max(0.3,Math.max(blockMinZoom(blk),blockImgMinZoom(blk,1))));
+  var lo=floor, hi=1;
   blk.style.zoom=lo;
   if(!blockFitsBox(blk,box))return; /* még a minimum sem fér bele — nincs mit tenni */
   for(var i=0;i<12;i++){
@@ -6881,6 +6904,16 @@ function initBlockTools(){
       else if(a==='ai'){ if(aiTarget)openAiTippBlockChooser(aiTarget); }
       else if(a==='del'){deleteThisBlock();}
     });
+  });
+
+  /* Menetrend+Étlap pár (ld. .pair-divider): ha admin sablon-építő módban MINDKÉT fele piros
+     kiemelést kapott (ld. blk-needs-data fentebb), a párt körbefogó .tail-pair-row is megkapja
+     ugyanezt — EGY, a teljes szekciót körbefogó kerettel, nem két külön, a köztük lévő vékony
+     vonal miatt megszakadó insettel (ld. CSS). */
+  document.querySelectorAll('#stage .tail-pair-row').forEach(function(row){
+    var kids=row.querySelectorAll(':scope > .blk[data-bid]');
+    var allNeed=kids.length>0 && Array.prototype.every.call(kids,function(k){return k.classList.contains('blk-needs-data');});
+    row.classList.toggle('pair-needs-data',allNeed);
   });
 
   if(!window._blkDeselectBound){window._blkDeselectBound=true;
