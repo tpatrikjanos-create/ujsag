@@ -665,6 +665,11 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .closer{font-size:13px;}
 .duo-row{display:flex;gap:6mm;align-items:flex-start;}
 .duo-row>.blk{flex:1 1 0;min-width:0;}
+/* a Menetrend+Étlap pár (ld. .tail-pair-row) mindkét fele egy-egy ".pair-col"-ba van
+   csomagolva — ez a VALÓDI, zoom-mentes doboz (fix magasság, ld. lejjebb a JS-ben), a benne
+   lévő .blk pedig szabadon zoomolhat anélkül, hogy ez a doboz saját mérete megváltozna, vagy a
+   szomszédos oszlopba lógna: az overflow:hidden a doboz szélén túli részt egyszerűen levágja. */
+.tail-pair-row>.pair-col{flex:1 1 0;min-width:0;overflow:hidden;}
 /* a negyed/fél/egész oldalas rovatok dobozmérete a generálás után PIXELBEN rögzített (ld.
    initBlockTools' post-gen fit ciklusa) — az overflow:hidden biztosítja, hogy a kézi Méret
    gombbal utólag nagyított TARTALOM sose feszítse szét/tolja el ezt a fix dobozt, legfeljebb
@@ -948,7 +953,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    módban emiatt is EGY, a teljes párt körbefogó piros kerettel jelöljük, ha mindkét fele
    adatot igényel, nem két külön (a köztük lévő vékony vonal miatt "eltörő") insettel. */
 .tail-pair-row.pair-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
-.tail-pair-row.pair-needs-data>.blk-needs-data{box-shadow:none;}
+.tail-pair-row.pair-needs-data .pair-col>.blk-needs-data{box-shadow:none;}
 @media print{.tail-pair-row.pair-needs-data{box-shadow:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
    AI Tipp gombot kap, ugyanabban a sarokban, ugyanolyan mindig-látható elven */
@@ -2891,7 +2896,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.33';
+  var APP_VERSION='6.34';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5296,8 +5301,15 @@ function generate(){
         /* Menetrend + Étlap/Itallap EGY rovatként viselkedik: a lapot vízszintesen pontosan
            félbevágva a bal oldalon a Menetrend, a jobb oldalon az Étlap/Itallap — a
            ".pair-divider" egy vékony függőleges vonal a két fél között, hogy EGY, középen
-           elválasztott szekciónak tűnjön, ne két külön, egymás mellé sodródott doboznak. */
-        html+='<div class="duo-row tail-pair-row">'+parts[qi].html+'<div class="pair-divider"></div>'+parts[qi+1].html+'</div>';
+           elválasztott szekciónak tűnjön, ne két külön, egymás mellé sodródott doboznak.
+           Mindkét felet egy-egy ".pair-col" csomagolja: EZ a doboz (fix, valódi pixelmagasság +
+           overflow:hidden), NEM maga a ".blk" — mert a CSS zoom a rovat SAJÁT dobozát is
+           arányosan felnagyítja (nem csak a benne lévő szöveget!), így ha a zoom közvetlenül a
+           .blk-on lenne, a két fél mérete a kézi Méret gombbal EGYMÁSTÓL FÜGGŐEN, egymásba
+           lógva változna. A ".pair-col" zoom nélküli, valódi fix méretű doboz — ezen belül a
+           .blk szabadon zoomolhat, de a doboz szélén túl eső rész egyszerűen levágódik, a
+           másik felet így semmilyen zoom-beállítás nem érintheti. */
+        html+='<div class="duo-row tail-pair-row"><div class="pair-col">'+parts[qi].html+'</div><div class="pair-divider"></div><div class="pair-col">'+parts[qi+1].html+'</div></div>';
         sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++;
       } else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
@@ -5363,21 +5375,18 @@ function generate(){
       cumUnits+=u;
       var bottom=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
       if(k.matches('.tail-pair-row')){
-        var pairKids=Array.prototype.filter.call(k.children,function(c){return c.classList.contains('blk');});
-        /* a doboz bal/jobb szélét a gyerek TÉNYLEGES flex-kiosztott szélessége adja — ezt csak
-           akkor mérhetjük megbízhatóan, ha MINDKÉT testvér előbb egy semleges (zoom:1) alapállásba
-           kerül; különben az egyik gyerek még a generáláskori ELŐZETES (gyakran téves) zoom-
-           becslésével torzítaná a flex-kiosztást, és a másik gyereknek egy hibás, e pillanatnyi
-           torzításból számolt dobozt adnánk. */
-        pairKids.forEach(function(child){ child.style.zoom=1; });
-        pairKids.forEach(function(child){
-          var r=child.getBoundingClientRect();
-          fitBlockToBox(child,{left:r.left,right:r.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
-          /* a doboz magasságát PIXELBEN rögzítjük (ld. .blk[data-size-pref]{overflow:hidden}) —
-             így a kézi Méret +/- gomb (ld. initBlockTools) utólag KIZÁRÓLAG a benne lévő
-             TARTALOM zoom-ját változtathatja, a doboz saját mérete attól függetlenül fix marad
-             (a doboznál nagyobbra nőtt tartalmat egyszerűen levágja az overflow:hidden). */
-          child.style.height=child.getBoundingClientRect().height+'px';
+        var pairCols=Array.prototype.filter.call(k.children,function(c){return c.classList.contains('pair-col');});
+        /* a ".pair-col" maga NEM kap zoom-ot (csak a benne lévő .blk), ezért a magassága a
+           SÁV (top/bottom) alapján biztonsággal, VALÓDI pixelben rögzíthető — ez lesz a fix
+           doboz, amit a benne lévő .blk tartalma zoom-mal tölt ki, de sosem feszíthet szét (ld.
+           .pair-col{overflow:hidden} CSS). Mivel a .pair-col-nak nincs zoom-ja, a szélessége is
+           megbízhatóan mérhető közvetlenül, nem kell előbb zoom:1-re állítani (ellentétben a régi
+           megoldással, ahol maga a .blk volt a flex-elem). */
+        pairCols.forEach(function(col){ col.style.height=(bottom-top)+'px'; });
+        pairCols.forEach(function(col){
+          var child=col.querySelector(':scope > .blk');
+          var r=col.getBoundingClientRect();
+          fitBlockToBox(child,{left:r.left,right:r.right,top:r.top,bottom:r.bottom},SIZEPREF_FIT_CAP);
         });
       } else {
         fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
@@ -6551,11 +6560,13 @@ function clampBlockZoom(blk,desired,minZ){
      megbízhatóan, ezért közvetlenül beállítjuk és lemérjük — ha túllóg a margón, bináris kereséssel
      visszavesszük, amíg bele nem fér. Ugyanaz a határ, mint a gombos mozgatásnál (a pbody tényleges
      széle), csak itt a méretre alkalmazva. */
-  /* a régi, egymás melletti páros (pl. Étlap+Itallap, ld. duo-row) rovatoknál a doboz nem a
-     TELJES lapszélességet foglalja, hanem csak a saját oszlopát — a kézi nagyítás jobb-szél
-     korlátjának ehhez, NEM a teljes .pbody szélességéhez kell igazodnia, különben a rovat
-     túlnőhetne a saját oszlopán és átfedésbe kerülne a szomszédjával. */
-  var pb=blk.closest('.duo-row, .pbody');
+  /* a Menetrend+Étlap párnál (ld. .pair-col) a doboz nem a TELJES lapszélességet/a teljes pár
+     magasságát foglalja, hanem csak a SAJÁT oszlopát — a kézi nagyítás korlátjának ehhez, NEM a
+     teljes .duo-row-hoz/.pbody-hoz kell igazodnia, különben a rovat túlnőhetne a saját oszlopán
+     és átfedésbe kerülne (vagy legalábbis "versengene" a hellyel) a szomszédjával. (A .pair-col
+     saját overflow:hidden-je egyébként is garantálja, hogy ez sosem látszik ténylegesen kilógva
+     — ez a korlát csak azért kell, hogy a kereséskor NE vágjon le feleslegesen korán.) */
+  var pb=blk.closest('.pair-col, .duo-row, .pbody');
   if(!pb){ blk.style.zoom=desired; return desired; }
   var pRect=pb.getBoundingClientRect();
   blk.style.zoom=desired;
@@ -6800,7 +6811,16 @@ function initBlockTools(){
       sBar.appendChild(szDone);
       document.body.appendChild(sBar);
       blk._sizeBar=sBar;
-      resizeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();sBar.classList.toggle('active');});
+      resizeBtn.addEventListener('click',function(e){
+        e.preventDefault();e.stopPropagation();
+        /* selectB() nélkül a rovat sosem kapott .bsel osztályt PC-n, így az "eszközön kívülre
+           kattintva mindent elrejtünk" globális figyelő (ld. lejjebb, #stage .blk.bsel-t keres)
+           sosem találta meg — az alsó sáv ilyenkor a kattintás után VÉGLEG nyitva ragadt, "mindig
+           látszó" toolbarnak tűnt. A selectB() hívása biztosítja, hogy máshova kattintva ez a
+           sáv is normálisan bezáródjon. */
+        selectB();
+        sBar.classList.toggle('active');
+      });
     }
 
     /* Drag fogantyúk: PC-n mind a 8, mobilon csak az oldalak (n/s/e/w) — sarkok nem.
@@ -6911,7 +6931,7 @@ function initBlockTools(){
      ugyanezt — EGY, a teljes szekciót körbefogó kerettel, nem két külön, a köztük lévő vékony
      vonal miatt megszakadó insettel (ld. CSS). */
   document.querySelectorAll('#stage .tail-pair-row').forEach(function(row){
-    var kids=row.querySelectorAll(':scope > .blk[data-bid]');
+    var kids=row.querySelectorAll(':scope > .pair-col > .blk[data-bid]');
     var allNeed=kids.length>0 && Array.prototype.every.call(kids,function(k){return k.classList.contains('blk-needs-data');});
     row.classList.toggle('pair-needs-data',allNeed);
   });
