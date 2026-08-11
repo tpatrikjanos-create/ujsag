@@ -2909,7 +2909,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.38';
+  var APP_VERSION='6.39';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4080,6 +4080,16 @@ function seedUjsagDefaults(){
   seedRepeater('rep_utazas',['place','desc'],[
     [L('« úti cél »','« destination »'),''],
     [L('« úti cél »','« destination »'),'']
+  ]);
+  seedVal('f_aw1',L('« Kovács Anna »','« Anna Smith »'));
+  seedVal('f_aw2',L('« Nagy Bence »','« Ben Jones »'));
+  seedVal('f_aw3',L('« Szabó Eszter »','« Esther Brown »'));
+  seedVal('f_aw4',L('« Tóth Gábor és Kiss Hanna »','« Gary and Hannah Taylor »'));
+  seedVal('f_aw5',L('« Varga Imre és Farkas Júlia »','« Ivan and Julia White »'));
+  seedRepeater('rep_singles',['name','table'],[
+    [L('« Kovács Réka »','« Jane Doe »'),L('3. asztal','Table 3')],
+    [L('« Nagy Bálint »','« John Smith »'),L('5. asztal','Table 5')],
+    [L('« Tóth Petra »','« Alex Kim »'),L('3. asztal','Table 3')]
   ]);
   seedRepeater('rep_bakancslista',['item'],[
     [L('« közös terv »','« shared plan »')],
@@ -6166,6 +6176,15 @@ function afterBlockChange(){
 function applyOptSectionEdit(chkId){
   var entry=currentAddableSections().find(function(s){return s.chk===chkId;}); if(!entry)return;
   pushUndo();
+  var cbEarly=document.getElementById('chk_'+chkId);
+  /* néhány rovat generátora (pl. robbantsd/vendégkönyv/fotóvadász) a SAJÁT checkboxának
+     bekapcsolt állapotát nézi (ld. gatherData() d.robbantsd/d.message/d.foto), nem csak a
+     mezők tartalmát — ezt előre be kell kapcsolni, MIELŐTT legenerálnánk a tartalmat, különben
+     "Hozzáadás"-ra az első próbálkozásra mindig üres stringet kapnánk (a checkbox csak EZUTÁN,
+     lentebb kapcsolódna be, a generálás már megtörtént volna a régi, kikapcsolt állapottal). A
+     tényleges, végleges checkbox-állapotot úgyis a ténylegesen generált tartalom (html)
+     valódisága dönti el lentebb. */
+  if(cbEarly)cbEarly.checked=true;
   var html=entry.fn(gatherData());
   var blk=upsertBlock(entry.blk,html);
   /* ha VOLT mit beilleszteni (html nem üres, tehát ez nem törlés), de mégsem sikerült (nincs
