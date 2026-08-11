@@ -665,6 +665,11 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .size-a4 .closer{font-size:13px;}
 .duo-row{display:flex;gap:6mm;align-items:flex-start;}
 .duo-row>.blk{flex:1 1 0;min-width:0;}
+/* a negyed/fél/egész oldalas rovatok dobozmérete a generálás után PIXELBEN rögzített (ld.
+   initBlockTools' post-gen fit ciklusa) — az overflow:hidden biztosítja, hogy a kézi Méret
+   gombbal utólag nagyított TARTALOM sose feszítse szét/tolja el ezt a fix dobozt, legfeljebb
+   levágódik a doboz alján, amíg a felhasználó vissza nem vesz a méretből. */
+.blk[data-size-pref]{overflow:hidden;}
 /* az utolsó-lapos csoport "nyolcadolt" negyed-párjai (ld. buildTailPagePlan) — ezeknek,
    ellentétben a régi (természetes magasságú) duo-row-val, EGYENLŐ magassággal kell kitölteniük
    a közösen elfoglalt sávot. */
@@ -905,12 +910,18 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk-del-btn{z-index:46;display:none;align-items:center;gap:4px;background:rgba(154,39,39,.88);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
 .blk:hover .blk-toolbar>.blk-del-btn,.blk.bsel .blk-toolbar>.blk-del-btn{display:flex;}
 .blk-del-btn:hover{background:rgba(184,46,46,1);}
-.blk-resize-btn{position:absolute;top:2px;left:90px;z-index:46;display:none;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
-.blk:hover>.blk-resize-btn,.blk.bsel>.blk-resize-btn{display:flex;}
+.blk-resize-btn{z-index:46;display:none;align-items:center;gap:4px;background:rgba(110,34,51,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
+.blk:hover .blk-toolbar>.blk-resize-btn,.blk.bsel .blk-toolbar>.blk-resize-btn{display:flex;}
 .blk-resize-btn:hover{background:rgba(140,44,66,1);}
-/* PC-n a "Méret" gomb (mobil-stílusú alsó ±/✓ sávot nyitna meg) nem kell — ott a kijelölés
-   gombbal előhívott .rsz fogantyúkkal közvetlenül húzva méretezhető a rovat. */
-@media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
+/* PC-n a legtöbb rovatnál a "Méret" gomb (mobil-stílusú alsó ±/✓ sávot nyitna meg) nem kell —
+   ott a kijelölés után előhívott .rsz fogantyúkkal közvetlenül húzva méretezhető a rovat.
+   KIVÉTEL a negyed/fél/egész oldalas ("data-size-pref") rovatok: azoknak a doboza fix (nincs
+   .rsz fogantyújuk, ld. blkDirs=[] initBlockTools-ban), a bennük lévő tartalom méretét
+   kizárólag ezzel a gombbal (a mobilos +/- D-paddal, ld. .mob-size-bar) lehet finomítani. */
+@media screen and (min-width:761px){
+  .blk-resize-btn{display:none!important;}
+  .blk[data-size-pref]:hover .blk-toolbar>.blk-resize-btn,.blk[data-size-pref].bsel .blk-toolbar>.blk-resize-btn{display:flex!important;}
+}
 /* a többi sarok-gombbal ellentétben ez ÁLLANDÓAN látszik (halványabban), nem csak hoverre/
    kijelöléskor — sok rovathoz adatot KELL megadni, ezért ennek felfedezhetőnek kell lennie
    anélkül is, hogy a user előbb tudná, hogy egyáltalán rá kell/lehet kattintani a rovatra */
@@ -919,15 +930,15 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
 .blk-ai-btn{z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .blk:hover .blk-toolbar>.blk-ai-btn,.blk.bsel .blk-toolbar>.blk-ai-btn{opacity:1;}
-/* Admin "Részletes szerkesztés" (sablon-építés) mód: erős piros keret + nagy, középre helyezett
-   gomb azokon a rovatokon, amiknek a tartalma generikus sablonban nem tölthető ki érdemben
-   (ld. UJSAG_ADMIN_TPL_NEEDS_DATA_IDS). inset box-shadow-t használunk border helyett, hogy a
-   .blk overflow:hidden-je se vágja le semelyik oldalon. */
+/* Admin "Részletes szerkesztés" (sablon-építés) mód: erős piros keret azokon a rovatokon,
+   amiknek a tartalma generikus sablonban nem tölthető ki érdemben (ld.
+   UJSAG_ADMIN_TPL_NEEDS_DATA_IDS) — inset box-shadow-t használunk border helyett, hogy a
+   .blk overflow:hidden-je se vágja le semelyik oldalon. Külön nagy gomb/felirat helyett a
+   rovat sarkában amúgy is ott lévő kis "✎ Adatok" toolbar-gomb kap piros kiemelést (ld.
+   lejjebb) — ez fix méretű marad és a rovat szélén, nem a közepén helyezkedik el. */
 .blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
-.blk-needs-data-badge{position:absolute;top:2px;left:2px;z-index:48;background:#e0342f;color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:5px;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.blk-needs-data-btn{position:absolute;left:50%;top:68%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:9px;letter-spacing:.02em;padding:7px 12px;border-radius:7px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(224,52,47,.45);white-space:nowrap;}
-.blk-needs-data-btn:hover{background:linear-gradient(120deg,#c92924,#e0342f);}
-@media print{.blk-needs-data,.blk-needs-data-badge,.blk-needs-data-btn{box-shadow:none!important;display:none!important;}}
+.blk-needs-data .blk-toolbar>.blk-edit-btn{background:linear-gradient(120deg,#c92924,#e0342f);opacity:1;}
+@media print{.blk-needs-data{box-shadow:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
    AI Tipp gombot kap, ugyanabban a sarokban, ugyanolyan mindig-látható elven */
 .cover-ai-btn{position:absolute;top:2px;right:2px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
@@ -2869,7 +2880,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.30';
+  var APP_VERSION='6.31';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4890,10 +4901,14 @@ var ZOOM_STEPS=[0.7,0.78,0.86,0.94,1.0,1.08,1.17,1.26,1.36,1.47,1.59,1.72,1.86,2
 var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[1];
 /* a "fél/negyed/egész oldal" kényszerített rovatok (ld. FIXED_SIZE_PREF) generáláskori
    automatikus kitöltése: a doboz mérete fix marad, a TARTALMAT pedig felnagyítjuk, hogy a
-   doboz TELJES méretét (szélességet ÉS magasságot is) kitöltse — a fitBlockToBox binkeresése
-   úgyis csak addig nagyít, amíg a tartalom még beleFÉR a dobozba (ld. blockFitsBox), tehát a
-   sapka itt csak biztonsági felső határ, nem a "ne töltsön ki mindent" szándék eszköze. */
-var SIZEPREF_FIT_CAP=6;
+   doboz méretét (szélességet ÉS magasságot is) minél jobban kitöltse — a fitBlockToBox
+   binkeresése úgyis csak addig nagyít, amíg a tartalom még beleFÉR a dobozba (ld.
+   blockFitsBox). A sapka itt szándékosan ALACSONY (ugyanaz, mint a kézi átméretező D-pad
+   legnagyobb lépésköze, ld. ZOOM_STEPS) — kevés tartalmú rovatoknál (pl. rövid Menetrend egy
+   negyed oldalban) a doboz TELJES kitöltése irreálisan (pl. 5-6×) felnagyított, olvashatatlanul
+   nagy betűméretet eredményezne; inkább marad egy kis üres hely a doboz alján, amit a
+   felhasználó a kézi Méret gombbal (ld. lejjebb) igény szerint tovább finomíthat. */
+var SIZEPREF_FIT_CAP=2.2;
 var HALFP_IDS_UJSAG=['qr','fotovadasz','vendegkonyv','robbantsd','szinglik','dijak'];
 /* ez a csoport MINDIG a legutolsó lap(ok)ra kerül, és MÁSHOL nem jelenhet meg — ld.
    splitTailFlow()/buildTailPagePlan(). A nászút NEM tartozik ide (feljebb, az utazási
@@ -5343,9 +5358,15 @@ function generate(){
         pairKids.forEach(function(child){
           var r=child.getBoundingClientRect();
           fitBlockToBox(child,{left:r.left,right:r.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+          /* a doboz magasságát PIXELBEN rögzítjük (ld. .blk[data-size-pref]{overflow:hidden}) —
+             így a kézi Méret +/- gomb (ld. initBlockTools) utólag KIZÁRÓLAG a benne lévő
+             TARTALOM zoom-ját változtathatja, a doboz saját mérete attól függetlenül fix marad
+             (a doboznál nagyobbra nőtt tartalmat egyszerűen levágja az overflow:hidden). */
+          child.style.height=child.getBoundingClientRect().height+'px';
         });
       } else {
         fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+        k.style.height=k.getBoundingClientRect().height+'px';
       }
     });
   });
@@ -6451,7 +6472,7 @@ function blkInnerOverflowOK(blk){
      transform:scale-je miatt kis blk.style.zoom-nál (pl. 0.3) VIZUÁLISAN messze túlnyúlhatnak a
      doboz szélén — ez tévesen "belső túlcsordulásnak" tűnne, holott a TÉNYLEGES tartalom
      (szöveg/kép) simán férne, ezért a mérés idejére elrejtjük őket. */
-  var controls=blk.querySelectorAll(':scope > .blk-toolbar, :scope > .rsz, :scope > .blk-resize-btn, :scope > .blk-needs-data-badge, :scope > .blk-needs-data-btn');
+  var controls=blk.querySelectorAll(':scope > .blk-toolbar, :scope > .rsz');
   var prevDisplay=[];
   controls.forEach(function(c){ prevDisplay.push(c.style.display); c.style.display='none'; });
   var ok = blk.scrollWidth<=blk.clientWidth+1 && blk.scrollHeight<=blk.clientHeight+1;
@@ -6718,11 +6739,18 @@ function initBlockTools(){
       blk._moveOv=moveOv;
     }
 
-    /* ÁTMÉRETEZÉS gomb — jobb felső sarok; CSAK MOBILON látszik (PC-n a kijelölés után
-       megjelenő .rsz fogantyúkkal húzva méretezhető, nincs szükség a mobil-stílusú
-       alsó sávra) */
-    var resizeBtn=blk.querySelector(':scope > .blk-resize-btn');
-    if(!resizeBtn){resizeBtn=document.createElement('button');resizeBtn.type='button';resizeBtn.className='blk-resize-btn';resizeBtn.title='Átméretezés';resizeBtn.innerHTML='<span class="ic">⊡</span><span class="lbl">Méret</span>';blk.appendChild(resizeBtn);}
+    /* ÁTMÉRETEZÉS ("Méret") gomb: a rendes rovatoknál MOBILON látszik (PC-n a kijelölés után
+       megjelenő .rsz fogantyúkkal húzva méretezhető, nincs szükség a mobil-stílusú alsó
+       sávra) — a negyed/fél/egész oldalas ("data-size-pref") rovatoknál viszont PC-n IS
+       megjelenik, mert azoknál nincs húzásos fogantyú (a doboz mérete fix, ld. blkDirs=[]
+       lejjebb): ez az egyetlen módja, hogy a bennük lévő tartalom betűméretét kézzel,
+       +/- gombbal finomítani lehessen anélkül, hogy a doboz mérete megváltozna (ld.
+       .blk[data-size-pref]{overflow:hidden} + a doboz pixelben rögzített magassága). A
+       toolbar-ba kerül (nem közvetlenül a blk-ba), hogy a syncBtnScale ugyanúgy fix méretűre
+       kényszerítse, mint a többi sarok-gombot, és a flex-wrap miatt keskeny rovatoknál se
+       lógjon ki. */
+    var resizeBtn=toolbar.querySelector(':scope > .blk-resize-btn');
+    if(!resizeBtn){resizeBtn=document.createElement('button');resizeBtn.type='button';resizeBtn.className='blk-resize-btn';resizeBtn.title='Méret';resizeBtn.innerHTML='<span class="ic">⊡</span><span class="lbl">Méret</span>';toolbar.appendChild(resizeBtn);}
     resizeBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
 
     /* ÁTMÉRETEZÉS D-pad: − / + / ✓ — body-hoz csatolva, fix a képernyő alján */
@@ -6749,7 +6777,7 @@ function initBlockTools(){
       sBar.appendChild(szDone);
       document.body.appendChild(sBar);
       blk._sizeBar=sBar;
-      resizeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(_mqMobile.matches)sBar.classList.toggle('active');});
+      resizeBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();sBar.classList.toggle('active');});
     }
 
     /* Drag fogantyúk: PC-n mind a 8, mobilon csak az oldalak (n/s/e/w) — sarkok nem.
@@ -6816,24 +6844,14 @@ function initBlockTools(){
     /* Admin "Részletes szerkesztés" (sablon-építés) módban: néhány rovat tartalma eleve NEM
        tölthető ki érdemben egy generikus sablonban (pl. a "Számokban a szerelmünk" konkrét
        számai, a násznép/tanúk NEVEI, a szingli vendégek névsora) — ezeket erős piros kerettel
-       és egy nagy, jól látható "Adatok megadása" gombbal jelöljük, hogy az admin ne felejtse
-       el/hagyja ki véletlenül üresen ezeket a sablon mentésekor. Kizárólag ebben a módban fut —
-       a valódi vásárlói szerkesztőt nem zavarja. */
-    if(window._adminTemplateEditPages && UJSAG_ADMIN_TPL_NEEDS_DATA_IDS.indexOf(blk.getAttribute('data-bid'))>=0){
-      blk.classList.add('blk-needs-data');
-      if(!blk.querySelector(':scope > .blk-needs-data-badge')){
-        var ndBadge=document.createElement('div'); ndBadge.className='blk-needs-data-badge'; ndBadge.textContent='⚠ '+L('Adatot igényel','Needs data');
-        blk.appendChild(ndBadge);
-      }
-      var ndTarget=editTarget; /* ugyanaz a cél, amit a kis "✎ Adatok" gomb is használ */
-      if(ndTarget && !blk.querySelector(':scope > .blk-needs-data-btn')){
-        var ndBtn=document.createElement('button'); ndBtn.type='button'; ndBtn.className='blk-needs-data-btn';
-        ndBtn.textContent='✎ '+L('Adatok megadása','Enter data');
-        ndBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
-        ndBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(ndTarget.kind,ndTarget.key);});
-        blk.appendChild(ndBtn);
-      }
-    }
+       jelöljük, hogy az admin ne felejtse el/hagyja ki véletlenül üresen ezeket a sablon
+       mentésekor. A jelölésnek NINCS külön, nagy gombja/felirata — a rovat sarkában amúgy is
+       ott lévő kis "✎ Adatok" toolbar-gomb (ld. lejjebb) egyszerűen piros színt kap, így fix
+       méretű marad (nem nő a rovat zoom-jával) és a rovat SZÉLÉN (nem a közepén, a szöveget
+       eltakarva) helyezkedik el. Kizárólag admin sablon-építő módban fut — a valódi vásárlói
+       szerkesztőt nem zavarja. */
+    var needsDataFlag = window._adminTemplateEditPages && UJSAG_ADMIN_TPL_NEEDS_DATA_IDS.indexOf(blk.getAttribute('data-bid'))>=0;
+    blk.classList.toggle('blk-needs-data', !!needsDataFlag);
 
     /* PC-n a rovat tartalma zoom-mal kicsinyíthető/nagyítható (ld. clampBlockZoom) — mivel a
        CSS zoom a rovat MINDEN gyerekét (a gombokat és a .rsz fogantyúkat is) arányosan
