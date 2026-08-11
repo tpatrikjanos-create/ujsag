@@ -2909,7 +2909,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.37';
+  var APP_VERSION='6.38';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4050,6 +4050,10 @@ function seedUjsagDefaults(){
   seedVal('f_ismerkedes',L('Egy közös barát mutatott be minket egymásnak — és onnantól nem volt visszaút…','A mutual friend introduced us — and there was no turning back from there…'));
   seedVal('f_lanykeres',L('A naplementében térdre ereszkedett, és feltette élete legfontosabb kérdését…','He got down on one knee at sunset and asked the most important question of his life…'));
   seedVal('f_legelsokep',L('Ezen a képen még nem is sejtettük, mi lesz ebből…','In this photo, we had no idea what this would become…'));
+  seedVal('f_stat1','1825');
+  seedVal('f_stat_live','730');
+  seedVal('f_stat3','180');
+  seedVal('f_stat4','120');
   seedVal('f_s1',L('« ide jön a dátum, hely »','« date, place goes here »'));
   seedVal('f_s2',L('« ide jön a dátum, hely »','« date, place goes here »'));
   seedVal('f_s3',L('« ide jön a dátum, hely »','« date, place goes here »'));
@@ -4259,7 +4263,7 @@ function B_menetrend(d){
   return '<div class="blk"><div class="col-head">'+ico('i-clock')+' '+L('Menetrend','Schedule')+'</div><div class="flow">'+steps+'</div></div>';
 }
 function B_etlap(d){
-  var courses=[[L('Vendégvárás / előétel','Welcome drink / starter'),val('f_m_app')],[L('Leves','Soup'),val('f_m_soup')],[L('Főétel','Main course'),val('f_m_main')],[L('Éjféli fogás','Midnight course'),val('f_m_night')],[L('Desszert','Dessert'),val('f_m_dessert')]];
+  var courses=[[L('Vendégvárás','Welcome drink'),val('f_m_app')],[L('Leves','Soup'),val('f_m_soup')],[L('Főétel','Main course'),val('f_m_main')],[L('Éjféli fogás','Midnight course'),val('f_m_night')],[L('Desszert','Dessert'),val('f_m_dessert')]];
   var menu='';courses.forEach(function(c){if(!c[1])return;var lines=c[1].split('\n').filter(function(x){return x.trim();});lines.forEach(function(ln,ix){menu+='<div class="row"><span class="course">'+(ix===0?esc(c[0]):'')+'</span><span class="dish">'+esc(ln.trim())+'</span></div>';});});
   var drinkItems='';val('f_itallap').split('\n').forEach(function(l){l=l.trim();if(!l)return;var idx=l.indexOf(':');var c=idx>=0?l.slice(0,idx).trim():'';var dd=idx>=0?l.slice(idx+1).trim():l;drinkItems+='<div class="row"><span class="course">'+esc(c)+'</span><span class="dish">'+esc(dd)+'</span></div>';});
   if(!menu&&!drinkItems)return '';
