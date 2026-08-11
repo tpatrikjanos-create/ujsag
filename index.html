@@ -2869,7 +2869,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.26';
+  var APP_VERSION='6.27';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3720,9 +3720,20 @@ var UJSAG_TEMPLATES={4:UJSAG_TEMPLATE_4,8:UJSAG_TEMPLATE_8,12:UJSAG_TEMPLATE_12,
    elrendezett (mozgatott/átméretezett) rovatokat rögzít sablonként. A blockfx ugyanazt a
    szerkezetet használja, mint a projekt-mentés (gatherProjectState) blockfx-e. */
 function normalizeTemplateEntry(entry){
-  if(Array.isArray(entry))return {order:entry.slice(),blockfx:{}};
-  if(entry&&typeof entry==='object')return {order:(entry.order||[]).slice(),blockfx:entry.blockfx||{}};
-  return {order:[],blockfx:{}};
+  var norm;
+  if(Array.isArray(entry))norm={order:entry.slice(),blockfx:{}};
+  else if(entry&&typeof entry==='object')norm={order:(entry.order||[]).slice(),blockfx:entry.blockfx||{}};
+  else norm={order:[],blockfx:{}};
+  /* migráció: az "itallap" egy korábban (a mostani ujsag-verzió előtt) mentett admin sablonban
+     még önálló rovat-azonosítóként szerepelhetett, mielőtt visszaolvadt volna az étlapba
+     (ld. B_etlap) — ma már nem létező blokk-azonosító, ezért ki kell szűrni, különben
+     "szellem" bejegyzésként jelenne meg a listában (törhetetlen, cím nélküli sor), és a
+     rovat-sorrend illesztését (ORDER-splice a buildFlowUjsag-ban) is megzavarná, ami a
+     ténylegesen létező negyed-oldalas rovatok (pl. Menetrend+Étlap) párba állítását is
+     tönkretehette. */
+  norm.order=norm.order.filter(function(id){ return id!=='itallap'; });
+  if(norm.blockfx&&norm.blockfx.itallap)delete norm.blockfx.itallap;
+  return norm;
 }
 function applyBlockfxMap(map){
   if(!map)return;
@@ -5025,37 +5036,52 @@ function buildPagePlan(flow,usable,GAP){
 /* Az "utolsó lapos" csoport (TAIL_IDS) speciális eset: ez a csoport MINDIG a lap 4 negyedébe
    kellene, hogy férjen (1 lap = 1 sor / rovat), DE ha ennél több rovat van bekapcsolva, a lap
    ALULRÓL FELFELE "nyolcadolható" — az utolsó (legalul lévő) rovatokat párba állítjuk, egymás
-   mellé, fele-fele szélességben, hogy egy sorba férjen kettő belőlük egy negyed helyett. Az
-   étlap+itallap saját (mindig meglévő) egymás-melletti párja NEM vehet részt ebben az új
-   párosításban (az saját magában már egy lezárt, 2-oszlopos "sor"). Ha még a maximális
-   párba-állítással sem férne el mind egyetlen lapon, visszaesünk a rendes, több-lapos tervre. */
+   mellé, fele-fele szélességben, hogy egy sorba férjen kettő belőlük egy negyed helyett. Ha még
+   a maximális párba-állítással sem férne el mind egyetlen lapon, visszaesünk a rendes, több-
+   lapos tervre. */
 function buildTailPagePlan(tailFlow,usable,GAP){
-  var standard=buildPagePlan(tailFlow,usable,GAP);
-  if(!tailFlow.length||standard.pagesUsed<=1)return standard;
+  if(!tailFlow.length)return {pages:[],pagesUsed:0};
+  tailFlow.forEach(function(item){ delete item.tailPair; });
   var units=buildUnits(tailFlow);
-  var n=units.length;
   var pairableIdxs=[];
-  units.forEach(function(u,i){ if(u.blocks.length===1)pairableIdxs.push(i); });
-  var maxPairs=Math.floor(pairableIdxs.length/2);
-  var pairsNeeded=Math.max(0,n-4);
-  var pairsToUse=Math.min(pairsNeeded,maxPairs);
-  var rowsNeeded=n-pairsToUse;
-  if(rowsNeeded>4)return standard; /* még a nyolcadolással sem fér el 1 lapon — marad a régi, több-lapos terv */
-  var idxsToPair=pairableIdxs.slice(pairableIdxs.length-pairsToUse*2); /* az utolsó (legalulabbi) párosítható egységek */
-  var pairSet={}; idxsToPair.forEach(function(i){pairSet[i]=true;});
-  var flat=[]; var i=0;
+  units.forEach(function(u,i){ if(u.blocks.length===1 && u.blocks[0].sizePref==='quarter')pairableIdxs.push(i); });
+  /* MINDIG párba állítjuk az egymást KÖVETŐ negyed-egységeket — nem csak akkor, ha ez
+     szükséges ahhoz, hogy a farok-csoport 1 lapra férjen (mint a korábbi, "nyolcadolás" nevű
+     szűk-esetű logika tette). Ez teszi kiszámíthatóvá/stabillá a negyed-rovatok (pl. Menetrend,
+     Étlap, Férj/feleség itala) szélességét: ugyanaz az elrendezés (fele-fele oszlopos pár) jön
+     ki akkor is, amikor az admin a sablont a Sablonszerkesztőben összeállítja, és akkor is,
+     amikor a vásárló a saját adataival generálja az újságot — függetlenül attól, hogy mennyi
+     egyéb tartalom van jelen. Egy párra nem talált (páratlan) egység egyedül, teljes
+     lapszélességben kapja meg a saját sávját. */
+  var pairSet={};
+  for(var pi=0; pi+1<pairableIdxs.length; pi+=2){
+    if(pairableIdxs[pi+1]===pairableIdxs[pi]+1){
+      pairSet[pairableIdxs[pi]]=true;
+      pairSet[pairableIdxs[pi]+1]=true;
+    }
+  }
+  var rows=[]; var i=0;
   while(i<units.length){
     if(pairSet[i]&&pairSet[i+1]){
       var a=units[i].blocks[0], b=units[i+1].blocks[0];
       a.tailPair='start'; b.tailPair='end';
-      flat.push(a); flat.push(b);
+      rows.push([a,b]);
       i+=2;
     } else {
-      units[i].blocks.forEach(function(bl){flat.push(bl);});
+      rows.push(units[i].blocks.slice());
       i++;
     }
   }
-  return {pages:[flat], pagesUsed:1};
+  /* egy lapon legfeljebb 4 sávnyi (negyed-egységnyi) hely van — a soroknál nem számít, hogy
+     párban (2 rovat) vagy egyedül (1 rovat) foglalják-e el a sávot, mindkettő 1 sávot foglal. */
+  var pages=[]; var curPage=[]; var curRows=0;
+  rows.forEach(function(row){
+    if(curRows>=4){ pages.push(curPage); curPage=[]; curRows=0; }
+    row.forEach(function(bl){ curPage.push(bl); });
+    curRows++;
+  });
+  if(curPage.length)pages.push(curPage);
+  return {pages:pages, pagesUsed:pages.length};
 }
 /* közös terv-számítás — az updateFit (fitbar szövege) ÉS az élő split-screen előnézet
    (renderLivePreview) is ugyanerre az egyetlen, egyszeri mérésre/tervre épül, nehogy minden
