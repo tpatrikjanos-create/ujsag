@@ -2909,7 +2909,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.36';
+  var APP_VERSION='6.37';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5930,7 +5930,7 @@ var UJSAG_CORE_EDIT_GROUPS=[
    admin "Részletes szerkesztés" módjában külön, erős piros kerettel és egy, a lap mellé
    kirakott piros "Adatok megadása" gombbal jelöljük őket (ld. initBlockTools "blk-needs-data"
    ága + positionNeedsDataButtons). */
-var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','sztori','csapat'];
+var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','sztori','csapat','menetrend','etlap'];
 function coreGroupLabel(key){
   var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
   var card=document.querySelector(g.selector); if(!card)return key;
