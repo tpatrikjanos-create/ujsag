@@ -2869,7 +2869,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.29';
+  var APP_VERSION='6.30';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4946,15 +4946,19 @@ function buildUnits(flow){ /* egymást követő párba-rendezhető rovatokat egy
   return units;
 }
 /* A rovatok SZIGORÚ, felhasználó által megadott SORRENDBEN kerülnek a lapokra, felülről lefelé,
-   lapról lapra haladva — nincs átrendezés/arányos elosztás, és KÉT ROVAT SOHA nem kerül egymás
-   MELLÉ (mindig csak egymás ALÁ, teljes lapszélességben). Az "egész oldal" rovat a soron
-   következő SAJÁT, kizárólagos lapot kapja (előtte lezárva bármit, ami "normál" tartalomból
-   éppen gyűlt). A "fél oldal" (2 egység) és "negyed oldal" (1 egység) rovatok egy közös,
-   4-egységes lap-költségvetésbe töltődnek, felülről lefelé — ha egy újabb rovat már nem férne
-   bele a nyitott lap maradék egységeibe, egy díszítő idézet/ornamens tölti ki a maradékot, és
-   egy ÚJ lap nyílik. A "normál" (méret nélküli) rovatok köztes szegmensekben gyűlnek össze, és
-   a régi, egymás MELLETTI párosítás (ld. HALFP_IDS/buildUnits) ezeken a szegmenseken belül
-   változatlanul működik. */
+   lapról lapra haladva — nincs átrendezés/arányos elosztás, és rovatok ÁLTALÁBAN nem kerülnek
+   egymás MELLÉ (mindig csak egymás ALÁ, teljes lapszélességben) — EGYETLEN kivétellel: a
+   Menetrend és az Étlap (itallappal) tartalma jellemzően keskeny (rövid sorok), ezért ha
+   közvetlenül egymás után következnek, egy közös, fele-fele szélességű sorba kerülnek (ld.
+   MENETREND_ETLAP_PAIR_IDS) — együtt pontosan annyi magasságot foglalnak, mint egy önálló "fél
+   oldal" rovat. Az "egész oldal" rovat a soron következő SAJÁT, kizárólagos lapot kapja (előtte
+   lezárva bármit, ami "normál" tartalomból éppen gyűlt). A "fél oldal" (2 egység) és "negyed
+   oldal" (1 egység) rovatok egy közös, 4-egységes lap-költségvetésbe töltődnek, felülről lefelé
+   — ha egy újabb rovat már nem férne bele a nyitott lap maradék egységeibe, egy díszítő idézet/
+   ornamens tölti ki a maradékot, és egy ÚJ lap nyílik. A "normál" (méret nélküli) rovatok köztes
+   szegmensekben gyűlnek össze, és a régi, egymás MELLETTI párosítás (ld. HALFP_IDS/buildUnits)
+   ezeken a szegmenseken belül változatlanul működik. */
+var MENETREND_ETLAP_PAIR_IDS=['menetrend','etlap'];
 function buildPagePlan(flow,usable,GAP){
   var pages=[]; // pages[0] = az első TARTALMI lap (a borító külön kezelve, nem itt)
   var curPage=0;
@@ -4989,11 +4993,36 @@ function buildPagePlan(flow,usable,GAP){
     if(openPage.unitsLeft>=1){ pages[openPage.pageIndex].push(fillerItem('quarter',true)); openPage.unitsLeft-=1; }
     openPage=null;
   }
-  flow.forEach(function(item){
+  var i=0;
+  while(i<flow.length){
+    var item=flow[i];
+    var next=flow[i+1];
+    var isMenetrendEtlapPair = item.sizePref==='quarter' && next && next.sizePref==='quarter'
+      && MENETREND_ETLAP_PAIR_IDS.indexOf(item.id)>=0 && MENETREND_ETLAP_PAIR_IDS.indexOf(next.id)>=0
+      && item.id!==next.id;
+    if(isMenetrendEtlapPair){
+      item.sidePair='start'; next.sidePair='end';
+      var pu=2; /* a pár együtt pontosan egy "fél oldal" magasságát foglalja */
+      if(openPage && openPage.unitsLeft>=pu){
+        pages[openPage.pageIndex].push(item); pages[openPage.pageIndex].push(next);
+        openPage.unitsLeft-=pu;
+        if(openPage.unitsLeft<=0)openPage=null;
+      } else {
+        closeOpenPageWithFiller();
+        flushNormalBuf();
+        ensurePage(curPage);
+        pages[curPage]=[item,next];
+        var pleft=4-pu;
+        openPage = pleft>0 ? {pageIndex:curPage,unitsLeft:pleft} : null;
+        curPage++;
+      }
+      i+=2;
+      continue;
+    }
     if(item.sizePref==='full'){
       /* az "egész oldal" rovat saját, önálló lapot kap, és ez NEM zárja le a félig kész,
          nyitott lapot (openPage) — az csak akkor kap díszítő pótlást, ha a sorrend végéig
-         valóban nem érkezik hozzá illő folytatás (ld. a forEach utáni lezárást). */
+         valóban nem érkezik hozzá illő folytatás (ld. a ciklus utáni lezárást). */
       flushNormalBuf();
       ensurePage(curPage);
       pages[curPage]=[item];
@@ -5016,16 +5045,17 @@ function buildPagePlan(flow,usable,GAP){
     } else {
       normalBuf.push(item);
     }
-  });
+    i++;
+  }
   flushNormalBuf();
   closeOpenPageWithFiller();
   return {pages:pages, pagesUsed:pages.length};
 }
-/* Az "utolsó lapos" csoport (TAIL_IDS) speciális esete korábban külön "nyolcadolási" (egymás
-   mellé, fele-fele szélességben párosító) logikát futtatott — ez megszűnt: két rovat SOHA nem
-   kerül egymás mellé, a farok-csoport rovatai is a normál buildPagePlan-en mennek át, egymás
-   ALATT, teljes lapszélességben. A függvény neve/aláírása megmaradt (hívási helyek egyszerűsége
-   miatt), de ma már csak egy vékony burkoló buildPagePlan körül. */
+/* Az "utolsó lapos" csoport (TAIL_IDS) speciális esete korábban külön "nyolcadolási" logikát
+   futtatott — ez megszűnt: a farok-csoport rovatai is a normál buildPagePlan-en mennek át
+   (a Menetrend+Étlap kivételével — ld. fentebb — egymás ALATT, teljes lapszélességben). A
+   függvény neve/aláírása megmaradt (hívási helyek egyszerűsége miatt), de ma már csak egy
+   vékony burkoló buildPagePlan körül. */
 function buildTailPagePlan(tailFlow,usable,GAP){
   return buildPagePlan(tailFlow,usable,GAP);
 }
@@ -5230,13 +5260,16 @@ function generate(){
            csak a TÉNYLEGESEN a DOM-ba beillesztett, kirenderelt rovaton mérhető meg. */
         bh=bh.replace('<div class="blk','<div data-bid="'+b.id+'"'+zoomAttr+' class="blk');
       }
-      /* KÉT ROVAT SOHA nem kerül egymás mellé — mindegyik a teljes lapszélességben, önálló
-         sorként jelenik meg (ld. buildPagePlan). */
-      parts.push({id:b.id,html:bh,h:effH(b,usable)});
+      /* Rovatok ÁLTALÁBAN nem kerülnek egymás mellé — EGYETLEN kivétellel: a Menetrend+Étlap
+         párt (ld. MENETREND_ETLAP_PAIR_IDS/buildPagePlan) a "sidePair" jelző mutatja. */
+      parts.push({id:b.id,html:bh,sidePair:b.sidePair,h:effH(b,usable)});
     });
     var sumH=0, rows=0;
     for(var qi=0;qi<parts.length;qi++){
-      html+=parts[qi].html; sumH+=parts[qi].h;
+      if(parts[qi].sidePair==='start' && parts[qi+1] && parts[qi+1].sidePair==='end'){
+        html+='<div class="duo-row tail-pair-row">'+parts[qi].html+parts[qi+1].html+'</div>';
+        sumH+=Math.max(parts[qi].h,parts[qi+1].h); qi++;
+      } else { html+=parts[qi].html; sumH+=parts[qi].h; }
       rows++;
     }
     var leftover=usable - sumH - GAP*(rows-1);
@@ -5283,19 +5316,37 @@ function generate(){
   function sizePrefUnits(pref){ return pref==='full'?4:pref==='half'?2:pref==='quarter'?1:0; }
   document.querySelectorAll('#stage .pbody').forEach(function(pb){
     var pRect=pb.getBoundingClientRect();
-    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && c.matches('.blk[data-size-pref]');});
+    /* a .tail-pair-row (Menetrend+Étlap pár, ld. buildPagePlan) EGY sávnyi HELYET (a szülő
+       .pbody direkt gyereke), de HÁROMFÉLÉNEK megfelelő MAGASSÁGOT ("fél oldal" = 2 egység)
+       foglal — a benne lévő KÉT rovat osztozik ezen a magasságon, fele-fele szélességben. */
+    var kids=Array.prototype.filter.call(pb.children,function(c){return c.matches && (c.matches('.blk[data-size-pref]')||c.matches('.tail-pair-row'));});
     if(!kids.length)return;
+    function unitsOf(k){ return k.matches('.tail-pair-row')?2:sizePrefUnits(k.getAttribute('data-size-pref')); }
     var totalUnits=0;
-    kids.forEach(function(k){ totalUnits+=sizePrefUnits(k.getAttribute('data-size-pref')); });
+    kids.forEach(function(k){ totalUnits+=unitsOf(k); });
     if(!totalUnits)return;
     var availH=pRect.height - GAP*(kids.length-1);
     var cumUnits=0;
     kids.forEach(function(k,idx){
-      var u=sizePrefUnits(k.getAttribute('data-size-pref'));
+      var u=unitsOf(k);
       var top=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
       cumUnits+=u;
       var bottom=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
-      fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+      if(k.matches('.tail-pair-row')){
+        var pairKids=Array.prototype.filter.call(k.children,function(c){return c.classList.contains('blk');});
+        /* a doboz bal/jobb szélét a gyerek TÉNYLEGES flex-kiosztott szélessége adja — ezt csak
+           akkor mérhetjük megbízhatóan, ha MINDKÉT testvér előbb egy semleges (zoom:1) alapállásba
+           kerül; különben az egyik gyerek még a generáláskori ELŐZETES (gyakran téves) zoom-
+           becslésével torzítaná a flex-kiosztást, és a másik gyereknek egy hibás, e pillanatnyi
+           torzításból számolt dobozt adnánk. */
+        pairKids.forEach(function(child){ child.style.zoom=1; });
+        pairKids.forEach(function(child){
+          var r=child.getBoundingClientRect();
+          fitBlockToBox(child,{left:r.left,right:r.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+        });
+      } else {
+        fitBlockToBox(k,{left:pRect.left,right:pRect.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
+      }
     });
   });
   /* a "normál" (nem fél/egész oldalas) rovatok alapértelmezett generálási mérete a korábbi 1.0
