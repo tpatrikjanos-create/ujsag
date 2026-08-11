@@ -625,6 +625,12 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .flow .step::before{content:"";position:absolute;left:-13px;top:5px;width:6px;height:6px;border-radius:50%;background:var(--ink);}
 .flow .step b{font-family:'Old Standard TT',serif;}
 .flow .ico{width:13px;height:13px;flex-shrink:0;}
+/* az étlap/itallap sorok (fogás + jobbra igazított név) alapból NEM kaptak semmilyen belső
+   margót a doboz szélétől — keskeny (pl. a Menetrend+Étlap párban félszélességű) dobozban ez
+   azt eredményezte, hogy a jobbra igazított fogás-szöveg szinte pixel pontosan a doboz/piros
+   keret szélén futott, olvashatatlanul "levágottnak" tűnve. Egy kis vízszintes belső margó
+   biztosítja, hogy mindig maradjon egy kevés levegő a szöveg és a doboz széle között. */
+.menu{padding:0 1.5mm;}
 .menu .row{display:flex;justify-content:space-between;gap:6px;border-bottom:.5px dotted #999;padding:3px 0;}
 .menu .row:last-child{border:none;}
 .menu .course{font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
@@ -940,19 +946,9 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
 .blk-ai-btn{z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .blk:hover .blk-toolbar>.blk-ai-btn,.blk.bsel .blk-toolbar>.blk-ai-btn{opacity:1;}
-/* Admin "Részletes szerkesztés" (sablon-építés) mód: erős piros keret azokon a rovatokon,
-   amiknek a tartalma generikus sablonban nem tölthető ki érdemben (ld.
-   UJSAG_ADMIN_TPL_NEEDS_DATA_IDS) — inset box-shadow-t használunk border helyett, hogy a
-   .blk overflow:hidden-je se vágja le semelyik oldalon. */
-.blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
-@media print{.blk-needs-data{box-shadow:none!important;}}
-/* a Menetrend+Étlap pár EGY rovatként viselkedik (ld. .pair-divider) — admin sablon-építő
-   módban emiatt is EGY, a teljes párt körbefogó piros kerettel jelöljük, ha mindkét fele
-   adatot igényel, nem két külön (a köztük lévő vékony vonal miatt "eltörő") insettel. */
-.tail-pair-row.pair-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
-.tail-pair-row.pair-needs-data .pair-col>.blk-needs-data{box-shadow:none;}
-@media print{.tail-pair-row.pair-needs-data{box-shadow:none!important;}}
-/* "Adatok megadása" piros gomb — NEM a rovaton belül (ne takarja el a tartalmat), hanem a
+/* "Szerkesztés" piros gomb — MINDEN admin sablon-építő módban szerkeszthető rovat mellett
+   megjelenik (nem csak néhány kiválasztottnál — a korábbi piros keretes kiemelés emiatt
+   feleslegessé vált, törölve). NEM a rovaton belül van (ne takarja el a tartalmat), hanem a
    LAPON KÍVÜL, a rovat bal oldalán, annak függőleges közepéhez igazítva lebeg (ld.
    positionNeedsDataButtons()). position:fixed + a viewporthoz mért koordináták kellenek, mert
    a .page/.sheet-wrap overflow:hidden-je egy a lapon belüli abszolút pozicionált elemet
@@ -961,7 +957,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    — jelenleg egyik sem, tehát biztonságos). A transform:translate(-100%,-50%) miatt elég a
    .style.left/.style.top-t a lap bal szélére / a rovat függőleges közepére állítani, a gomb
    saját magát tolja el balra és középre. */
-.needs-data-side-btn{position:fixed;z-index:9400;transform:translate(-100%,-50%);background:linear-gradient(120deg,#c92924,#e0342f);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:10.5px;letter-spacing:.02em;padding:8px 13px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(224,52,47,.45);white-space:nowrap;margin-left:-10px;}
+.needs-data-side-btn{position:fixed;z-index:9400;transform:translate(-100%,-50%);background:linear-gradient(120deg,#c92924,#e0342f);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:9.5px;letter-spacing:.02em;padding:6px 11px;border-radius:7px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(224,52,47,.45);white-space:nowrap;margin-left:-10px;}
 .needs-data-side-btn:hover{background:linear-gradient(120deg,#b32420,#c92924);}
 @media print{.needs-data-side-btn{display:none!important;}}
 /* csak akkor van értelme "a lap mellé" tenni, ha ténylegesen van hely ott — keskeny/mobil
@@ -2909,7 +2905,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.39';
+  var APP_VERSION='6.40';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5939,12 +5935,6 @@ var UJSAG_CORE_EDIT_GROUPS=[
   {key:'etlap',selector:'[data-editgroup="etlap"]',blks:['etlap'],fns:{etlap:function(d){return B_etlap(d);}}},
   {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
 ];
-/* Ezeknek a rovatoknak a tartalma egy generikus SABLONBAN eleve nem tölthető ki érdemben —
-   konkrét, pár-specifikus adat kell hozzájuk (számok, névsorok, konkrét történet) —, ezért az
-   admin "Részletes szerkesztés" módjában külön, erős piros kerettel és egy, a lap mellé
-   kirakott piros "Adatok megadása" gombbal jelöljük őket (ld. initBlockTools "blk-needs-data"
-   ága + positionNeedsDataButtons). */
-var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','sztori','csapat','menetrend','etlap'];
 function coreGroupLabel(key){
   var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
   var card=document.querySelector(g.selector); if(!card)return key;
@@ -6153,10 +6143,27 @@ function insertBlockAtBestSpot(blkId,html){
 function replaceBlockInPlace(existing,blkId,html){
   var tmp=document.createElement('div'); tmp.innerHTML=html.replace('<div class="blk','<div data-bid="'+blkId+'" class="blk');
   var newBlk=tmp.firstElementChild;
-  /* a felhasználó által kézzel átméretezett/nagyított rovat mérete maradjon meg szerkesztés után is */
-  if(existing.style.zoom)newBlk.style.zoom=existing.style.zoom;
-  if(existing.hasAttribute('data-size-pref'))newBlk.setAttribute('data-size-pref',existing.getAttribute('data-size-pref'));
+  var hasSizePref=existing.hasAttribute('data-size-pref');
+  var refitBox=null;
+  if(hasSizePref){
+    /* A DOBOZ mérete fix (negyed/fél/egész oldal), csak a TARTALOM változott — a szerkesztés
+       előtti zoom-ot egyszerűen átvéve a régi (esetleg egészen más terjedelmű) tartalomhoz illő
+       méret maradna meg, ami az ÚJ szöveggel vagy túlfeszítené a dobozt (kilógó/levágott
+       szöveg), vagy alulnagyítaná (feleslegesen kicsi betű). Ehelyett újramérjük a
+       rendelkezésre álló dobozt — pár esetén a zoom-mentes ".pair-col"-ét (mert az a valódi,
+       fix méretű doboz), különben magának a rovatnak a szerkesztés előtti helyét/méretét —, és
+       fitBlockToBox-szal a FRISS tartalomhoz igazítjuk, ugyanúgy, ahogy generáláskor történne. */
+    var pairCol=existing.closest('.pair-col');
+    var r=(pairCol||existing).getBoundingClientRect();
+    refitBox={left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+    newBlk.setAttribute('data-size-pref',existing.getAttribute('data-size-pref'));
+  } else if(existing.style.zoom){
+    /* a felhasználó által kézzel átméretezett/nagyított (nem size-pref) rovat mérete maradjon
+       meg szerkesztés után is */
+    newBlk.style.zoom=existing.style.zoom;
+  }
   existing.replaceWith(newBlk);
+  if(refitBox && typeof fitBlockToBox==='function')fitBlockToBox(newBlk,refitBox,SIZEPREF_FIT_CAP);
   return newBlk;
 }
 function upsertBlock(blkId,html){
@@ -6983,20 +6990,16 @@ function initBlockTools(){
       aiBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openAiTippBlockChooser(aiTarget);});
     }
 
-    /* Admin "Részletes szerkesztés" (sablon-építés) módban: néhány rovat tartalma eleve NEM
-       tölthető ki érdemben egy generikus sablonban (pl. a "Számokban a szerelmünk" konkrét
-       számai, a násznép/tanúk NEVEI, a szingli vendégek névsora) — ezeket erős piros kerettel
-       jelöljük, hogy az admin ne felejtse el/hagyja ki véletlenül üresen ezeket a sablon
-       mentésekor. A kerethez egy piros "Adatok megadása" gomb is tartozik — ez SZÁNDÉKOSAN NEM
-       a rovaton belül van (ne takarja el a tartalmat), hanem a LAPON KÍVÜL, a rovat bal
-       oldalán lebeg (ld. positionNeedsDataButtons() + .needs-data-side-btn CSS). Kizárólag
-       admin sablon-építő módban fut — a valódi vásárlói szerkesztőt nem zavarja. */
-    var needsDataFlag = window._adminTemplateEditPages && UJSAG_ADMIN_TPL_NEEDS_DATA_IDS.indexOf(blk.getAttribute('data-bid'))>=0;
-    blk.classList.toggle('blk-needs-data', !!needsDataFlag);
-    if(needsDataFlag && editTarget){
+    /* Admin "Részletes szerkesztés" (sablon-építés) módban MINDEN szerkeszthető adatú rovat
+       mellé kerül egy piros "Szerkesztés" gomb — ez SZÁNDÉKOSAN NEM a rovaton belül van (ne
+       takarja el a tartalmat), hanem a LAPON KÍVÜL, a rovat bal oldalán lebeg (ld.
+       positionNeedsDataButtons() + .needs-data-side-btn CSS). Kizárólag admin sablon-építő
+       módban fut — a valódi vásárlói szerkesztőt nem zavarja (ott a rovat sarkában lévő kis
+       "✎ Adatok" toolbar-gomb az egyetlen belépési pont, ld. feljebb). */
+    if(window._adminTemplateEditPages && editTarget){
       if(!blk._needsDataBtn){
         var ndBtn=document.createElement('button'); ndBtn.type='button'; ndBtn.className='needs-data-side-btn';
-        ndBtn.textContent='✎ '+L('Adatok megadása','Enter data');
+        ndBtn.textContent='✎ '+L('Szerkesztés','Edit');
         ndBtn._target=blk;
         ndBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
         ndBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openSingleSectionEditor(editTarget.kind,editTarget.key);});
@@ -7037,15 +7040,6 @@ function initBlockTools(){
     });
   });
 
-  /* Menetrend+Étlap pár (ld. .pair-divider): ha admin sablon-építő módban MINDKÉT fele piros
-     kiemelést kapott (ld. blk-needs-data fentebb), a párt körbefogó .tail-pair-row is megkapja
-     ugyanezt — EGY, a teljes szekciót körbefogó kerettel, nem két külön, a köztük lévő vékony
-     vonal miatt megszakadó insettel (ld. CSS). */
-  document.querySelectorAll('#stage .tail-pair-row').forEach(function(row){
-    var kids=row.querySelectorAll(':scope > .pair-col > .blk[data-bid]');
-    var allNeed=kids.length>0 && Array.prototype.every.call(kids,function(k){return k.classList.contains('blk-needs-data');});
-    row.classList.toggle('pair-needs-data',allNeed);
-  });
   positionNeedsDataButtons();
   if(!window._needsDataScrollBound){
     window._needsDataScrollBound=true;
