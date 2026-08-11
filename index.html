@@ -2869,7 +2869,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.28';
+  var APP_VERSION='6.29';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3745,6 +3745,18 @@ function applyBlockfxMap(map){
   Object.keys(map).forEach(function(bid){
     var blk=document.querySelector('#stage .blk[data-bid="'+bid+'"]'); if(!blk)return;
     var f=map[bid];
+    /* a negyed/fél/egész oldalas ("data-size-pref") rovatok mérete (zoom/szélesség/magasság)
+       MINDIG automatikusan, a generálás után lefutó fitBlockToBox-lépés által van beállítva —
+       nincs többé kézi átméretezés ezeknél (ld. initBlockTools: blkDirs=[] size-pref blokkokon).
+       Egy RÉGEBBI (a "két rovat egymás mellett" korszakból származó) mentett sablon blockfx-e
+       még tartalmazhat egy akkor manuálisan beállított, keskeny zoom/width értéket — ha ezt itt
+       alkalmaznánk, felülírná (és el is rontaná, mert a mai, mindig teljes-szélességű dobozhoz
+       képest rossz méretű lenne) az automatikus illesztés eredményét. Ezért ezeknél a
+       rovatoknál a zoom/szélesség/magasság mezőket figyelmen kívül hagyjuk. */
+    if(blk.hasAttribute('data-size-pref')){
+      if(f.tr)blk.style.transform=f.tr;
+      return;
+    }
     if(f.zoom)blk.style.zoom=f.zoom;
     if(f.tr)blk.style.transform=f.tr;
     if(f.w)blk.style.width=f.w;
@@ -7464,11 +7476,7 @@ function applyProjectState(data){
     setTimeout(function(){
       var boxes=document.querySelectorAll('#stage .imgbox');
       (data.imgs||[]).forEach(function(e,ix){ if(e&&boxes[ix]&&boxes[ix]._importImg)boxes[ix]._importImg(e); });
-      if(data.blockfx){Object.keys(data.blockfx).forEach(function(bid){
-        var blk=document.querySelector('#stage .blk[data-bid="'+bid+'"]'); if(!blk)return; var f=data.blockfx[bid];
-        if(f.zoom)blk.style.zoom=f.zoom; if(f.tr)blk.style.transform=f.tr; if(f.w)blk.style.width=f.w; if(f.h)blk.style.height=f.h; if(f.lh)blk.style.lineHeight=f.lh;
-      });}
-      if(typeof checkBlockOverflows==='function')checkBlockOverflows();
+      if(data.blockfx)applyBlockfxMap(data.blockfx);
     },150);
   }
 }
