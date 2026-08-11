@@ -927,7 +927,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    .blk overflow:hidden-je se vágja le semelyik oldalon. */
 .blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
 .blk-needs-data-badge{position:absolute;top:2px;left:2px;z-index:48;background:#e0342f;color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:5px;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.blk-needs-data-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:13px;letter-spacing:.02em;padding:10px 18px;border-radius:10px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(224,52,47,.45);white-space:nowrap;}
+.blk-needs-data-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:6.5px;letter-spacing:.02em;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;box-shadow:0 2px 7px rgba(224,52,47,.45);white-space:nowrap;}
 .blk-needs-data-btn:hover{background:linear-gradient(120deg,#c92924,#e0342f);}
 @media print{.blk-needs-data,.blk-needs-data-badge,.blk-needs-data-btn{box-shadow:none!important;display:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
@@ -2872,7 +2872,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.24';
+  var APP_VERSION='6.25';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3276,10 +3276,6 @@ Burgonyapüré, párolt zöldség"></textarea></div>
       <div class="fld"><label><span data-i18n="w_lbl_f_m_night">Éjféli fogás</span></label><textarea id="f_m_night" style="min-height:54px;" data-i18n-ph="w_ph_f_m_night" placeholder="pl. Sült kolbász, savanyúság"></textarea></div>
     </div>
     <div class="fld"><label><span data-i18n="w_lbl_f_m_dessert">Desszert</span></label><textarea id="f_m_dessert" style="min-height:54px;" data-i18n-ph="w_ph_f_m_dessert" placeholder="pl. Menyasszonytorta"></textarea></div>
-  </div>
-
-  <div class="card" data-editgroup="itallap">
-    <h3><span data-i18n="w_h3plain_itallap_gerinc">Itallap (gerinc)</span> <span style="font-size:11px;color:#aaa;font-weight:400;" data-i18n="w_note_mindig_l_tszik_az_utols_olda_2">mindig látszik, az utolsó oldalon</span></h3>
     <div class="fld"><label data-i18n="w_lbl_f_itallap">Itallap (az étlap mellett jelenik meg; soronként egy ital, „Kategória: ital" vagy sima szöveg, üres = kimarad)</label><textarea id="f_itallap" style="min-height:90px;" data-i18n-ph="w_ph_f_itallap" placeholder="pl. Pezsgő: Törley Gála
 Vörösbor: Egri Bikavér
 Fehérbor: Olaszrizling
@@ -4200,8 +4196,13 @@ function B_menetrend(d){
 function B_etlap(d){
   var courses=[[L('Vendégvárás / előétel','Welcome drink / starter'),val('f_m_app')],[L('Leves','Soup'),val('f_m_soup')],[L('Főétel','Main course'),val('f_m_main')],[L('Éjféli fogás','Midnight course'),val('f_m_night')],[L('Desszert','Dessert'),val('f_m_dessert')]];
   var menu='';courses.forEach(function(c){if(!c[1])return;var lines=c[1].split('\n').filter(function(x){return x.trim();});lines.forEach(function(ln,ix){menu+='<div class="row"><span class="course">'+(ix===0?esc(c[0]):'')+'</span><span class="dish">'+esc(ln.trim())+'</span></div>';});});
-  if(!menu)return '';
-  return '<div class="blk"><div class="col-head">'+ico('i-cutlery')+' '+L('Mai nap étlapja',"Today's menu")+'</div><div class="menu">'+menu+'</div></div>';
+  var drinkItems='';val('f_itallap').split('\n').forEach(function(l){l=l.trim();if(!l)return;var idx=l.indexOf(':');var c=idx>=0?l.slice(0,idx).trim():'';var dd=idx>=0?l.slice(idx+1).trim():l;drinkItems+='<div class="row"><span class="course">'+esc(c)+'</span><span class="dish">'+esc(dd)+'</span></div>';});
+  if(!menu&&!drinkItems)return '';
+  var html='<div class="blk">';
+  if(menu)html+='<div class="col-head">'+ico('i-cutlery')+' '+L('Mai nap étlapja',"Today's menu")+'</div><div class="menu">'+menu+'</div>';
+  if(drinkItems)html+='<div class="col-head">'+ico('i-glass')+' '+L('Itallap','Drinks list')+'</div><div class="menu">'+drinkItems+'</div>';
+  html+='</div>';
+  return html;
 }
 function B_italok(d){
   if(!d.drinks)return '';
@@ -4272,11 +4273,6 @@ function B_filler(kind){
 }
 function newQuote(btn){pushUndo();var blk=btn.closest('.filler-blk');if(!blk)return;var el=blk.querySelector('.filler-quote');if(!el)return;var qlist=QUOTES();var cur=el.textContent,nq=cur;for(var i=0;i<8&&nq===cur;i++){nq=qlist[Math.floor(Math.random()*qlist.length)];}el.textContent=nq;}
 
-function B_itallap(d){
-  var items='';val('f_itallap').split('\n').forEach(function(l){l=l.trim();if(!l)return;var idx=l.indexOf(':');var c=idx>=0?l.slice(0,idx).trim():'';var dd=idx>=0?l.slice(idx+1).trim():l;items+='<div class="row"><span class="course">'+esc(c)+'</span><span class="dish">'+esc(dd)+'</span></div>';});
-  if(!items)return '';
-  return '<div class="blk"><div class="col-head">'+ico('i-glass')+' '+L('Itallap','Drinks list')+'</div><div class="menu">'+items+'</div></div>';
-}
 function B_csapat(d){
   function card(role,name,role2,desc){ if(!name)return ''; return '<div class="tm-card">'+imgbox(role||name)+'<div class="tm-role">'+esc(role)+'</div><div class="tm-name">'+esc(name)+'</div>'+(role2?'<div class="tm-help">'+esc(role2)+'</div>':'')+(desc?'<div class="tm-desc">'+esc(desc)+'</div>':'')+'</div>'; }
   function side(label,oa,om,tanu,tanuLbl,rows,rlbl){
@@ -4674,7 +4670,6 @@ function buildFlowUjsag(d){
   B.menetrend=B_menetrend(d);
   B.etlap=B_etlap(d);
   B.italok=B_italok(d);
-  B.itallap=B_itallap(d);
   B.qr=on('chk_qr')?B_qr(d):'';
   B.fotovadasz=d.foto?B_fotovadasz(d):'';
   B.vendegkonyv=d.message?B_vendegkonyv(d):'';
@@ -4706,7 +4701,7 @@ function buildFlowUjsag(d){
      kezeli (a fölösleges lapok a fő tartalom és ez a csoport KÖZÉ kerülnek, nem e mögé). */
   var ORDER=['welcome','szuloknek','stats','sztori','childhood','ismerkedes','legelsokep','years','lanykeres','jegyesfoto',
     'utazas','bakancslista','naszut','csapat','memorial','negylabu','szulok','szinglik','dijak',
-    'igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','itallap','italok','qr','fotovadasz',
+    'igazhamis','jatekok','lagziszab','masnapos','horoszkop','gyik','interju','szinezo','menetrend','etlap','italok','qr','fotovadasz',
     'robbantsd','vendegkonyv','closer'];
   /* egy sablon admin által beállított (▲▼-vel szerkesztett) rovat-sorrendje felülírja a fentit
      — a "welcome" mindig legelöl marad, a sablonban nem szereplő (pl. mindig-aktív gerinc-)
@@ -4875,11 +4870,11 @@ var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[1];
    szabad hely, amit a felhasználó a Kijelölés gomb + sarok-fogantyúk/Méret segítségével utólag,
    kedve szerint tölthet ki. */
 var SIZEPREF_FIT_CAP=1.5;
-var HALFP_IDS_UJSAG=['qr','fotovadasz','vendegkonyv','robbantsd','etlap','itallap','szinglik','dijak'];
+var HALFP_IDS_UJSAG=['qr','fotovadasz','vendegkonyv','robbantsd','szinglik','dijak'];
 /* ez a csoport MINDIG a legutolsó lap(ok)ra kerül, és MÁSHOL nem jelenhet meg — ld.
    splitTailFlow()/buildTailPagePlan(). A nászút NEM tartozik ide (feljebb, az utazási
    rovatok közelébe került a normál sorrendben, ld. ORDER buildFlow()-ban). */
-var TAIL_IDS_UJSAG=['menetrend','etlap','itallap','italok','qr','fotovadasz','robbantsd','vendegkonyv','closer'];
+var TAIL_IDS_UJSAG=['menetrend','etlap','italok','qr','fotovadasz','robbantsd','vendegkonyv','closer'];
 /* a másik két termék (meghívó, save the date) saját, sokkal rövidebb "mindig utolsó lap"
    csoportja — ld. buildFlowMeghivo()/buildFlowSTD(). Egyiknél sincs egymás-melletti
    (duo-row) páros rovat, ezért a HALFP_IDS változatuk üres. */
@@ -4935,10 +4930,9 @@ function buildUnits(flow){ /* egymást követő párba-rendezhető rovatokat egy
    idézet/ornamens tölti ki a hiányzó részt. A "negyed oldal" rovatok is egy szinttel lejjebb
    ugyanígy párba állnak EGYMÁSSAL (két negyed = egy "fél oldalnyi" sor, egymás mellett, fele-fele
    szélességben), és ez a negyed-PÁR pontosan úgy viselkedik a lap felső/alsó felének
-   elfoglalásakor, mint egy önálló "fél oldal" rovat. A "normál" (méret nélküli — jelenleg
-   gyakorlatilag csak az étlap/itallap, ld. NO_AUTO_QUARTER_IDS) rovatok köztes szegmensekben
-   gyűlnek össze, és a régi, egymás MELLETTI párosítás (ld. HALFP_IDS/buildUnits) ezeken a
-   szegmenseken belül változatlanul működik. */
+   elfoglalásakor, mint egy önálló "fél oldal" rovat. A "normál" (méret nélküli) rovatok köztes
+   szegmensekben gyűlnek össze, és a régi, egymás MELLETTI párosítás (ld. HALFP_IDS/buildUnits)
+   ezeken a szegmenseken belül változatlanul működik. */
 function buildPagePlan(flow,usable,GAP){
   var pages=[]; // pages[0] = az első TARTALMI lap (a borító külön kezelve, nem itt)
   var curPage=0;
@@ -5121,7 +5115,7 @@ function humanLabel(bid){
   if(bid==='cover')return t('lbl_cover');
   var entry=(typeof ADDABLE_SECTIONS_UJSAG!=='undefined')?ADDABLE_SECTIONS_UJSAG.find(function(s){return s.blk===bid;}):null;
   if(entry && typeof sectionLabel==='function')return sectionLabel(entry.chk);
-  var MENU_LABELS={welcome:t('lbl_welcome'),etlap:t('lbl_etlap'),itallap:t('lbl_itallap'),italok:t('lbl_italok'),menetrend:t('lbl_menetrend'),vendegkonyv:t('lbl_vendegkonyv'),closer:t('lbl_closer')};
+  var MENU_LABELS={welcome:t('lbl_welcome'),etlap:t('lbl_etlap'),italok:t('lbl_italok'),menetrend:t('lbl_menetrend'),vendegkonyv:t('lbl_vendegkonyv'),closer:t('lbl_closer')};
   return MENU_LABELS[bid]||bid;
 }
 function renderLivePreview(plan,need){
@@ -5857,20 +5851,19 @@ function sectionLabel(chkId){
 }
 /* ===== Ujsag: "gerinc" (mindig aktív, checkbox nélküli) rovatcsoportok, amiket szintén
    szerkeszteni lehet ugyanezzel a felülettel — a varázsló megfelelő (elrejtett) kártyáján
-   [data-editgroup] attribútummal jelölve. A menetrend+étlap+itallap+italok EGY közös kártyán
-   él a varázslóban, ezért egy szerkesztés mind a négy rovatot újragenerálja. */
+   [data-editgroup] attribútummal jelölve. Az étlap+itallap EGY közös kártyán/rovaton él
+   (a "Mai nap étlapja" rovat automatikusan negyed oldalas — ld. FIXED_SIZE_PREF). */
 var UJSAG_CORE_EDIT_GROUPS=[
   {key:'welcome',selector:'[data-editgroup="welcome"]',blks:['welcome'],fns:{welcome:function(d){return B_welcome(d);}}},
   {key:'menetrend',selector:'[data-editgroup="menetrend"]',blks:['menetrend'],fns:{menetrend:function(d){return B_menetrend(d);}}},
   {key:'etlap',selector:'[data-editgroup="etlap"]',blks:['etlap'],fns:{etlap:function(d){return B_etlap(d);}}},
-  {key:'itallap',selector:'[data-editgroup="itallap"]',blks:['itallap'],fns:{itallap:function(d){return B_itallap(d);}}},
   {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
 ];
 /* Ezeknek a rovatoknak a tartalma egy generikus SABLONBAN eleve nem tölthető ki érdemben —
    konkrét, pár-specifikus adat kell hozzájuk (számok, névsorok, menü) —, ezért az admin
    "Részletes szerkesztés" módjában külön, erős piros kerettel és nagy gombbal jelöljük őket
    (ld. initBlockTools "blk-needs-data" ága). */
-var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','csapat','szinglik','etlap','itallap','menetrend'];
+var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','csapat','szinglik','etlap','menetrend'];
 function coreGroupLabel(key){
   var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
   var card=document.querySelector(g.selector); if(!card)return key;
@@ -7241,8 +7234,7 @@ var AI_TIPP_FIELD_FOR_BLOCK={
   lanykeres:['f_lanykeres'],
   naszut:['f_naszut'],
   szinglik:['f_singlesIntro'],
-  etlap:['f_m_app','f_m_soup','f_m_main','f_m_night','f_m_dessert'],
-  itallap:['f_itallap'],
+  etlap:['f_m_app','f_m_soup','f_m_main','f_m_night','f_m_dessert','f_itallap'],
   drinks:['f_barNote'],
   qr:['f_qrHead','f_driveCap','f_qrMid','f_djCap'],
   fotovadasz:['f_hunt'],
@@ -7450,15 +7442,16 @@ var FIXED_SIZE_PREF={
   horoszkop:'full',  /* Horoszkóp — ma éjjelre */
   gyik:'full',       /* Gyakran Ismételt Kérdések */
   interju:'full',    /* Exkluzív interjú */
+  menetrend:'quarter', /* Menetrend — negyed oldal */
+  etlap:'quarter',     /* Étlap (az itallappal együtt) — negyed oldal */
   mh_intro:'full',      /* Meghívó: meghívó szöveg (2. oldal) */
   mh_menetrend:'full',  /* Meghívó: menetrend (3. oldal) */
   std_foto:'full'    /* Save the date: nagy fotó */
 };
-/* az étlap/itallap kötelezően egymás mellett, fele-fele szélességben jelenik meg (ld.
-   ensureMenuPair) — ez a saját, régebbi páros-elrendezés elsőbbséget élvez, ezért ez a két
-   rovat NEM kap automatikus "negyed oldal" besorolást, változatlanul a régi, mért-magasságú
-   (nem kényszerített doboz-méretű) rendszeren megy át. */
-var NO_AUTO_QUARTER_IDS=['etlap','itallap'];
+/* korábban itt élt egy régebbi, egymás-melletti (fele-fele szélességű) kényszer-párosítás az
+   étlap és az akkor még önálló itallap rovat között (NO_AUTO_QUARTER_IDS + ensureMenuPair) —
+   az itallap időközben visszaolvadt az étlapba (ld. B_etlap), ezért erre már nincs szükség: a
+   rovat egy szokásos, negyed oldalas dobozként megy át a normál rendszeren. */
 /* Új szabály: amelyik rovatnál NINCS kifejezetten megadva, hogy fél vagy egész oldalnak kell
    lennie, ott mindig NEGYED oldallal számolunk — a lap TELJES szélességében, negyed magasságú
    sávval (a lap konkrétan negyedbe hajtva, ugyanúgy fix doboz-mérettel, mint a fél/egész
@@ -7469,7 +7462,6 @@ var NO_AUTO_QUARTER_IDS=['etlap','itallap'];
    elrendezést. */
 function getSizePref(id){
   if(FIXED_SIZE_PREF[id])return FIXED_SIZE_PREF[id];
-  if(NO_AUTO_QUARTER_IDS.indexOf(id)>=0)return '';
   return 'quarter';
 }
 (function(){
@@ -8387,10 +8379,11 @@ var _adminTemplateBlockfx={};
 function adminStripModifiers(ids){
   return (ids||[]).filter(function(id){ return id!=='times'&&UJSAG_TAIL_CORE_IDS.indexOf(id)<0; });
 }
-/* Menetrend / Étlap / Itallap: mindig bekerülő "gerinc" rovatok (nem kapcsolhatók ki), de a
-   sablonban egymáshoz és a többi farok-rovathoz (QR, fotóvadász stb.) képest a SORRENDJÜK
-   admin-szinten állítható — ld. a Sablonszerkesztő külön "Gerinc-rovatok sorrendje" blokkját. */
-var UJSAG_TAIL_CORE_IDS=['menetrend','etlap','itallap'];
+/* Menetrend / Étlap (az itallappal együtt): mindig bekerülő "gerinc" rovatok (nem kapcsolhatók
+   ki), de a sablonban egymáshoz és a többi farok-rovathoz (QR, fotóvadász stb.) képest a
+   SORRENDJÜK admin-szinten állítható — ld. a Sablonszerkesztő külön "Gerinc-rovatok sorrendje"
+   blokkját. */
+var UJSAG_TAIL_CORE_IDS=['menetrend','etlap'];
 var _adminGerincOrder=UJSAG_TAIL_CORE_IDS.slice();
 function adminExtractGerincOrder(ids){
   var present=(ids||[]).filter(function(id){return UJSAG_TAIL_CORE_IDS.indexOf(id)>=0;});
@@ -8576,7 +8569,7 @@ function adminSaveVisualTemplate(n){
   document.querySelectorAll('#stage .blk[data-bid]').forEach(function(b){
     var bid=b.getAttribute('data-bid');
     var entry=ADDABLE_SECTIONS_UJSAG.find(function(s){return s.blk===bid;});
-    if(!entry)return; /* gerinc (welcome/menetrend/etlap/itallap/closer) és töltő-blokkok kihagyva — az italok (Férj/feleség itala) MÁR valódi ADDABLE_SECTIONS_UJSAG-tag, tehát a fenti loop a jelenlétét/sorrendjét is helyesen rögzíti */
+    if(!entry)return; /* gerinc (welcome/menetrend/etlap/closer) és töltő-blokkok kihagyva — az italok (Férj/feleség itala) MÁR valódi ADDABLE_SECTIONS_UJSAG-tag, tehát a fenti loop a jelenlétét/sorrendjét is helyesen rögzíti */
     if(order.indexOf(entry.chk)<0)order.push(entry.chk);
   });
   var blockfx={};
