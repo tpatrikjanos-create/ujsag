@@ -2909,7 +2909,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.35';
+  var APP_VERSION='6.36';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -5926,10 +5926,11 @@ var UJSAG_CORE_EDIT_GROUPS=[
   {key:'closer',selector:'[data-editgroup="closer"]',blks:['closer'],fns:{closer:function(d){return B_closer(d);}}}
 ];
 /* Ezeknek a rovatoknak a tartalma egy generikus SABLONBAN eleve nem tölthető ki érdemben —
-   konkrét, pár-specifikus adat kell hozzájuk (számok, névsorok, menü) —, ezért az admin
-   "Részletes szerkesztés" módjában külön, erős piros kerettel és nagy gombbal jelöljük őket
-   (ld. initBlockTools "blk-needs-data" ága). */
-var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','csapat','szinglik','etlap','menetrend'];
+   konkrét, pár-specifikus adat kell hozzájuk (számok, névsorok, konkrét történet) —, ezért az
+   admin "Részletes szerkesztés" módjában külön, erős piros kerettel és egy, a lap mellé
+   kirakott piros "Adatok megadása" gombbal jelöljük őket (ld. initBlockTools "blk-needs-data"
+   ága + positionNeedsDataButtons). */
+var UJSAG_ADMIN_TPL_NEEDS_DATA_IDS=['stats','sztori','csapat'];
 function coreGroupLabel(key){
   var g=UJSAG_CORE_EDIT_GROUPS.find(function(x){return x.key===key;}); if(!g)return key;
   var card=document.querySelector(g.selector); if(!card)return key;
@@ -6063,6 +6064,20 @@ function openSingleSectionEditor(kind,key){
   document.getElementById('addSecCloseBtn').onclick=closeAddSectionOverlay;
   if(kind==='core')openSectionFieldsForCore(key); else openSectionFieldsForOpt(key);
 }
+/* Új, üres lap fűzése a #stage végéhez — ld. insertBlockAtBestSpot admin sablon-építő módú
+   "nincs hely" ága. Ugyanazt a szerkezetet (wm/pbody/folio) építi fel, mint a generate() fő
+   ciklusa, hogy a stílusok/vízjel/oldalszám-sáv ugyanúgy működjön egy utólag hozzáfűzött
+   lapon is. */
+function appendEmptyPage(){
+  var stage=document.getElementById('stage');
+  var pageNum=stage.querySelectorAll('.page').length+1;
+  var d=gatherData();
+  var sec=document.createElement('section'); sec.className='page'; sec.id='p'+pageNum;
+  sec.innerHTML='<div class="wm"></div><div class="pbody"></div>'
+    +'<div class="folio"><span>'+t('folio_page').replace('{n}',pageNum)+' · '+esc(d.masthead)+'</span><span>'+esc(d.names)+'</span></div>';
+  stage.appendChild(sec);
+  return sec.querySelector('.pbody');
+}
 /* ===== a rovat-blokk beillesztése/cseréje a #stage-en — mindkét irányból (hozzáadás ÉS
    szerkesztés) ide fut ki, hogy a "hol van üres hely" / "hogy méretezzük" logika egy helyen
    éljen ===== */
@@ -6086,8 +6101,22 @@ function insertBlockAtBestSpot(blkId,html){
     if(!best||leftover>best.leftover){ best={pbody:pbody,pRect:pRect,maxBottom:maxBottom,leftover:leftover}; }
   });
   if(!best||best.leftover<40){
-    if(msgEl)msgEl.innerHTML='<div class="done-saved err">⚠ '+t('asp_no_space')+'</div>';
-    return null;
+    /* Egyik meglévő lapon sincs 40px-nél nagyobb szabad hely — ez a lap-alapú negyedelő
+       elrendezéssel (ld. buildPagePlan) szinte MINDIG előfordul, mert a lapok szándékosan a
+       teljes egység-költségvetésükig vannak feltöltve, alig marad "sima" maradék hely a
+       lap alján. Admin sablon-építő módban (ahol a lapszám csak előnézeti kényelem — a MENTÉS
+       ténylegesen a rovat-sorrendet és a per-rovat stílus-felülírásokat menti, nem a
+       pillanatnyi lapbeosztást, ld. adminSaveVisualTemplate) ezért inkább egy ÚJ, üres lapot
+       fűzünk a végéhez, mint hogy a felhasználó számára csendben, láthatatlanul semmi ne
+       történjen. A valódi vásárlói szerkesztőben (ahol a lapszám FIX, a választott csomaghoz
+       kötött) ez nem biztonságos — ott marad a korábbi "nincs hely" hibaüzenet. */
+    if(window._adminTemplateEditPages){
+      var newPbody=appendEmptyPage();
+      best={pbody:newPbody,pRect:newPbody.getBoundingClientRect(),maxBottom:newPbody.getBoundingClientRect().top,leftover:9999};
+    } else {
+      if(msgEl)msgEl.innerHTML='<div class="done-saved err">⚠ '+t('asp_no_space')+'</div>';
+      return null;
+    }
   }
   best.pbody.querySelectorAll('.filler-blk').forEach(function(f){f.remove();}); /* helyet ad a valódi tartalomnak */
   /* ha a célzott lap korábban "magányos" (.lonely) volt — azaz a CSS nagyította fel az egyetlen
@@ -6135,8 +6164,14 @@ function applyOptSectionEdit(chkId){
   pushUndo();
   var html=entry.fn(gatherData());
   var blk=upsertBlock(entry.blk,html);
+  /* ha VOLT mit beilleszteni (html nem üres, tehát ez nem törlés), de mégsem sikerült (nincs
+     hely — ld. insertBlockAtBestSpot), NE zárjuk be az overlay-t és NE jelöljük be a
+     jelölőnégyzetet — különben a felhasználó számára úgy tűnne, mintha "semmi sem történt
+     volna" (az insertBlockAtBestSpot által beállított hibaüzenet az overlay bezárásával azonnal
+     el is tűnt volna, mielőtt bárki elolvashatta volna). */
+  var failed = !!html && !blk;
   var cb=document.getElementById('chk_'+chkId);
-  if(cb){
+  if(cb && !failed){
     cb.checked=!!html;
     /* ha ez a rovat egy korábbi Válogatás (swipe) körben "ideiglenesen" el lett rejtve a
        varázslóban, a bekapcsolással most újra láthatóvá tesszük a kártyáját is */
@@ -6144,6 +6179,7 @@ function applyOptSectionEdit(chkId){
     if(typeof optToggle==='function')optToggle(cb);
   }
   afterBlockChange();
+  if(failed)return;
   closeAddSectionOverlay(); /* ha a mezők ide voltak "kölcsönözve" kitöltésre, előbb visszatesszük a varázslóba, mielőtt a modal eltűnik */
   if(blk)blk.scrollIntoView({behavior:'smooth',block:'center'});
 }
@@ -7369,8 +7405,6 @@ var AI_TIPP_FIELD_FOR_BLOCK={
   lanykeres:['f_lanykeres'],
   naszut:['f_naszut'],
   szinglik:['f_singlesIntro'],
-  etlap:['f_m_app','f_m_soup','f_m_main','f_m_night','f_m_dessert','f_itallap'],
-  drinks:['f_barNote'],
   qr:['f_qrHead','f_driveCap','f_qrMid','f_djCap'],
   fotovadasz:['f_hunt'],
   robbantsd:['f_robText'],
@@ -8372,6 +8406,12 @@ function applyProjectState(data){
     scheduleHide();
   }
   function hideToolbar(){
+    /* Admin sablon-építő módban a topbar (benne a leggyakrabban használt "🧩 Rovatok kezelése"
+       gomb) SOSEM tűnhet el görgetéskor/pár másodperc tétlenség után — ellenkező esetben az
+       admin, miután egy új rovat hozzáadása után a nézet a rovathoz görget (scrollIntoView),
+       a gombot eltűntnek (pointer-events:none) találja, és a "Rovatok kezelése" kattintás
+       csendben semmit sem csinál — pontosan ez okozta a "rovat hozzáadás nem működik" hibát. */
+    if(window._adminTemplateEditPages)return;
     hidden=true;
     topbar.classList.add('tb-hidden');
     if(hint)hint.classList.add('show');
