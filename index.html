@@ -911,8 +911,6 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* PC-n a "Méret" gomb (mobil-stílusú alsó ±/✓ sávot nyitna meg) nem kell — ott a kijelölés
    gombbal előhívott .rsz fogantyúkkal közvetlenül húzva méretezhető a rovat. */
 @media screen and (min-width:761px){.blk-resize-btn{display:none!important;}}
-.blk-select-btn{z-index:46;display:none;align-items:center;gap:4px;background:rgba(42,90,120,.9);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;}
-.blk:hover .blk-toolbar>.blk-select-btn,.blk.bsel .blk-toolbar>.blk-select-btn{display:flex;}
 /* a többi sarok-gombbal ellentétben ez ÁLLANDÓAN látszik (halványabban), nem csak hoverre/
    kijelöléskor — sok rovathoz adatot KELL megadni, ezért ennek felfedezhetőnek kell lennie
    anélkül is, hogy a user előbb tudná, hogy egyáltalán rá kell/lehet kattintani a rovatra */
@@ -927,7 +925,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
    .blk overflow:hidden-je se vágja le semelyik oldalon. */
 .blk-needs-data{box-shadow:inset 0 0 0 3px #e0342f;}
 .blk-needs-data-badge{position:absolute;top:2px;left:2px;z-index:48;background:#e0342f;color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:800;letter-spacing:.04em;padding:2px 7px;border-radius:5px;pointer-events:none;box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.blk-needs-data-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:6.5px;letter-spacing:.02em;padding:5px 9px;border-radius:5px;border:none;cursor:pointer;box-shadow:0 2px 7px rgba(224,52,47,.45);white-space:nowrap;}
+.blk-needs-data-btn{position:absolute;left:50%;top:68%;transform:translate(-50%,-50%);z-index:48;background:linear-gradient(120deg,#e0342f,#ff6b5c);color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:9px;letter-spacing:.02em;padding:7px 12px;border-radius:7px;border:none;cursor:pointer;box-shadow:0 3px 10px rgba(224,52,47,.45);white-space:nowrap;}
 .blk-needs-data-btn:hover{background:linear-gradient(120deg,#c92924,#e0342f);}
 @media print{.blk-needs-data,.blk-needs-data-badge,.blk-needs-data-btn{box-shadow:none!important;display:none!important;}}
 /* a címlapnak nincs "Adatok" gombja (nem megy át a blokk-szerkesztő rendszeren), de saját
@@ -935,7 +933,6 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .cover-ai-btn{position:absolute;top:2px;right:2px;z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .cover-ai-btn:hover{opacity:1;}
 @media print{.cover-ai-btn{display:none!important;}}
-.blk-select-btn:hover{background:rgba(52,110,148,1);}
 .blk.bsel>.rsz{display:block;}
 .blk.bsel{outline:1.5px dashed var(--claret);outline-offset:3px;}
 .blk.dragging{opacity:.55;}
@@ -945,7 +942,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 .blk.swap-target{outline:2.5px solid #2f7d3a !important;outline-offset:3px;background:rgba(47,125,58,.06);}
 .page.move-target{outline:3px solid #2f7d3a;outline-offset:-3px;}
 .page.over{outline:2px solid #c0392b;outline-offset:-2px;}
-@media print{.blk-grip,.blk-del-btn,.blk-select-btn,.blk-edit-btn,.blk-ai-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
+@media print{.blk-grip,.blk-del-btn,.blk-edit-btn,.blk-ai-btn{display:none!important;}.blk.bsel{outline:none!important;}.page.over{outline:none!important;}.blk.swap-target{outline:none!important;background:none!important;}.page.move-target{outline:none!important;}.page.snapgrid .pbody{background:none!important;outline:none!important;}.page.snapgrid-fine .pbody{background:none!important;outline:none!important;}}
 .imgbox.lowres::after{content:'⚠ kis felbontás';position:absolute;top:3px;left:3px;z-index:30;background:rgba(154,51,39,.92);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:8px;font-weight:700;padding:2px 5px;border-radius:4px;pointer-events:none;letter-spacing:.02em;}
 @media print{.imgbox.lowres::after{display:none!important;}}
 
@@ -970,7 +967,7 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
      Kivétel: az "✎ Adatok" ÉS a "✨ AI Tipp" gomb — ezek mobilon is ÁLLANDÓAN látszanak a rovat jobb
      felső sarkában (egymás alatt), hogy a kitöltendő/AI-val írható adatokra ne csak a rovat kijelölése
      (aljára húzódó eszköztár) után derüljön fény. */
-  .blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn{display:none!important;}
+  .blk-grip,.blk-resize-btn,.blk-del-btn{display:none!important;}
   .blk-edit-btn{position:absolute;top:2px;left:auto;right:2px;font-size:10px;padding:3px 8px;opacity:.85;}
   .blk-ai-btn{position:absolute;top:24px;left:auto;right:2px;font-size:10px;padding:3px 8px;opacity:.85;}
   /* a mobil eszköztárban (rovat kijelölésekor előjövő alsó sáv) az "Adatok" gomb kapjon
@@ -2872,7 +2869,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.25';
+  var APP_VERSION='6.26';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4863,13 +4860,12 @@ var ZOOM_STEPS=[0.7,0.78,0.86,0.94,1.0,1.08,1.17,1.26,1.36,1.47,1.59,1.72,1.86,2
    utólag, kézzel nagyíthassa fel azt, amit valóban szeretne kiemelni (ne a generálás döntsön
    helyette azzal, hogy eleve nagyra tölti ki a rendelkezésre álló helyet). */
 var DEFAULT_BLOCK_ZOOM=ZOOM_STEPS[1];
-/* a "fél/egész oldal" kényszerített rovatok (ld. FIXED_SIZE_PREF) generáláskori automatikus
-   kitöltése is ehhez igazodik: a doboz mérete (fél/egész oldal) fix marad, de a TARTALMAT nem
-   nagyítjuk fel automatikusan a doboz TELJES kitöltéséhez (a korábbi 2.2-es sapka szélsőségesen
-   túlnagyította a szerényebb tartalmat) — csak egy mérsékeltebb szintig, hogy maradjon LÁTHATÓ
-   szabad hely, amit a felhasználó a Kijelölés gomb + sarok-fogantyúk/Méret segítségével utólag,
-   kedve szerint tölthet ki. */
-var SIZEPREF_FIT_CAP=1.5;
+/* a "fél/negyed/egész oldal" kényszerített rovatok (ld. FIXED_SIZE_PREF) generáláskori
+   automatikus kitöltése: a doboz mérete fix marad, a TARTALMAT pedig felnagyítjuk, hogy a
+   doboz TELJES méretét (szélességet ÉS magasságot is) kitöltse — a fitBlockToBox binkeresése
+   úgyis csak addig nagyít, amíg a tartalom még beleFÉR a dobozba (ld. blockFitsBox), tehát a
+   sapka itt csak biztonsági felső határ, nem a "ne töltsön ki mindent" szándék eszköze. */
+var SIZEPREF_FIT_CAP=6;
 var HALFP_IDS_UJSAG=['qr','fotovadasz','vendegkonyv','robbantsd','szinglik','dijak'];
 /* ez a csoport MINDIG a legutolsó lap(ok)ra kerül, és MÁSHOL nem jelenhet meg — ld.
    splitTailFlow()/buildTailPagePlan(). A nászút NEM tartozik ide (feljebb, az utazási
@@ -5309,11 +5305,10 @@ function generate(){
      (mérőműszeres, zoom nélküli) magasságbecslésre épül, ami nem mindig pontos — most, hogy a
      #paper már látható, tényleges méréssel ellenőrizzük: ha túllógna a saját sávjából, bináris
      kereséssel visszavesszük (de sosem 1× alá — inkább kilóg egy CSS overflow-védelemig, mint
-     hogy olvashatatlanná zsugorodjon). Ha ALULnagyítja a saját sávját (bőven marad alatta üres
-     hely), azt SZÁNDÉKOSAN nem töltjük ki automatikusan a doboz teljes méretéig (ld.
-     SIZEPREF_FIT_CAP) — a rovat inkább kicsiben generálódik, szabad hellyel, és a felhasználó a
-     Kijelölés gomb + sarok-fogantyúk (vagy a Méret ±) segítségével nagyíthatja fel utólag, ha
-     szeretné.
+     hogy olvashatatlanná zsugorodjon). Ha ALULnagyítja a saját sávját, azt is bináris kereséssel
+     felnagyítjuk (ld. SIZEPREF_FIT_CAP), hogy a rovat a doboza TELJES méretét (szélesség+
+     magasság) kitöltse — nincs manuális "Kijelölés + sarok-fogantyú" utólagos nagyítás, a
+     rovatok mindig alapból a maguk teljes helyét foglalják el.
      A fél/negyed/egész oldalas rovatok mind TELJES lapszélességben, egymás ALATT sorakoznak —
      a lap magasságát "negyed-egységekre" osztjuk (egész=4, fél=2, negyed=1), és minden rovat
      ennyi egységnyi SÁVOT kap a lapon, a GAP-okkal csökkentett tényleges magasságból arányosan.
@@ -5340,7 +5335,14 @@ function generate(){
       cumUnits+=u;
       var bottom=pRect.top + (cumUnits/totalUnits)*availH + GAP*idx;
       if(k.matches('.tail-pair-row')){
-        Array.prototype.filter.call(k.children,function(c){return c.classList.contains('blk');}).forEach(function(child){
+        var pairKids=Array.prototype.filter.call(k.children,function(c){return c.classList.contains('blk');});
+        /* a doboz bal/jobb szélét a gyerek TÉNYLEGES flex-kiosztott szélessége adja — ezt csak
+           akkor mérhetjük megbízhatóan, ha MINDKÉT testvér előbb egy semleges (zoom:1) alapállásba
+           kerül; különben az egyik gyerek még a generáláskori ELŐZETES (gyakran téves) zoom-
+           becslésével torzítaná a flex-kiosztást, és a másik gyereknek egy hibás, e pillanatnyi
+           torzításból számolt dobozt adnánk. */
+        pairKids.forEach(function(child){ child.style.zoom=1; });
+        pairKids.forEach(function(child){
           var r=child.getBoundingClientRect();
           fitBlockToBox(child,{left:r.left,right:r.right,top:top,bottom:bottom},SIZEPREF_FIT_CAP);
         });
@@ -6417,7 +6419,7 @@ function blockMinZoom(blk){
        (pl. a "Méret" felirat 9px-es betűmérete) NEM számíthat bele a "sose menjen 8pt alá"
        biztonsági küszöbbe, különben a kezelőfelület saját apró feliratai miatt hamisan magasra
        (akár 1.0-ra) tornázná a minimum-zoomot. */
-    if(el.closest('.blk-grip,.blk-resize-btn,.blk-del-btn,.blk-select-btn,.rsz'))return;
+    if(el.closest('.blk-grip,.blk-resize-btn,.blk-del-btn,.rsz'))return;
     if(!el.childNodes.length)return; var hasText=false;
     el.childNodes.forEach(function(n){if(n.nodeType===3&&n.nodeValue.trim())hasText=true;});
     if(!hasText)return;
@@ -6443,48 +6445,64 @@ function imgBelowMin(blk){ /* van-e a minimumnál kisebb kép a rovatban? */
   });
   return bad;
 }
-function blockFitsMargins(blk,pRect){
-  var r=blk.getBoundingClientRect();
+function blkInnerOverflowOK(blk){
   /* a scrollWidth/Height a BELSŐ (pl. egy flex/grid oszlop, ami nem zsugorodik a tartalma alá)
      túlcsordulást is elkapja, amit a blk SAJÁT — egyébként rendben lévő — külső mérete önmagában
-     nem mutatna meg (a belső elem csak vizuálisan "kilóg", és az ős overflow:hidden-je elrejti). */
-  var noInnerOverflow = blk.scrollWidth<=blk.clientWidth+1 && blk.scrollHeight<=blk.clientHeight+1;
-  return r.right<=pRect.right+0.5 && r.bottom<=pRect.bottom+0.5 && noInnerOverflow;
+     nem mutatna meg (a belső elem csak vizuálisan "kilóg", és az ős overflow:hidden-je elrejti).
+     A szerkesztői vezérlők (.blk-toolbar és tartalma) viszont a syncBtnScale ellentétes irányú
+     transform:scale-je miatt kis blk.style.zoom-nál (pl. 0.3) VIZUÁLISAN messze túlnyúlhatnak a
+     doboz szélén — ez tévesen "belső túlcsordulásnak" tűnne, holott a TÉNYLEGES tartalom
+     (szöveg/kép) simán férne, ezért a mérés idejére elrejtjük őket. */
+  var controls=blk.querySelectorAll(':scope > .blk-toolbar, :scope > .rsz, :scope > .blk-resize-btn, :scope > .blk-needs-data-badge, :scope > .blk-needs-data-btn');
+  var prevDisplay=[];
+  controls.forEach(function(c){ prevDisplay.push(c.style.display); c.style.display='none'; });
+  var ok = blk.scrollWidth<=blk.clientWidth+1 && blk.scrollHeight<=blk.clientHeight+1;
+  controls.forEach(function(c,i){ c.style.display=prevDisplay[i]; });
+  return ok;
+}
+function blockFitsMargins(blk,pRect){
+  var r=blk.getBoundingClientRect();
+  return r.right<=pRect.right+0.5 && r.bottom<=pRect.bottom+0.5 && blkInnerOverflowOK(blk);
 }
 function blockFitsBox(blk,box){
   /* mint blockFitsMargins, de tetszőleges (nem feltétlenül a teljes .pbody-nyi) dobozhoz mérve —
      ez kell a "fél oldal" rovatok saját fél-szeletéhez igazításához, mert a SAJÁT szeletük
      magassága csak fele a teljes lapnak, a testvér rovat pedig a másik felet foglalja. */
   var r=blk.getBoundingClientRect();
-  var noInnerOverflow = blk.scrollWidth<=blk.clientWidth+1 && blk.scrollHeight<=blk.clientHeight+1;
-  return r.right<=box.right+0.5 && r.bottom<=box.bottom+0.5 && noInnerOverflow;
+  return r.right<=box.right+0.5 && r.bottom<=box.bottom+0.5 && blkInnerOverflowOK(blk);
 }
 function fitBlockToBox(blk,box,cap){
-  if(!blockFitsBox(blk,box)){
-    var z0=parseFloat(blk.style.zoom)||1;
-    var lo=0.3, hi=z0;
-    blk.style.zoom=lo;
-    if(!blockFitsBox(blk,box))return; /* még a minimum sem fér bele — nincs mit tenni */
-    for(var i=0;i<12;i++){
-      var mid=(lo+hi)/2;
-      blk.style.zoom=mid;
-      if(blockFitsBox(blk,box)){lo=mid;} else {hi=mid;}
+  /* A blk BELÉPÉSKOR gyakran egy ELŐZETES, generáláskori becsléssel kapott zoom-ot visel (ld. a
+     "zoomAttr" számítást fentebb) — ez a becslés TELJES lapszélességre mért magasságból indul
+     ki, de a tényleges doboz (pl. egy tail-pair-row páros oszlopa) ennél KESKENYEBB is lehet,
+     ahol a tartalom sortörése (és így a magassága) egészen más. Emiatt ez az előzetes zoom
+     megbízhatatlan bináris keresési FELSŐ HATÁRNAK — helyette mindig a megbízható zoom=1
+     (természetes méret) alapállásból indulunk, és onnan keresünk fel- vagy lefelé. */
+  blk.style.zoom=1;
+  if(blockFitsBox(blk,box)){
+    if(cap<=1)return;
+    var r=blk.getBoundingClientRect();
+    if(r.bottom>=box.bottom-2)return; /* már majdnem eléri a szelet alját, nincs mit nőni */
+    blk.style.zoom=cap;
+    if(blockFitsBox(blk,box))return;
+    var lo2=1, hi2=cap;
+    for(var j=0;j<12;j++){
+      var mid2=(lo2+hi2)/2;
+      blk.style.zoom=mid2;
+      if(blockFitsBox(blk,box)){lo2=mid2;} else {hi2=mid2;}
     }
-    blk.style.zoom=lo;
+    blk.style.zoom=lo2;
     return;
   }
-  var r=blk.getBoundingClientRect();
-  if(r.bottom>=box.bottom-2)return; /* már majdnem eléri a szelet alját, nincs mit nőni */
-  var z=parseFloat(blk.style.zoom)||1;
-  blk.style.zoom=cap;
-  if(blockFitsBox(blk,box))return;
-  var lo2=z, hi2=cap;
-  for(var j=0;j<12;j++){
-    var mid2=(lo2+hi2)/2;
-    blk.style.zoom=mid2;
-    if(blockFitsBox(blk,box)){lo2=mid2;} else {hi2=mid2;}
+  var lo=0.3, hi=1;
+  blk.style.zoom=lo;
+  if(!blockFitsBox(blk,box))return; /* még a minimum sem fér bele — nincs mit tenni */
+  for(var i=0;i<12;i++){
+    var mid=(lo+hi)/2;
+    blk.style.zoom=mid;
+    if(blockFitsBox(blk,box)){lo=mid;} else {hi=mid;}
   }
-  blk.style.zoom=lo2;
+  blk.style.zoom=lo;
 }
 function clampBlockZoom(blk,desired,minZ){
   /* a zoom CSS tulajdonság a transform/flex-nyújtással kombinálva nem jósolható meg képlettel
@@ -6702,15 +6720,6 @@ function initBlockTools(){
       blk._moveOv=moveOv;
     }
 
-    /* KIJELÖLÉS gomb — PC-n; ELSŐSORBAN erre van szükség, hogy a rovatot ki lehessen
-       jelölni (és így a rá kattintva megjelenő .rsz fogantyúkat elérni) anélkül, hogy ez
-       — mint a grip húzása — azonnal el is mozdítaná a rovatot. Mobilon nem jelenik meg
-       (ott a rovatra koppintás már önmagában kijelöl, ld. a pointerdown-figyelőt fentebb). */
-    var selectBtn=toolbar.querySelector(':scope > .blk-select-btn');
-    if(!selectBtn){selectBtn=document.createElement('button');selectBtn.type='button';selectBtn.className='blk-select-btn';selectBtn.title='Kijelölés';selectBtn.innerHTML='<span class="ic">☑</span><span class="lbl">Kijelölés</span>';toolbar.appendChild(selectBtn);}
-    selectBtn.addEventListener('pointerdown',function(e){e.stopPropagation();});
-    selectBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();});
-
     /* ÁTMÉRETEZÉS gomb — jobb felső sarok; CSAK MOBILON látszik (PC-n a kijelölés után
        megjelenő .rsz fogantyúkkal húzva méretezhető, nincs szükség a mobil-stílusú
        alsó sávra) */
@@ -6749,14 +6758,13 @@ function initBlockTools(){
        Kép-tartalmú blokkot mobilon NEM lehet húzással méretezni, csak szövegeset. */
     var hasImg=!!blk.querySelector('.imgbox');
     var blkDirs=_mqMobile.matches?(hasImg?[]:['n','e','s','w']):['nw','n','ne','e','se','s','sw','w'];
-    /* A fix (fél/egész oldalas — pl. igaz-hamis, csapatunk) rovatok DOBOZA az oldal-elrendezés
-       miatt nem méretezhető szabadon (az oldal/félig-oldal helyfoglalás máshol számít erre),
-       DE a benne lévő TARTALOM igen — sőt kellene is, mert generálás után nem mindig néz ki
-       jól. Ezért az ilyen rovatoknál csak a SAROK-fogantyúk maradnak (arányos zoom, ld.
-       startBlockResize "corner" ága, ami zoom-mal skáláz, min/max-korláttal), az ÉL-fogantyúk
-       (amik a szélességet/magasságot külön, a dobozt ténylegesen átméretezve húznák) nem. */
+    /* A fix (negyed/fél/egész oldalas — pl. igaz-hamis, csapatunk, menetrend, étlap) rovatok
+       DOBOZA az oldal-elrendezés miatt nem méretezhető szabadon (az oldal/félig-oldal
+       helyfoglalás máshol számít erre), a benne lévő TARTALOM mérete pedig automatikusan a
+       doboz teljes méretéig nő (ld. fitBlockToBox/SIZEPREF_FIT_CAP) — ezért ezeknél a
+       rovatoknál egyáltalán nincs kézi átméretező fogantyú (sem sarok, sem él). */
     if(blk.hasAttribute('data-size-pref')){
-      blkDirs=blkDirs.filter(function(d){return d.length===2;});
+      blkDirs=[];
     }
     /* a jegyesfotózás rovat MINDIG teljesen kitölti a saját (egész oldalas) lapját — sem a
        doboz, sem a benne lévő rács mérete nem állítható (nincs zoom-alapú "tartalom kicsinyítés/
