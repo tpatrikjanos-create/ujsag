@@ -2905,7 +2905,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.40';
+  var APP_VERSION='6.41';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -6072,14 +6072,41 @@ function openSingleSectionEditor(kind,key){
    "nincs hely" ága. Ugyanazt a szerkezetet (wm/pbody/folio) építi fel, mint a generate() fő
    ciklusa, hogy a stílusok/vízjel/oldalszám-sáv ugyanúgy működjön egy utólag hozzáfűzött
    lapon is. */
+function renumberPageFolios(){
+  /* egy lap beszúrása/eltávolítása után a MEGLÉVŐ lapok "N. oldal" felirata és id-ja
+     (id="pN") elcsúszhat — ez frissíti mindet a jelenlegi, tényleges sorrendhez. A borító
+     (0. index) saját, külön felirat-logikát kapott generáláskor, azt itt nem bántjuk. */
+  var pages=document.querySelectorAll('#stage .page');
+  var d=gatherData();
+  pages.forEach(function(pg,ix){
+    pg.id='p'+(ix+1);
+    if(ix===0)return;
+    var folio=pg.querySelector('.folio'); if(!folio)return;
+    var spans=folio.querySelectorAll('span');
+    if(spans[0])spans[0].textContent=t('folio_page').replace('{n}',ix+1)+' · '+d.masthead;
+  });
+}
 function appendEmptyPage(){
   var stage=document.getElementById('stage');
-  var pageNum=stage.querySelectorAll('.page').length+1;
+  var pages=Array.prototype.slice.call(stage.querySelectorAll('.page'));
+  /* A "farok" csoport (Menetrend, Étlap, QR, Záró felirat stb. — ld. TAIL_IDS) MINDIG a füzet
+     ténylegesen UTOLSÓ lapján/lapjain kell maradjon. Ha egyszerűen a #stage végéhez fűznénk az
+     új lapot, az a farok-csoport UTÁN kerülne, és az többé nem lenne az utolsó — pontosan ez
+     okozta, hogy a párosított Menetrend+Étlap "lecsúszott" az utolsó helyről, amikor admin
+     módban egy új rovatnak nem volt hely egyik meglévő lapon sem. Ehelyett az ELSŐ, farok-
+     tartalmú lap ELÉ szúrjuk be az új, üres lapot, hogy a farok-csoport a helyén maradjon. */
+  var insertBeforeEl=null;
+  for(var i=0;i<pages.length;i++){
+    var hasTail=Array.prototype.some.call(pages[i].querySelectorAll('.blk[data-bid]'),function(b){
+      return TAIL_IDS.indexOf(b.getAttribute('data-bid'))>=0;
+    });
+    if(hasTail){ insertBeforeEl=pages[i]; break; }
+  }
   var d=gatherData();
-  var sec=document.createElement('section'); sec.className='page'; sec.id='p'+pageNum;
-  sec.innerHTML='<div class="wm"></div><div class="pbody"></div>'
-    +'<div class="folio"><span>'+t('folio_page').replace('{n}',pageNum)+' · '+esc(d.masthead)+'</span><span>'+esc(d.names)+'</span></div>';
-  stage.appendChild(sec);
+  var sec=document.createElement('section'); sec.className='page';
+  sec.innerHTML='<div class="wm"></div><div class="pbody"></div><div class="folio"><span></span><span></span></div>';
+  if(insertBeforeEl)stage.insertBefore(sec,insertBeforeEl); else stage.appendChild(sec);
+  renumberPageFolios();
   return sec.querySelector('.pbody');
 }
 /* ===== a rovat-blokk beillesztése/cseréje a #stage-en — mindkét irányból (hozzáadás ÉS
