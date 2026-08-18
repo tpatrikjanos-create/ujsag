@@ -946,9 +946,10 @@ body.pack-magazine .filler-quote::after{content:'';position:absolute;left:50%;bo
 /* AI TIPP gomb — közvetlenül az Adatok gomb mellett, ugyanolyan mindig-látható elven */
 .blk-ai-btn{z-index:47;display:flex;align-items:center;gap:4px;background:linear-gradient(120deg,#5b3fae,#8a5fd6);color:#fff;font-family:'Libre Franklin',sans-serif;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:5px;cursor:pointer;border:none;white-space:nowrap;opacity:.72;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .blk:hover .blk-toolbar>.blk-ai-btn,.blk.bsel .blk-toolbar>.blk-ai-btn{opacity:1;}
-/* "Szerkesztés" piros gomb — MINDEN admin sablon-építő módban szerkeszthető rovat mellett
-   megjelenik (nem csak néhány kiválasztottnál — a korábbi piros keretes kiemelés emiatt
-   feleslegessé vált, törölve). NEM a rovaton belül van (ne takarja el a tartalmat), hanem a
+/* "Szerkesztés" piros gomb — MINDEN szerkeszthető rovat mellett megjelenik, mind az admin
+   sablon-építő módban, mind a valódi vásárlói szerkesztőben (nem csak néhány kiválasztottnál —
+   a korábbi piros keretes kiemelés emiatt feleslegessé vált, törölve). NEM a rovaton belül van
+   (ne takarja el a tartalmat), hanem a
    LAPON KÍVÜL, a rovat bal oldalán, annak függőleges közepéhez igazítva lebeg (ld.
    positionNeedsDataButtons()). position:fixed + a viewporthoz mért koordináták kellenek, mert
    a .page/.sheet-wrap overflow:hidden-je egy a lapon belüli abszolút pozicionált elemet
@@ -2905,7 +2906,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.42';
+  var APP_VERSION='6.43';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -7017,13 +7018,15 @@ function initBlockTools(){
       aiBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();selectB();openAiTippBlockChooser(aiTarget);});
     }
 
-    /* Admin "Részletes szerkesztés" (sablon-építés) módban MINDEN szerkeszthető adatú rovat
-       mellé kerül egy piros "Szerkesztés" gomb — ez SZÁNDÉKOSAN NEM a rovaton belül van (ne
-       takarja el a tartalmat), hanem a LAPON KÍVÜL, a rovat bal oldalán lebeg (ld.
-       positionNeedsDataButtons() + .needs-data-side-btn CSS). Kizárólag admin sablon-építő
-       módban fut — a valódi vásárlói szerkesztőt nem zavarja (ott a rovat sarkában lévő kis
-       "✎ Adatok" toolbar-gomb az egyetlen belépési pont, ld. feljebb). */
-    if(window._adminTemplateEditPages && editTarget){
+    /* MINDEN szerkeszthető adatú rovat mellé kerül egy piros "Szerkesztés" gomb — eredetileg
+       csak az admin sablon-építő módban készült, de a vásárlói szerkesztőben is hasznos
+       (gyorsabb belépési pont, mint a rovat sarkában lévő kis "✎ Adatok" toolbar-gomb
+       felkeresése), ezért mindkét módban fut. SZÁNDÉKOSAN NEM a rovaton belül van (ne takarja
+       el a tartalmat), hanem a LAPON KÍVÜL, a rovat bal oldalán lebeg (ld.
+       positionNeedsDataButtons() + .needs-data-side-btn CSS). Csak PC-n (1000px fölött)
+       jelenik meg — keskenyebb/mobil nézetben a rovat sarkában amúgy is állandóan látható
+       "✎ Adatok" gomb tölti be ugyanezt a szerepet. */
+    if(editTarget){
       if(!blk._needsDataBtn){
         var ndBtn=document.createElement('button'); ndBtn.type='button'; ndBtn.className='needs-data-side-btn';
         ndBtn.textContent='✎ '+L('Szerkesztés','Edit');
