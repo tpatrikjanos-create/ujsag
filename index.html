@@ -2905,7 +2905,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.41';
+  var APP_VERSION='6.42';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -8454,8 +8454,11 @@ function applyProjectState(data){
        gomb) SOSEM tűnhet el görgetéskor/pár másodperc tétlenség után — ellenkező esetben az
        admin, miután egy új rovat hozzáadása után a nézet a rovathoz görget (scrollIntoView),
        a gombot eltűntnek (pointer-events:none) találja, és a "Rovatok kezelése" kattintás
-       csendben semmit sem csinál — pontosan ez okozta a "rovat hozzáadás nem működik" hibát. */
-    if(window._adminTemplateEditPages)return;
+       csendben semmit sem csinál — pontosan ez okozta a "rovat hozzáadás nem működik" hibát.
+       Ugyanez a probléma jelentkezett a MÁSIK admin-módban is (ld. window._isAdminSession —
+       amikor az admin egy MÁR mentett, beküldött újságot nyit meg a ?admin=1 nézetből, vízjel
+       nélkül): görgetéskor ott is eltűnt a topbar a "✅ Kész" gombbal együtt. */
+    if(window._adminTemplateEditPages || window._isAdminSession)return;
     hidden=true;
     topbar.classList.add('tb-hidden');
     if(hint)hint.classList.add('show');
