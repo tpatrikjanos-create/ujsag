@@ -586,27 +586,31 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .caption{font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.04em;color:var(--soft);margin-top:3px;border-bottom:.6px solid var(--ink);padding-bottom:4px;}
 .size-a4 .caption{font-size:9px;}
 .hero{flex:1;min-height:60mm;}
-/* ===== "Esküvői Magazin (teszt)" borító-stílus — csak a wedmag-cover blokkon belül léteznek ezek az
-   osztályok, így nem érintik a többi stílus-csomagot. Kép cserélhető (.imgbox), szövegek szerkeszthetők
-   (.editable), de a borító blokk (mint minden cover) sosem kap data-bid-et, így soha nem kerül a
-   drag/resize eszközkészletbe — semmi nem mozgatható rajta. */
-.wedmag-cover{background:#fff;color:#111;font-family:'Libre Franklin',sans-serif;}
-.wedmag-topline{display:flex;justify-content:flex-end;align-items:center;font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:6.5px;border-bottom:2px solid #111;padding-bottom:3px;}
-.size-a4 .wedmag-topline{font-size:9px;}
-.wedmag-masthead{font-family:'Jost',sans-serif;font-weight:800;text-transform:uppercase;text-align:center;font-size:40px;letter-spacing:.02em;line-height:.95;margin:5px 0 0;}
-.size-a4 .wedmag-masthead{font-size:60px;}
-.wedmag-sub{text-align:center;font-weight:600;letter-spacing:.25em;text-transform:uppercase;font-size:7px;margin:4px 0 6px;border-top:1px solid #111;border-bottom:1px solid #111;padding:3px 0;}
-.size-a4 .wedmag-sub{font-size:9px;}
-.wedmag-photowrap{position:relative;flex:1;min-height:55mm;}
-.wedmag-photo{position:absolute;inset:0;}
-.wedmag-tag{position:absolute;left:0;top:12%;background:#111;color:#fff;padding:4px 8px 4px 6px;font-weight:700;font-size:6.5px;letter-spacing:.06em;text-transform:uppercase;max-width:40%;box-shadow:2px 2px 0 rgba(0,0,0,.18);}
-.size-a4 .wedmag-tag{font-size:9px;padding:6px 12px 6px 9px;}
-.wedmag-caption{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-weight:700;font-size:16px;letter-spacing:.02em;margin:6px 0 2px;}
-.size-a4 .wedmag-caption{font-size:24px;}
-.wedmag-bottom{display:flex;align-items:center;gap:8px;background:#111;color:#fff;padding:5px 8px;margin-top:4px;font-family:'Jost',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:8px;}
-.size-a4 .wedmag-bottom{font-size:11px;padding:8px 12px;gap:12px;}
-.wedmag-barcode{flex:0 0 auto;width:24px;height:14px;background:repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 3px);}
-.size-a4 .wedmag-bottom .wedmag-barcode{width:34px;height:18px;}
+/* ===== "Esküvői Magazin (teszt)" borító-stílus — full-bleed: a fotó az EGÉSZ lapot kitölti
+   (a .wedmag-cover negatív offsetekkel túlnyúlik a lap belső margóján, a .page overflow:hidden
+   vágja méretre), minden szöveg a kép FELETT lebeg abszolút pozícióban. Csak a wedmag-cover
+   blokkon belül léteznek ezek az osztályok, így nem érintik a többi stílus-csomagot. Kép
+   cserélhető (.imgbox), szövegek szerkeszthetők (.editable), de a borító blokk (mint minden
+   cover) sosem kap data-bid-et, így soha nem kerül a drag/resize eszközkészletbe — semmi nem
+   mozgatható rajta. A vízjel (.wm, z-index:30) a teljes fotó felett is látszódik. */
+.wedmag-cover{position:absolute;left:-10mm;right:-10mm;top:-9mm;bottom:-6mm;color:#fff;font-family:'Libre Franklin',sans-serif;background:#4a4a4a;}
+.size-a4 .wedmag-cover{left:-12mm;right:-12mm;top:-12mm;bottom:-8mm;}
+.wedmag-photo{position:absolute;inset:0;min-height:0;}
+.wedmag-cover .cover-ai-btn{right:auto;left:2px;}
+.wedmag-date{position:absolute;top:4%;right:6%;background:#161616;color:#fff;padding:3px 9px;font-family:'Jost',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;z-index:3;}
+.size-a4 .wedmag-date{font-size:13px;padding:4px 12px;}
+.wedmag-masthead{position:absolute;top:6.5%;left:0;right:0;margin:0;text-align:center;font-family:'Marcellus',serif;font-weight:400;text-transform:uppercase;font-size:44px;line-height:.98;letter-spacing:.02em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.45);z-index:3;padding:0 6mm;}
+.size-a4 .wedmag-masthead{font-size:64px;}
+.wedmag-caption{position:absolute;left:7%;top:57%;font-family:'Jost',sans-serif;font-weight:700;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.55);z-index:3;}
+.size-a4 .wedmag-caption{font-size:12px;}
+.wedmag-tag{position:absolute;right:6%;top:47%;max-width:34%;text-align:left;font-family:'Jost',sans-serif;font-weight:700;font-size:13px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.55);z-index:3;}
+.size-a4 .wedmag-tag{font-size:19px;}
+.wedmag-barcode{position:absolute;right:6%;bottom:15%;width:64px;height:34px;background:repeating-linear-gradient(90deg,#fff 0,#fff 2px,transparent 2px,transparent 4px);opacity:.92;z-index:3;}
+.size-a4 .wedmag-barcode{width:92px;height:48px;}
+.wedmag-bottom{position:absolute;left:0;right:0;bottom:2.5%;text-align:center;font-family:'Marcellus',serif;text-transform:uppercase;font-size:30px;line-height:1;letter-spacing:.03em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.5);z-index:3;padding:0 4mm;}
+.size-a4 .wedmag-bottom{font-size:46px;}
+/* a lapszám-lábléc (folio) a full-bleed borítón értelmetlen és belelógna az alsó címsávba */
+body.pack-wedmag #stage .page:first-child .folio{display:none;}
 .candle{text-align:center;font-size:13px;margin:4px 0 1px;}
 .mem-intro{text-align:center;font-style:italic;font-size:9px;line-height:1.4;margin:2px auto 6px;max-width:92%;}
 .size-a4 .mem-intro{font-size:11px;}
@@ -2929,7 +2933,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.44';
+  var APP_VERSION='6.45';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4197,21 +4201,23 @@ function B_cover(d){
   return B_coverUjsag(d);
 }
 function B_coverWeddingMagazine(d){
+  /* Full-bleed magazin-borító: a fotó az EGÉSZ lapot kitölti (a lap margóján is túlnyúlik,
+     ld. .wedmag-cover negatív offsetjei a CSS-ben), minden szöveg a kép FELETT lebeg,
+     abszolút pozícióban. A pozíciók fixek (a borító sosem kap data-bid-et, tehát semmi sem
+     mozgatható), de minden szöveg szerkeszthető és a kép cserélhető. */
   var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
   var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
-  var phrase=d.phrase||L('összeházasodnak','are getting married');
   var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
-  var bottomTxt=d.coverCap||L('Esküvői ötletek, ruhák, helyszínek','Wedding ideas, dresses, venues');
-  return '<div class="blk wedmag-cover" style="display:flex;flex-direction:column;flex:1;position:relative;">'
+  var bottomTxt=d.coverCap||L('Ruhák & Öltönyök','Dresses & Suits');
+  return '<div class="blk wedmag-cover">'
     +'<button type="button" class="cover-ai-btn" title="AI Tipp" onclick="openCoverAiTippChooser()"><span class="ic">✨</span><span class="lbl">AI Tipp</span></button>'
-    +'<div class="wedmag-topline"><span class="wedmag-date editable" contenteditable="true">'+esc(dateTxt)+'</span></div>'
+    +'<div class="hero imgbox photo wedmag-photo" data-label="'+L('Egész oldalas kép rólunk','Full-page photo of us')+'"></div>'
+    +'<span class="wedmag-date editable" contenteditable="true">'+esc(dateTxt)+'</span>'
     +'<h1 class="wedmag-masthead editable" contenteditable="true">'+esc(masthead)+'</h1>'
-    +'<div class="wedmag-sub editable" contenteditable="true">'+esc(phrase)+'</div>'
-    +'<div class="wedmag-photowrap"><div class="hero imgbox photo wedmag-photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
-    +'<div class="wedmag-tag"><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div>'
-    +'</div>'
     +'<div class="wedmag-caption editable" contenteditable="true">'+esc(d.names)+'</div>'
-    +'<div class="wedmag-bottom"><div class="wedmag-barcode"></div><span class="editable" contenteditable="true">'+esc(bottomTxt)+'</span></div>'
+    +'<div class="wedmag-tag editable" contenteditable="true">'+esc(venueTxt)+'</div>'
+    +'<div class="wedmag-barcode"></div>'
+    +'<div class="wedmag-bottom editable" contenteditable="true">'+esc(bottomTxt)+'</div>'
     +'</div>';
 }
 function B_coverUjsag(d){
