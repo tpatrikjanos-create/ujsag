@@ -586,6 +586,27 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
 .caption{font-family:'Libre Franklin',sans-serif;font-size:7px;letter-spacing:.04em;color:var(--soft);margin-top:3px;border-bottom:.6px solid var(--ink);padding-bottom:4px;}
 .size-a4 .caption{font-size:9px;}
 .hero{flex:1;min-height:60mm;}
+/* ===== "Esküvői Magazin (teszt)" borító-stílus — csak a wedmag-cover blokkon belül léteznek ezek az
+   osztályok, így nem érintik a többi stílus-csomagot. Kép cserélhető (.imgbox), szövegek szerkeszthetők
+   (.editable), de a borító blokk (mint minden cover) sosem kap data-bid-et, így soha nem kerül a
+   drag/resize eszközkészletbe — semmi nem mozgatható rajta. */
+.wedmag-cover{background:#fff;color:#111;font-family:'Libre Franklin',sans-serif;}
+.wedmag-topline{display:flex;justify-content:flex-end;align-items:center;font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:6.5px;border-bottom:2px solid #111;padding-bottom:3px;}
+.size-a4 .wedmag-topline{font-size:9px;}
+.wedmag-masthead{font-family:'Jost',sans-serif;font-weight:800;text-transform:uppercase;text-align:center;font-size:40px;letter-spacing:.02em;line-height:.95;margin:5px 0 0;}
+.size-a4 .wedmag-masthead{font-size:60px;}
+.wedmag-sub{text-align:center;font-weight:600;letter-spacing:.25em;text-transform:uppercase;font-size:7px;margin:4px 0 6px;border-top:1px solid #111;border-bottom:1px solid #111;padding:3px 0;}
+.size-a4 .wedmag-sub{font-size:9px;}
+.wedmag-photowrap{position:relative;flex:1;min-height:55mm;}
+.wedmag-photo{position:absolute;inset:0;}
+.wedmag-tag{position:absolute;left:0;top:12%;background:#111;color:#fff;padding:4px 8px 4px 6px;font-weight:700;font-size:6.5px;letter-spacing:.06em;text-transform:uppercase;max-width:40%;box-shadow:2px 2px 0 rgba(0,0,0,.18);}
+.size-a4 .wedmag-tag{font-size:9px;padding:6px 12px 6px 9px;}
+.wedmag-caption{text-align:center;font-family:'Old Standard TT',serif;font-style:italic;font-weight:700;font-size:16px;letter-spacing:.02em;margin:6px 0 2px;}
+.size-a4 .wedmag-caption{font-size:24px;}
+.wedmag-bottom{display:flex;align-items:center;gap:8px;background:#111;color:#fff;padding:5px 8px;margin-top:4px;font-family:'Jost',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:8px;}
+.size-a4 .wedmag-bottom{font-size:11px;padding:8px 12px;gap:12px;}
+.wedmag-barcode{flex:0 0 auto;width:24px;height:14px;background:repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 3px);}
+.size-a4 .wedmag-bottom .wedmag-barcode{width:34px;height:18px;}
 .candle{text-align:center;font-size:13px;margin:4px 0 1px;}
 .mem-intro{text-align:center;font-style:italic;font-size:9px;line-height:1.4;margin:2px auto 6px;max-width:92%;}
 .size-a4 .mem-intro{font-size:11px;}
@@ -1681,6 +1702,7 @@ hu:{
   tb_style_romantic:"Stílus: Romantikus",
   tb_style_modern:"Stílus: Modern",
   tb_style_magazine:"Stílus: Magazinos",
+  tb_style_wedmag:"Stílus: Esküvői Magazin (teszt)",
   tb_undo_title:"Legutóbbi mozgatás/átméretezés visszavonása",
   tb_undo_btn:"↺ Visszavonás",
   tb_back_to_data:"← Adatok",
@@ -2310,6 +2332,7 @@ en:{
   tb_style_romantic:"Style: Romantic",
   tb_style_modern:"Style: Modern",
   tb_style_magazine:"Style: Magazine",
+  tb_style_wedmag:"Style: Wedding Magazine (test)",
   tb_undo_title:"Undo the last move/resize",
   tb_undo_btn:"↺ Undo",
   tb_back_to_data:"← Details",
@@ -2906,7 +2929,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.43';
+  var APP_VERSION='6.44';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -3618,6 +3641,7 @@ A kedvenc díszítésed
           <option value="romantic" data-i18n="tb_style_romantic">Stílus: Romantikus</option>
           <option value="modern" data-i18n="tb_style_modern">Stílus: Modern</option>
           <option value="magazine" data-i18n="tb_style_magazine">Stílus: Magazinos</option>
+          <option value="wedmag" data-i18n="tb_style_wedmag">Stílus: Esküvői Magazin (teszt)</option>
         </select>
         <button class="back" id="undoBtn" onclick="undoStage()" disabled data-i18n-title="tb_undo_title" title="Legutóbbi mozgatás/átméretezés visszavonása" data-i18n="tb_undo_btn">↺ Visszavonás</button>
         <button class="back" onclick="backToWizard()" data-i18n="tb_back_to_data">← Adatok</button>
@@ -4169,7 +4193,26 @@ function ico(id,sz){return '<span class="ico"'+(sz?' style="width:'+sz+';height:
 function B_cover(d){
   if(CFG.product==='meghivo')return B_coverMeghivo(d);
   if(CFG.product==='savethedate')return B_coverSTD(d);
+  if(CFG.product==='ujsag' && document.body.classList.contains('pack-wedmag'))return B_coverWeddingMagazine(d);
   return B_coverUjsag(d);
+}
+function B_coverWeddingMagazine(d){
+  var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
+  var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
+  var phrase=d.phrase||L('összeházasodnak','are getting married');
+  var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
+  var bottomTxt=d.coverCap||L('Esküvői ötletek, ruhák, helyszínek','Wedding ideas, dresses, venues');
+  return '<div class="blk wedmag-cover" style="display:flex;flex-direction:column;flex:1;position:relative;">'
+    +'<button type="button" class="cover-ai-btn" title="AI Tipp" onclick="openCoverAiTippChooser()"><span class="ic">✨</span><span class="lbl">AI Tipp</span></button>'
+    +'<div class="wedmag-topline"><span class="wedmag-date editable" contenteditable="true">'+esc(dateTxt)+'</span></div>'
+    +'<h1 class="wedmag-masthead editable" contenteditable="true">'+esc(masthead)+'</h1>'
+    +'<div class="wedmag-sub editable" contenteditable="true">'+esc(phrase)+'</div>'
+    +'<div class="wedmag-photowrap"><div class="hero imgbox photo wedmag-photo" data-label="'+L('Nagy kép rólunk','Big photo of us')+'"></div>'
+    +'<div class="wedmag-tag"><span class="editable" contenteditable="true">'+esc(venueTxt)+'</span></div>'
+    +'</div>'
+    +'<div class="wedmag-caption editable" contenteditable="true">'+esc(d.names)+'</div>'
+    +'<div class="wedmag-bottom"><div class="wedmag-barcode"></div><span class="editable" contenteditable="true">'+esc(bottomTxt)+'</span></div>'
+    +'</div>';
 }
 function B_coverUjsag(d){
   var ears=(d.slogan?'<div class="ears" style="justify-content:center;"><div class="slogan">'+esc(d.slogan)+'</div></div>':'');
@@ -7691,10 +7734,25 @@ function getSizePref(id){
   });
 })();
 function setStylePack(name){
-  document.body.classList.remove('pack-romantic','pack-modern','pack-magazine');
+  document.body.classList.remove('pack-romantic','pack-modern','pack-magazine','pack-wedmag');
   if(name==='romantic')document.body.classList.add('pack-romantic');
   else if(name==='modern')document.body.classList.add('pack-modern');
   else if(name==='magazine')document.body.classList.add('pack-magazine');
+  else if(name==='wedmag')document.body.classList.add('pack-wedmag');
+  /* a többi stílus-csomag (romantic/modern/magazine) ugyanazt a borító-HTML-szerkezetet
+     (B_coverUjsag) csak CSS-sel színezi újra, ezért élő váltáskor elég az osztályt cserélni.
+     A wedmag viszont EGY MÁSIK szerkezetet ad vissza (B_coverWeddingMagazine), ezért ha a
+     projekt már generálva van, a borító blokkot élőben újra kell építeni — a többi rovatot
+     (beírt szövegeket, feltöltött képeket) ez nem érinti. */
+  if(CFG.product==='ujsag' && typeof gatherData==='function' && typeof B_cover==='function'){
+    var coverBlk=document.querySelector('#stage .page:first-child .pbody>.blk');
+    if(coverBlk){
+      var tmp=document.createElement('div'); tmp.innerHTML=B_cover(gatherData());
+      var newBlk=tmp.firstElementChild;
+      coverBlk.replaceWith(newBlk);
+      if(typeof afterBlockChange==='function')afterBlockChange();
+    }
+  }
 }
 /* ===== Projekt mentés / visszatöltés ===== */
 function gatherProjectState(){
