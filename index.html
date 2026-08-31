@@ -38,7 +38,7 @@
 </script>
 <style id="pgcss">@page{size:A4 landscape;margin:0;}</style>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@400;600;700;800&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Franklin:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Marcellus&family=Jost:wght@400;500;700&family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@700;800;900&display=swap');
 :root{--paper:#fff;--ink:#111;--soft:#555;--claret:#6e2233;--wm-url:none;
   --wiz-rose:#c2487a;--wiz-rose-dark:#9c3361;--wiz-rose-pale:#f6d8e3;--wiz-gold:#cda434;--wiz-blush:#fdf2f5;--wiz-cream:#fffaf6;}
 *{box-sizing:border-box;}
@@ -593,22 +593,34 @@ body.pack-magazine .dropcap-ready::first-letter{font-family:'Grenze Gotisch',ser
    cserélhető (.imgbox), szövegek szerkeszthetők (.editable), de a borító blokk (mint minden
    cover) sosem kap data-bid-et, így soha nem kerül a drag/resize eszközkészletbe — semmi nem
    mozgatható rajta. A vízjel (.wm, z-index:30) a teljes fotó felett is látszódik. */
-.wedmag-cover{position:absolute;left:-10mm;right:-10mm;top:-9mm;bottom:-6mm;color:#fff;font-family:'Libre Franklin',sans-serif;background:#4a4a4a;}
+.wedmag-cover{position:absolute;left:-10mm;right:-10mm;top:-9mm;bottom:-6mm;color:#fff;font-family:'Libre Franklin',sans-serif;background:#4a4a4a;overflow:hidden;}
 .size-a4 .wedmag-cover{left:-12mm;right:-12mm;top:-12mm;bottom:-8mm;}
-.wedmag-photo{position:absolute;inset:0;min-height:0;}
-.wedmag-cover .cover-ai-btn{right:auto;left:2px;}
-.wedmag-date{position:absolute;top:4%;right:6%;background:#161616;color:#fff;padding:3px 9px;font-family:'Jost',sans-serif;font-weight:700;font-size:9px;letter-spacing:.08em;z-index:3;}
-.size-a4 .wedmag-date{font-size:13px;padding:4px 12px;}
-.wedmag-masthead{position:absolute;top:6.5%;left:0;right:0;margin:0;text-align:center;font-family:'Marcellus',serif;font-weight:400;text-transform:uppercase;font-size:44px;line-height:.98;letter-spacing:.02em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.45);z-index:3;padding:0 6mm;}
-.size-a4 .wedmag-masthead{font-size:64px;}
-.wedmag-caption{position:absolute;left:7%;top:57%;font-family:'Jost',sans-serif;font-weight:700;font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.55);z-index:3;}
-.size-a4 .wedmag-caption{font-size:12px;}
-.wedmag-tag{position:absolute;right:6%;top:47%;max-width:34%;text-align:left;font-family:'Jost',sans-serif;font-weight:700;font-size:13px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.55);z-index:3;}
-.size-a4 .wedmag-tag{font-size:19px;}
-.wedmag-barcode{position:absolute;right:6%;bottom:15%;width:64px;height:34px;background:repeating-linear-gradient(90deg,#fff 0,#fff 2px,transparent 2px,transparent 4px);opacity:.92;z-index:3;}
-.size-a4 .wedmag-barcode{width:92px;height:48px;}
-.wedmag-bottom{position:absolute;left:0;right:0;bottom:2.5%;text-align:center;font-family:'Marcellus',serif;text-transform:uppercase;font-size:30px;line-height:1;letter-spacing:.03em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.5);z-index:3;padding:0 4mm;}
-.size-a4 .wedmag-bottom{font-size:46px;}
+.wedmag-photo{position:absolute;inset:0;min-height:0;z-index:1;}
+.wedmag-cover .cover-ai-btn{right:auto;left:2px;z-index:5;}
+/* halvány sötét/világos elmosódások a kép felett, hogy a fehér ill. sötét szöveg a fotó
+   tartalmától (világos/sötét részeitől) függetlenül is mindig olvasható maradjon — a referencia
+   sablonban ezt maga a fotó adta (sötét felül, világos alul), de nálunk bármilyen vásárlói fotó
+   lehet, ezért ezt biztosítjuk mesterségesen. */
+.wedmag-scrim-top{position:absolute;left:0;right:0;top:0;height:34%;background:linear-gradient(to bottom,rgba(0,0,0,.4),transparent);z-index:2;pointer-events:none;}
+.wedmag-scrim-bottom{position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(to top,rgba(255,255,255,.92) 40%,transparent);z-index:2;pointer-events:none;}
+.wedmag-date{position:absolute;top:4%;right:5%;background:#161616;color:#fff;padding:3px 10px;font-family:'Jost',sans-serif;font-weight:700;font-size:9px;letter-spacing:.1em;z-index:3;}
+.size-a4 .wedmag-date{font-size:13px;padding:4px 14px;}
+.wedmag-masthead{position:absolute;top:8%;left:5%;right:5%;z-index:3;}
+.wm-big{display:block;font-family:'Playfair Display',serif;font-weight:900;text-transform:uppercase;font-size:52px;line-height:.92;letter-spacing:.01em;color:#fff;text-align:center;text-shadow:0 2px 10px rgba(0,0,0,.4);}
+.size-a4 .wm-big{font-size:76px;}
+.wm-small{display:block;font-family:'Playfair Display',serif;font-weight:700;text-transform:uppercase;font-size:16px;letter-spacing:.32em;color:#fff;text-align:right;margin-top:2px;text-shadow:0 2px 8px rgba(0,0,0,.4);}
+.size-a4 .wm-small{font-size:23px;}
+.wedmag-caption{position:absolute;left:7%;top:59%;font-family:'Jost',sans-serif;font-weight:600;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6);z-index:3;}
+.size-a4 .wedmag-caption{font-size:13px;}
+.wedmag-venue{position:absolute;right:6%;top:44%;max-width:38%;text-align:right;z-index:3;}
+.wedmag-venue-h{font-family:'Playfair Display',serif;font-weight:800;font-size:15px;line-height:1.15;letter-spacing:.02em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5);}
+.size-a4 .wedmag-venue-h{font-size:22px;}
+.wedmag-venue-sub{margin-top:5px;font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:6px;line-height:1.35;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.6);}
+.size-a4 .wedmag-venue-sub{font-size:8.5px;}
+.wedmag-barcode{position:absolute;right:6%;bottom:22%;width:58px;height:30px;background:repeating-linear-gradient(90deg,#fff 0,#fff 2px,transparent 2px,transparent 4px);opacity:.95;z-index:3;}
+.size-a4 .wedmag-barcode{width:84px;height:42px;}
+.wedmag-bottom{position:absolute;left:0;right:0;bottom:1.5%;text-align:center;font-family:'Playfair Display',serif;font-weight:900;text-transform:uppercase;font-size:30px;line-height:1;letter-spacing:.01em;color:#161616;z-index:3;padding:0 4mm;}
+.size-a4 .wedmag-bottom{font-size:44px;}
 /* a lapszám-lábléc (folio) a full-bleed borítón értelmetlen és belelógna az alsó címsávba */
 body.pack-wedmag #stage .page:first-child .folio{display:none;}
 .candle{text-align:center;font-size:13px;margin:4px 0 1px;}
@@ -2933,7 +2945,7 @@ function backToTypeSelect(){
   /* verziószám — csak ezt az egy sort kell frissíteni minden új kiadásnál, semmi mást. Csak a
      varázsló (adatbeviteli) felületen jelenik meg, a szerkesztőfelületen (#paper/#stage) nem —
      mert a #wizard elem display:none-ra vált generálás után, és ez a badge annak gyereke. */
-  var APP_VERSION='6.45';
+  var APP_VERSION='6.46';
   document.getElementById('appVersionBadge').textContent='v'+APP_VERSION;
   </script>
   <button type="button" class="back-to-types" onclick="backToTypeSelect()" data-i18n="w_back_to_types">← Másik terméktípust választanék</button>
@@ -4201,21 +4213,30 @@ function B_cover(d){
   return B_coverUjsag(d);
 }
 function B_coverWeddingMagazine(d){
-  /* Full-bleed magazin-borító: a fotó az EGÉSZ lapot kitölti (a lap margóján is túlnyúlik,
-     ld. .wedmag-cover negatív offsetjei a CSS-ben), minden szöveg a kép FELETT lebeg,
-     abszolút pozícióban. A pozíciók fixek (a borító sosem kap data-bid-et, tehát semmi sem
-     mozgatható), de minden szöveg szerkeszthető és a kép cserélhető. */
+  /* Full-bleed magazin-borító, 1:1 elrendezés-másolat egy Etsy/Canva "Wedding Magazine" sablon
+     alapján (csak a SZERKEZET és a tipográfia másolt — a fotó, a nevek és minden szöveg a mi
+     adatainkból jön). A fotó az EGÉSZ lapot kitölti (a lap margóján is túlnyúlik, ld.
+     .wedmag-cover negatív offsetjei a CSS-ben), minden szöveg a kép FELETT lebeg, abszolút
+     pozícióban, a referencia elrendezésének megfelelő helyeken (dátum jobb fent, kétsoros nagy
+     cím fent, pár neve balra középen, "helyszín" panel jobbra középen, dekoratív vonalkód, nagy
+     alsó címsor). A pozíciók fixek (a borító sosem kap data-bid-et, tehát semmi sem mozgatható),
+     de minden szöveg szerkeszthető és a kép cserélhető. */
   var dateTxt=d.date||L('« ide jön a dátum »','« date goes here »');
-  var venueTxt=d.venue||L('« ide jön a helyszín »','« venue goes here »');
+  var venueTxt=d.venue||L('Esküvői helyszínek','Wedding venues');
+  var venueSub=L('Ajánlott helyszínek nektek','Venues for you and your guests');
   var masthead=d.masthead||L('Esküvői Újság','Wedding Gazette');
+  var mWords=masthead.split(' ');
+  var mBig=mWords[0]||masthead;
+  var mSmall=mWords.slice(1).join(' ')||L('Magazin','Magazine');
   var bottomTxt=d.coverCap||L('Ruhák & Öltönyök','Dresses & Suits');
   return '<div class="blk wedmag-cover">'
     +'<button type="button" class="cover-ai-btn" title="AI Tipp" onclick="openCoverAiTippChooser()"><span class="ic">✨</span><span class="lbl">AI Tipp</span></button>'
     +'<div class="hero imgbox photo wedmag-photo" data-label="'+L('Egész oldalas kép rólunk','Full-page photo of us')+'"></div>'
+    +'<div class="wedmag-scrim-top"></div><div class="wedmag-scrim-bottom"></div>'
     +'<span class="wedmag-date editable" contenteditable="true">'+esc(dateTxt)+'</span>'
-    +'<h1 class="wedmag-masthead editable" contenteditable="true">'+esc(masthead)+'</h1>'
+    +'<div class="wedmag-masthead"><span class="wm-big editable" contenteditable="true">'+esc(mBig)+'</span><span class="wm-small editable" contenteditable="true">'+esc(mSmall)+'</span></div>'
     +'<div class="wedmag-caption editable" contenteditable="true">'+esc(d.names)+'</div>'
-    +'<div class="wedmag-tag editable" contenteditable="true">'+esc(venueTxt)+'</div>'
+    +'<div class="wedmag-venue"><div class="wedmag-venue-h editable" contenteditable="true">'+esc(venueTxt)+'</div><div class="wedmag-venue-sub editable" contenteditable="true">'+esc(venueSub)+'</div></div>'
     +'<div class="wedmag-barcode"></div>'
     +'<div class="wedmag-bottom editable" contenteditable="true">'+esc(bottomTxt)+'</div>'
     +'</div>';
